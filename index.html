@@ -9,7 +9,15 @@
     <title>FitFlow - Your Personal Workout Companion</title>
     <style>
         /* Import SF Pro Text font */
-        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Text:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @font-face {
+          font-family: "SF Pro Text";
+          src: url("SFProText-Regular.woff2") format("woff2"),
+               url("SFProText-Regular.woff") format("woff");
+          font-weight: 400;
+          font-style: normal;
+          font-display: swap;
+          color: #ffffff;
+          }
         
         * { 
             margin: 0; 
@@ -147,7 +155,7 @@
             background: #2a2a2a;
             display: flex;
             padding: 8px 8px 0 8px; /* Removed bottom padding */
-            padding-bottom: calc(8px + env(safe-area-inset-bottom, 8px)); /* Use safe area or fallback */
+            padding-bottom: calc(8px); /* Use safe area or fallback */
             position: fixed;
             bottom: 0;
             left: 0;
