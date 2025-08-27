@@ -46,9 +46,7 @@
             position: fixed;
             margin: 0;
             padding: 0;
-            /* Updated font family with SF Pro Text as primary */
             font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            /* Updated background to lighter black */
             background: #1a1a1a;
             -webkit-overflow-scrolling: touch;
             touch-action: manipulation;
@@ -63,7 +61,6 @@
             bottom: 0;
             display: flex;
             flex-direction: column;
-            /* Updated background to lighter black */
             background: #1a1a1a;
             max-width: 100%;
             margin: 0 auto;
@@ -95,7 +92,7 @@
         }
         
         .header {
-            background: #1a1a1a; /* Updated background */
+            background: #1a1a1a;
             color: white;
             padding: 0 20px 16px 20px;
             padding-top: calc(16px + env(safe-area-inset-top, 0px));
@@ -104,6 +101,7 @@
             align-items: center;
             justify-content: center;
             min-height: fit-content;
+            flex-shrink: 0;
         }
         
         @supports not (padding-top: env(safe-area-inset-top)) {
@@ -141,18 +139,19 @@
             scroll-behavior: smooth;
             position: relative;
             min-height: 0;
-            background: #1a1a1a; /* Updated background */
+            background: #1a1a1a;
         }
         
+        /* Fixed Navigation - Removed extra space and clipping */
         .nav {
-            background: #2a2a2a; /* Slightly lighter nav background */
+            background: #2a2a2a;
             display: flex;
-            padding: 8px;
-            padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
+            padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px)) 8px;
             position: relative;
             z-index: 100;
             flex-shrink: 0;
             border-radius: 25px 25px 0 0;
+            min-height: calc(68px + env(safe-area-inset-bottom, 0px));
         }
         
         .nav-item {
@@ -190,7 +189,7 @@
         }
         
         .card {
-            background: #2a2a2a; /* Updated card background */
+            background: #2a2a2a;
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 16px;
@@ -271,9 +270,9 @@
             transform: translateY(0);
         }
         
-        /* Enhanced Play/Pause/Complete Button Styles */
+        /* Fixed Play/Pause Button Colors - Made Consistent */
         .btn-play {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             width: 80px;
             height: 80px;
             border-radius: 50%;
@@ -285,7 +284,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             color: white;
-            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             position: relative;
             overflow: hidden;
         }
@@ -305,17 +304,9 @@
             left: 100%;
         }
         
-        .btn-play.paused {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        
+        /* Removed the separate .paused class - both states use same color now */
         .btn-play:hover {
             transform: scale(1.1);
-            box-shadow: 0 12px 35px rgba(34, 197, 94, 0.5);
-        }
-        
-        .btn-play.paused:hover {
             box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
         }
         
@@ -468,7 +459,7 @@
         
         /* Enhanced Steps Section */
         .steps-section {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); /* Updated background */
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             border-radius: 20px;
             padding: 24px;
             margin-bottom: 20px;
@@ -553,7 +544,6 @@
             margin-bottom: 12px;
             padding: 0 4px;
             position: relative;
-            /* Prevent overflow */
             max-width: 100%;
             overflow: hidden;
         }
@@ -567,8 +557,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
-            /* Ensure bars don't overflow */
-            max-width: calc((100% - 36px) / 7); /* 6 gaps of 6px */
+            max-width: calc((100% - 36px) / 7);
         }
         
         .chart-bar.active {
@@ -619,7 +608,7 @@
         }
         
         .stat-card {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); /* Updated background */
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             color: white;
             padding: 24px 20px;
             border-radius: 16px;
@@ -685,15 +674,15 @@
         .workout-active {
             text-align: center;
             padding: 20px;
-            background: #1a1a1a; /* Updated background */
+            background: #1a1a1a;
             position: relative;
             min-height: 100vh;
         }
         
-        /* Enhanced Back Button */
+        /* Fixed Back Button Position - Lowered to avoid notch/time display */
         .back-button {
             position: absolute;
-            top: 20px;
+            top: calc(60px + env(safe-area-inset-top, 0px));
             left: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -709,6 +698,20 @@
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
             transition: all 0.3s ease;
             z-index: 10;
+        }
+        
+        /* Additional safe area for devices without notch */
+        @supports not (top: env(safe-area-inset-top)) {
+            .back-button {
+                top: 80px;
+            }
+        }
+        
+        /* Responsive adjustments for different iPhone sizes */
+        @media (max-height: 700px) {
+            .back-button {
+                top: calc(50px + env(safe-area-inset-top, 0px));
+            }
         }
         
         .back-button:hover {
@@ -756,9 +759,9 @@
             color: #ffffff;
         }
         
-        /* How to Perform Instructions Box (Replaces emojis) */
+        /* How to Perform Instructions Box */
         .exercise-instructions {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); /* Updated background */
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 24px;
@@ -791,7 +794,7 @@
         }
         
         .detail-card {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); /* Updated background */
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             padding: 16px;
             border-radius: 12px;
             text-align: center;
@@ -940,7 +943,7 @@
         }
         
         .modal-content {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); /* Updated background */
+            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
             border-radius: 24px;
             padding: 24px;
             width: calc(100% - 40px);
@@ -994,9 +997,9 @@
             color: #ef4444;
         }
         
-        /* Rest and Recovery Styles - Updated Colors */
+        /* Rest and Recovery Styles */
         .rest-display {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Changed from orange to blue gradient */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 24px;
             padding: 32px;
@@ -1014,7 +1017,7 @@
             font-size: 64px;
             font-weight: 700;
             margin: 24px 0;
-            color: #ffffff; /* Ensure white text for contrast */
+            color: #ffffff;
         }
         
         .next-exercise {
@@ -1093,7 +1096,6 @@
             z-index: 1;
         }
         
-        /* Fixed Apple Health X Button Centering */
         .health-status-icon {
             width: 24px;
             height: 24px;
@@ -1103,7 +1105,6 @@
             justify-content: center;
             font-size: 14px;
             font-weight: bold;
-            /* Fixed centering with flexbox */
             flex-shrink: 0;
         }
         
@@ -1113,7 +1114,6 @@
         
         .health-status-icon.denied {
             background: rgba(239, 68, 68, 0.8);
-            /* Ensure perfect centering */
             line-height: 1;
         }
         
@@ -1272,7 +1272,12 @@
         
         /* Responsive Design */
         @media (max-width: 414px) {
-            .header { padding-top: calc(20px + env(safe-area-inset-top, 0px)); }
+            .header { 
+                padding-top: calc(20px + env(safe-area-inset-top, 0px)); 
+            }
+            .back-button {
+                top: calc(50px + env(safe-area-inset-top, 0px));
+            }
         }
         
         @media (max-width: 390px) {
@@ -1290,6 +1295,11 @@
             .workout-info { font-size: 12px; }
             .modal-content { padding: 16px; }
             .form-input, .form-select { font-size: 16px !important; }
+            .back-button {
+                top: calc(40px + env(safe-area-inset-top, 0px));
+                font-size: 12px;
+                padding: 10px 14px;
+            }
         }
         
         @media (max-width: 375px) {
@@ -1299,7 +1309,12 @@
         }
         
         @media (min-width: 428px) {
-            .header { padding-top: calc(20px + env(safe-area-inset-top, 0px)); }
+            .header { 
+                padding-top: calc(20px + env(safe-area-inset-top, 0px)); 
+            }
+            .back-button {
+                top: calc(60px + env(safe-area-inset-top, 0px));
+            }
         }
         
         @media (min-width: 768px) {
@@ -1312,6 +1327,11 @@
                 top: auto;
                 box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             }
+        }
+        
+        /* Smooth scrollable workouts list - removed the clunky slider */
+        .workouts-container {
+            /* Removed max-height and overflow properties for smooth scrolling */
         }
     </style>
 </head>
@@ -1342,50 +1362,50 @@
     </div>
 
     <script>
-        // Apple Health integration
+        // Apple Health integration - Fixed to only track real data
         let healthPermissionGranted = false;
         let dailyStepsData = 0;
         let healthKitAvailable = false;
         let weeklyStepsData = [];
         let healthDisabled = false;
         
-        // Enhanced calorie and minute tracking
+        // Fixed calorie and minute tracking - only from actual workouts
         let dailyCalories = 0;
         let dailyMinutes = 0;
-        let weeklyCaloriesData = [];
-        let weeklyMinutesData = [];
 
-        // Check if HealthKit is available (simplified check for web context)
+        // Check if HealthKit is available
         function checkHealthKitAvailability() {
-            // In a real implementation, this would check for Capacitor/Cordova HealthKit plugins
-            // For web demo, we'll simulate availability
-            healthKitAvailable = window.DeviceMotionEvent !== undefined;
+            // Proper HealthKit detection for iOS web apps
+            healthKitAvailable = typeof window.DeviceMotionEvent !== 'undefined' && 
+                                 navigator.userAgent.includes('iPhone');
             return healthKitAvailable;
         }
 
-        // Request Apple Health permissions
+        // Request Apple Health permissions - Fixed implementation
         async function requestHealthPermissions() {
             try {
-                // In a real implementation, this would use Capacitor HealthKit plugin
-                // For demo purposes, we'll simulate the permission request
-                const result = await new Promise((resolve) => {
-                    setTimeout(() => {
-                        // Simulate user granting permission
-                        resolve({ granted: true });
-                    }, 1000);
-                });
-
-                if (result.granted) {
+                // In production, this would integrate with Capacitor HealthKit plugin
+                if (typeof window.HealthKit !== 'undefined') {
+                    const result = await window.HealthKit.requestAuthorization({
+                        read: ['HKQuantityTypeIdentifierStepCount']
+                    });
+                    
+                    if (result.granted) {
+                        healthPermissionGranted = true;
+                        healthDisabled = false;
+                        await fetchRealStepData();
+                        await generateWeeklyStepsData();
+                        return true;
+                    }
+                } else {
+                    // Fallback for demo - simulate permission granted
                     healthPermissionGranted = true;
                     healthDisabled = false;
-                    await fetchStepData();
+                    await fetchRealStepData();
                     await generateWeeklyStepsData();
-                    await updateCaloriesAndMinutes();
                     return true;
-                } else {
-                    healthPermissionGranted = false;
-                    return false;
                 }
+                return false;
             } catch (error) {
                 console.error('Health permission request failed:', error);
                 healthPermissionGranted = false;
@@ -1393,102 +1413,51 @@
             }
         }
 
-        // Disable Apple Health integration
-        function disableHealthIntegration() {
-            healthDisabled = true;
-            healthPermissionGranted = false;
-            dailyStepsData = 0;
-            weeklyStepsData = [];
-            dailyCalories = 0;
-            dailyMinutes = 0;
-            weeklyCaloriesData = [];
-            weeklyMinutesData = [];
-            localStorage.setItem('fitflow-health-disabled', 'true');
-            localStorage.removeItem('fitflow-health-permission');
-            localStorage.removeItem('fitflow-daily-steps');
-            localStorage.removeItem('fitflow-weekly-steps');
-            localStorage.removeItem('fitflow-daily-calories');
-            localStorage.removeItem('fitflow-daily-minutes');
-            showHomeTab(); // Refresh the display
-        }
-
-        // Re-enable Apple Health integration
-        function enableHealthIntegration() {
-            healthDisabled = false;
-            localStorage.removeItem('fitflow-health-disabled');
-            showHealthPermissionModal();
-        }
-
-        // Fetch step data from Apple Health
-        async function fetchStepData() {
+        // Fixed step data fetching - only real data, no fake generation
+        async function fetchRealStepData() {
             if (!healthPermissionGranted || healthDisabled) {
+                dailyStepsData = 0;
                 return 0;
             }
 
             try {
-                // In a real implementation, this would use HealthKit plugin to fetch actual data
-                // For demo, we'll generate realistic step data
-                const now = new Date();
-                const seed = now.getDate() + now.getMonth(); // Daily variation
-                dailyStepsData = Math.floor(4000 + (seed * 347) + Math.random() * 3000); // 4000-7000 steps range
+                // In production, this would fetch real data from HealthKit
+                if (typeof window.HealthKit !== 'undefined') {
+                    const today = new Date();
+                    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                    
+                    const result = await window.HealthKit.querySampleType({
+                        sampleType: 'HKQuantityTypeIdentifierStepCount',
+                        startDate: startOfDay,
+                        endDate: today,
+                        unit: 'count'
+                    });
+                    
+                    dailyStepsData = result.reduce((total, sample) => total + sample.quantity, 0);
+                } else {
+                    // For demo purposes, start with 0 and only update from actual usage
+                    const savedSteps = localStorage.getItem('fitflow-real-steps');
+                    const savedDate = localStorage.getItem('fitflow-steps-date');
+                    const today = new Date().toDateString();
+                    
+                    if (savedDate === today && savedSteps) {
+                        dailyStepsData = parseInt(savedSteps);
+                    } else {
+                        dailyStepsData = 0; // Reset for new day
+                        localStorage.setItem('fitflow-steps-date', today);
+                    }
+                }
                 
-                // Save to local storage for persistence
-                localStorage.setItem('fitflow-daily-steps', dailyStepsData.toString());
-                localStorage.setItem('fitflow-steps-date', now.toDateString());
-                
+                localStorage.setItem('fitflow-real-steps', dailyStepsData.toString());
                 return dailyStepsData;
             } catch (error) {
-                console.error('Failed to fetch step data:', error);
+                console.error('Failed to fetch real step data:', error);
+                dailyStepsData = 0;
                 return 0;
             }
         }
 
-        // Enhanced calories and minutes tracking
-        async function updateCaloriesAndMinutes() {
-            const today = new Date().toDateString();
-            const savedDate = localStorage.getItem('fitflow-calories-date');
-            
-            if (savedDate !== today) {
-                // Reset daily counters for new day
-                dailyCalories = 0;
-                dailyMinutes = 0;
-                localStorage.setItem('fitflow-calories-date', today);
-            } else {
-                // Load existing data
-                dailyCalories = parseInt(localStorage.getItem('fitflow-daily-calories') || '0');
-                dailyMinutes = parseInt(localStorage.getItem('fitflow-daily-minutes') || '0');
-            }
-            
-            // Sync with Apple Health if available
-            if (healthPermissionGranted && !healthDisabled) {
-                // In real implementation, fetch calories and active minutes from HealthKit
-                const healthCalories = Math.floor(dailyStepsData * 0.04); // Rough estimate
-                const healthMinutes = Math.floor(dailyStepsData / 100); // Rough estimate
-                
-                dailyCalories = Math.max(dailyCalories, healthCalories);
-                dailyMinutes = Math.max(dailyMinutes, healthMinutes);
-            }
-            
-            // Add workout calories and minutes
-            if (workoutHistory.length > 0) {
-                const todaysWorkouts = workoutHistory.filter(w => {
-                    const workoutDate = new Date(w.completedAt).toDateString();
-                    return workoutDate === today;
-                });
-                
-                const workoutCalories = todaysWorkouts.reduce((sum, w) => sum + (w.calories || 0), 0);
-                const workoutMinutes = todaysWorkouts.reduce((sum, w) => sum + Math.floor(w.totalTime / 60), 0);
-                
-                dailyCalories += workoutCalories;
-                dailyMinutes += workoutMinutes;
-            }
-            
-            // Save updated values
-            localStorage.setItem('fitflow-daily-calories', dailyCalories.toString());
-            localStorage.setItem('fitflow-daily-minutes', dailyMinutes.toString());
-        }
-
-        // Generate weekly steps data
+        // Generate weekly steps data from real HealthKit data
         async function generateWeeklyStepsData() {
             if (!healthPermissionGranted || healthDisabled) {
                 weeklyStepsData = [];
@@ -1499,75 +1468,152 @@
             const today = new Date().getDay();
             weeklyStepsData = [];
             
-            for (let i = 0; i < 7; i++) {
-                const dayOffset = (i - today + 7) % 7;
-                const isToday = dayOffset === 0;
-                const steps = isToday ? dailyStepsData : Math.floor(2500 + Math.random() * 4000);
-                const height = Math.max(8, Math.min(80, (steps / 8000) * 80)); // Max height 80px for 8000+ steps
-                
-                weeklyStepsData.push({
-                    day: days[i],
-                    steps: steps,
-                    height: height,
-                    isToday: isToday
-                });
+            // In production, this would fetch 7 days of real data from HealthKit
+            if (typeof window.HealthKit !== 'undefined') {
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - (6 - i));
+                    const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                    const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
+                    
+                    try {
+                        const result = await window.HealthKit.querySampleType({
+                            sampleType: 'HKQuantityTypeIdentifierStepCount',
+                            startDate: startOfDay,
+                            endDate: endOfDay,
+                            unit: 'count'
+                        });
+                        
+                        const steps = result.reduce((total, sample) => total + sample.quantity, 0);
+                        const height = Math.max(8, Math.min(80, (steps / 8000) * 80));
+                        
+                        weeklyStepsData.push({
+                            day: days[(today + i - 6 + 7) % 7],
+                            steps: steps,
+                            height: height,
+                            isToday: i === 6
+                        });
+                    } catch (error) {
+                        weeklyStepsData.push({
+                            day: days[(today + i - 6 + 7) % 7],
+                            steps: 0,
+                            height: 8,
+                            isToday: i === 6
+                        });
+                    }
+                }
+            } else {
+                // Demo mode - show only today's actual steps, others as 0
+                for (let i = 0; i < 7; i++) {
+                    const isToday = i === 6;
+                    const steps = isToday ? dailyStepsData : 0;
+                    const height = Math.max(8, Math.min(80, (steps / 8000) * 80));
+                    
+                    weeklyStepsData.push({
+                        day: days[(today + i - 6 + 7) % 7],
+                        steps: steps,
+                        height: height,
+                        isToday: isToday
+                    });
+                }
             }
             
             localStorage.setItem('fitflow-weekly-steps', JSON.stringify(weeklyStepsData));
         }
 
-        // Get step data with fallback
+        // Fixed calories and minutes - ONLY from completed workouts
+        function updateWorkoutCaloriesAndMinutes() {
+            const today = new Date().toDateString();
+            
+            // Reset daily counters
+            dailyCalories = 0;
+            dailyMinutes = 0;
+            
+            // Only add calories and minutes from actual completed workouts
+            if (workoutHistory.length > 0) {
+                const todaysWorkouts = workoutHistory.filter(w => {
+                    const workoutDate = new Date(w.completedAt).toDateString();
+                    return workoutDate === today;
+                });
+                
+                dailyCalories = todaysWorkouts.reduce((sum, w) => sum + (w.calories || 0), 0);
+                dailyMinutes = todaysWorkouts.reduce((sum, w) => sum + Math.floor(w.totalTime / 60), 0);
+            }
+            
+            // Save updated values
+            localStorage.setItem('fitflow-workout-calories', dailyCalories.toString());
+            localStorage.setItem('fitflow-workout-minutes', dailyMinutes.toString());
+            localStorage.setItem('fitflow-workout-date', today);
+        }
+
+        // Get calories and minutes from workouts only
+        function getWorkoutCalories() {
+            const today = new Date().toDateString();
+            const savedDate = localStorage.getItem('fitflow-workout-date');
+            
+            if (savedDate === today) {
+                return parseInt(localStorage.getItem('fitflow-workout-calories') || '0');
+            }
+            
+            updateWorkoutCaloriesAndMinutes();
+            return dailyCalories;
+        }
+
+        function getWorkoutMinutes() {
+            const today = new Date().toDateString();
+            const savedDate = localStorage.getItem('fitflow-workout-date');
+            
+            if (savedDate === today) {
+                return parseInt(localStorage.getItem('fitflow-workout-minutes') || '0');
+            }
+            
+            updateWorkoutCaloriesAndMinutes();
+            return dailyMinutes;
+        }
+
+        // Disable Apple Health integration
+        function disableHealthIntegration() {
+            healthDisabled = true;
+            healthPermissionGranted = false;
+            dailyStepsData = 0;
+            weeklyStepsData = [];
+            localStorage.setItem('fitflow-health-disabled', 'true');
+            localStorage.removeItem('fitflow-health-permission');
+            localStorage.removeItem('fitflow-real-steps');
+            localStorage.removeItem('fitflow-weekly-steps');
+            showHomeTab();
+        }
+
+        // Re-enable Apple Health integration
+        function enableHealthIntegration() {
+            healthDisabled = false;
+            localStorage.removeItem('fitflow-health-disabled');
+            showHealthPermissionModal();
+        }
+
+        // Get step data with proper fallback
         function getStepData() {
-            if (healthDisabled) return 0;
+            if (healthDisabled || !healthPermissionGranted) return 0;
             
             const today = new Date().toDateString();
             const savedDate = localStorage.getItem('fitflow-steps-date');
             
             if (savedDate === today) {
-                return parseInt(localStorage.getItem('fitflow-daily-steps') || '0');
+                return parseInt(localStorage.getItem('fitflow-real-steps') || '0');
             }
             
-            // If it's a new day, refresh the data
-            if (healthPermissionGranted && !healthDisabled) {
-                fetchStepData();
-                generateWeeklyStepsData();
-            }
-            
-            return dailyStepsData;
+            return 0; // Return 0 for new day until refreshed
         }
 
         // Get weekly steps data
         function getWeeklyStepsData() {
-            if (healthDisabled) return [];
+            if (healthDisabled || !healthPermissionGranted) return [];
             
             const saved = localStorage.getItem('fitflow-weekly-steps');
             if (saved) {
                 return JSON.parse(saved);
             }
             return weeklyStepsData;
-        }
-
-        // Get daily calories and minutes
-        function getDailyCalories() {
-            const today = new Date().toDateString();
-            const savedDate = localStorage.getItem('fitflow-calories-date');
-            
-            if (savedDate === today) {
-                return parseInt(localStorage.getItem('fitflow-daily-calories') || '0');
-            }
-            
-            return dailyCalories;
-        }
-
-        function getDailyMinutes() {
-            const today = new Date().toDateString();
-            const savedDate = localStorage.getItem('fitflow-calories-date');
-            
-            if (savedDate === today) {
-                return parseInt(localStorage.getItem('fitflow-daily-minutes') || '0');
-            }
-            
-            return dailyMinutes;
         }
 
         // App state
@@ -1705,7 +1751,7 @@
             }
         };
 
-        // Exercise instructions - NO EMOJIS
+        // Exercise instructions
         const exerciseInstructions = {
             'Push-ups': 'Start in plank position with hands shoulder-width apart. Lower your body until chest nearly touches the floor. Push back up to starting position. Keep core tight throughout.',
             'Squats': 'Stand with feet shoulder-width apart. Lower your body by bending knees and pushing hips back. Keep chest up and knees behind toes. Drive through heels to return to standing.',
@@ -1841,7 +1887,7 @@
             }
         ];
 
-        // Initialize app with Apple Health
+        // Initialize app with fixed Apple Health
         async function init() {
             workouts = predefinedWorkouts;
             loadData();
@@ -1851,28 +1897,20 @@
             
             // Initialize Apple Health if not disabled
             if (!healthDisabled && checkHealthKitAvailability()) {
-                // Try to get existing permission status
                 const savedPermission = localStorage.getItem('fitflow-health-permission');
                 if (savedPermission === 'granted') {
                     healthPermissionGranted = true;
-                    await fetchStepData();
+                    await fetchRealStepData();
                     await generateWeeklyStepsData();
                 }
             }
             
-            // Always update calories and minutes regardless of health integration
-            await updateCaloriesAndMinutes();
+            // Always update workout calories and minutes
+            updateWorkoutCaloriesAndMinutes();
             
             refreshWorkoutData();
             showTab('home');
             startTimerLoop();
-            
-            // Auto-update stats on app load
-            if (healthPermissionGranted && !healthDisabled) {
-                await fetchStepData();
-                await generateWeeklyStepsData();
-            }
-            await updateCaloriesAndMinutes();
         }
 
         // Show Apple Health permission modal
@@ -1937,7 +1975,7 @@
             if (granted) {
                 localStorage.setItem('fitflow-health-permission', 'granted');
                 closeModal('healthModal');
-                showHomeTab(); // Refresh to show step data
+                showHomeTab();
                 alert('Apple Health access granted! Your daily steps and weekly chart will now sync automatically.');
             } else {
                 localStorage.setItem('fitflow-health-permission', 'denied');
@@ -2090,18 +2128,31 @@
             }, 50);
         }
 
-        // Updated Home tab with enhanced design and trending workout logic
+        // Fixed Browse Workouts function - scrolls to workouts section
+        function scrollToWorkoutsSection() {
+            showTab('home');
+            setTimeout(() => {
+                const workoutsSection = document.querySelector('.trending-section') || 
+                                       document.querySelector('h3[style*="All Workouts"]') ||
+                                       document.querySelector('.workouts-container');
+                if (workoutsSection) {
+                    workoutsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+
+        // Updated Home tab with fixed scrolling workouts list
         function showHomeTab() {
             const allWorkouts = [...workouts, ...customWorkouts];
             const content = document.getElementById('content');
             const trendingWorkout = getTrendingWorkout(allWorkouts);
             const weeklyData = getWeeklyStepsData();
             const todaySteps = getStepData();
-            const todayKm = (todaySteps * 0.0008).toFixed(2); // Rough conversion: 1 step ≈ 0.8m
+            const todayKm = (todaySteps * 0.0008).toFixed(2);
             
-            // Get updated calories and minutes
-            const displayCalories = getDailyCalories();
-            const displayMinutes = getDailyMinutes();
+            // Get updated calories and minutes from workouts only
+            const displayCalories = getWorkoutCalories();
+            const displayMinutes = getWorkoutMinutes();
             
             content.innerHTML = `
                 <div class="header">
@@ -2143,15 +2194,15 @@
                         ` : ''}
                     </div>
                     
-                    <!-- Enhanced Stats Grid with Real Tracking -->
+                    <!-- Enhanced Stats Grid with Workout-Only Tracking -->
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-number">${displayCalories}</div>
-                            <div class="stat-label">Calories</div>
+                            <div class="stat-label">Calories (Workouts)</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-number">${displayMinutes}</div>
-                            <div class="stat-label">Minutes</div>
+                            <div class="stat-label">Minutes (Workouts)</div>
                         </div>
                     </div>
                     
@@ -2190,7 +2241,8 @@
 
                         <h3 style="margin-bottom: 16px; color: #ffffff; font-size: 18px; font-weight: 700;">All Workouts</h3>
                         
-                        <div style="max-height: 70vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
+                        <!-- Fixed: Removed clunky slider, smooth scrolling workouts list -->
+                        <div class="workouts-container">
                             ${allWorkouts.map(workout => `
                                 <div class="card">
                                     <div class="workout-title">
@@ -2235,7 +2287,7 @@
                             <h2 style="margin-bottom: 16px; position: relative; z-index: 1;">Ready to Workout?</h2>
                             <p style="opacity: 0.8; margin-bottom: 24px; position: relative; z-index: 1;">Select a workout from the home screen to begin your fitness journey!</p>
                         </div>
-                        <button class="btn" onclick="showTab('home')">Browse Workouts</button>
+                        <button class="btn" onclick="scrollToWorkoutsSection()">Browse Workouts</button>
                     </div>
                 `;
                 return;
@@ -2262,7 +2314,7 @@
                             Back
                         </button>
                         
-                        <h2 style="font-size: 24px; margin-bottom: 16px; color: #ffffff; margin-top: 60px;">${currentWorkout.name}</h2>
+                        <h2 style="font-size: 24px; margin-bottom: 16px; color: #ffffff; margin-top: 100px;">${currentWorkout.name}</h2>
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${progress}%"></div>
                         </div>
@@ -2325,7 +2377,7 @@
                         </button>
                         
                         <!-- Exercise Info -->
-                        <div style="padding: 80px 20px 20px; text-align: center;">
+                        <div style="padding: 120px 20px 20px; text-align: center;">
                             <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 20px; color: #ffffff;">${exercise.name}</h2>
                             
                             <div class="timer" style="color: #ffffff; text-align: center; margin-bottom: 20px; font-size: 56px; font-weight: 700;">${formatTime(timer)}</div>
@@ -2334,7 +2386,7 @@
                                 <div class="progress-fill" style="width: ${progress}%"></div>
                             </div>
                             
-                            <!-- How to Perform Instructions (Replaces Emojis) -->
+                            <!-- How to Perform Instructions -->
                             <div class="exercise-instructions">
                                 <h4>
                                     <span style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">How to Perform</span>
@@ -2394,7 +2446,7 @@
                                 <button class="btn-control" onclick="previousExercise()" style="border-radius: 25px;">
                                     Previous
                                 </button>
-                                <button class="btn-play ${!isTimerRunning ? 'paused' : ''}" 
+                                <button class="btn-play" 
                                         style="width: 80px; height: 80px; font-size: 28px;" 
                                         onclick="toggleTimer()">
                                     ${isTimerRunning ? '⏸' : '▶'}
@@ -2586,7 +2638,7 @@
                         <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);">
                             <h3 style="color: #ffffff; margin-bottom: 12px;">Ready to Start?</h3>
                             <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">Complete your first workout to begin tracking your fitness journey!</p>
-                            <button class="btn" onclick="showTab('home')">Start First Workout</button>
+                            <button class="btn" onclick="scrollToWorkoutsSection()">Start First Workout</button>
                         </div>
                     ` : workoutHistory.slice(0, 5).map(workout => `
                         <div class="card">
@@ -2791,6 +2843,7 @@
             }, 100);
         }
 
+        // Fixed workout completion with proper calorie/minute tracking
         function completeWorkout() {
             const completedWorkout = {
                 ...currentWorkout,
@@ -2806,11 +2859,31 @@
             userStats.totalWorkouts++;
             userStats.totalTime += timer;
             
-            // Update calories and minutes tracking
-            dailyCalories += completedWorkout.calories;
-            dailyMinutes += Math.floor(timer / 60);
-            localStorage.setItem('fitflow-daily-calories', dailyCalories.toString());
-            localStorage.setItem('fitflow-daily-minutes', dailyMinutes.toString());
+            // Fixed: Update workout-only calories and minutes
+            updateWorkoutCaloriesAndMinutes();
+            
+            // Sync with Apple Health if available
+            if (typeof window.HealthKit !== 'undefined' && healthPermissionGranted) {
+                try {
+                    window.HealthKit.saveQuantitySample({
+                        sampleType: 'HKQuantityTypeIdentifierActiveEnergyBurned',
+                        quantity: completedWorkout.calories,
+                        unit: 'kcal',
+                        startDate: new Date(Date.now() - timer * 1000),
+                        endDate: new Date()
+                    });
+                    
+                    window.HealthKit.saveQuantitySample({
+                        sampleType: 'HKQuantityTypeIdentifierAppleExerciseTime',
+                        quantity: Math.floor(timer / 60),
+                        unit: 'min',
+                        startDate: new Date(Date.now() - timer * 1000),
+                        endDate: new Date()
+                    });
+                } catch (error) {
+                    console.log('Could not sync to Apple Health:', error);
+                }
+            }
             
             const today = new Date().toDateString();
             const lastWorkout = localStorage.getItem('fitflow-last-workout-date');
@@ -3011,7 +3084,7 @@
         let touchStartY = 0;
         let isDragging = false;
         let dragStartTime = 0;
-        let dragThreshold = 500; // milliseconds to start drag
+        let dragThreshold = 500;
 
         function setupDragAndDrop(container) {
             if (!container) return;
@@ -3021,7 +3094,6 @@
             exercises.forEach((exercise, index) => {
                 exercise.dataset.index = index;
                 
-                // Add drag handle if not exists
                 if (!exercise.querySelector('.drag-handle')) {
                     const dragHandle = document.createElement('div');
                     dragHandle.className = 'drag-handle';
@@ -3030,12 +3102,10 @@
                 
                 const dragHandle = exercise.querySelector('.drag-handle');
                 
-                // Touch events for mobile
                 dragHandle.addEventListener('touchstart', handleTouchStart, { passive: false });
                 dragHandle.addEventListener('touchmove', handleTouchMove, { passive: false });
                 dragHandle.addEventListener('touchend', handleTouchEnd, { passive: false });
                 
-                // Mouse events for desktop
                 dragHandle.addEventListener('mousedown', handleMouseStart);
                 exercise.addEventListener('dragover', handleDragOver);
                 exercise.addEventListener('drop', handleDrop);
@@ -3069,12 +3139,10 @@
             if (deltaY > 10 && Date.now() - dragStartTime >= dragThreshold) {
                 if (!isDragging) startDrag();
                 
-                // Find element under touch point
                 const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
                 const targetItem = elementBelow?.closest('.exercise-item');
                 
                 if (targetItem && targetItem !== draggedElement) {
-                    // Remove drag-over from all items
                     document.querySelectorAll('.exercise-item').forEach(item => {
                         item.classList.remove('drag-over');
                     });
@@ -3116,7 +3184,7 @@
             isDragging = true;
             draggedElement.classList.add('dragging');
             document.body.style.userSelect = 'none';
-            navigator.vibrate?.(50); // Haptic feedback if available
+            navigator.vibrate?.(50);
         }
 
         function endDrag() {
@@ -3193,7 +3261,6 @@
                 container.insertBefore(draggedItem, targetItem);
             }
             
-            // Update indices
             Array.from(container.children).forEach((item, index) => {
                 item.dataset.index = index;
             });
@@ -3292,7 +3359,6 @@
 
         // Sound effects
         function playDingSound() {
-            // Create a simple beep sound
             try {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
@@ -3842,7 +3908,6 @@
             
             document.body.appendChild(modal);
             
-            // Setup drag and drop after modal is created
             setTimeout(() => {
                 setupDragAndDrop(document.getElementById('createExerciseList'));
             }, 100);
@@ -4131,7 +4196,6 @@
                     difficulty: document.getElementById('ai-difficulty').value
                 };
 
-                // Validate inputs
                 if (!preferences.type || !preferences.duration || preferences.duration < 5) {
                     alert('Please fill in all required fields with valid values.');
                     return;
@@ -4157,7 +4221,6 @@
                 const workoutDifficulty = document.getElementById('workout-difficulty').value;
                 const workoutDuration = parseInt(document.getElementById('workout-duration').value);
                 
-                // Validate basic inputs
                 if (!workoutName || !workoutDuration || workoutDuration < 1) {
                     alert('Please enter a valid workout name and duration.');
                     return;
@@ -4178,14 +4241,12 @@
                             name: exerciseName
                         };
                         
-                        // Only add non-empty values
                         if (inputs[1].value) exercise.duration = parseInt(inputs[1].value);
                         if (inputs[2].value.trim()) exercise.reps = inputs[2].value.trim();
                         if (inputs[3].value) exercise.sets = parseInt(inputs[3].value);
                         if (inputs[4].value) exercise.rest = parseInt(inputs[4].value);
                         if (inputs[5].value.trim()) exercise.weight = inputs[5].value.trim();
                         
-                        // Set defaults if nothing specified
                         if (!exercise.duration && !exercise.reps) {
                             exercise.reps = '10-12';
                         }
@@ -4255,14 +4316,12 @@
                             name: exerciseName
                         };
                         
-                        // Only add non-empty values
                         if (inputs[1].value) exercise.duration = parseInt(inputs[1].value);
                         if (inputs[2].value.trim()) exercise.reps = inputs[2].value.trim();
                         if (inputs[3].value) exercise.sets = parseInt(inputs[3].value);
                         if (inputs[4].value) exercise.rest = parseInt(inputs[4].value);
                         if (inputs[5].value.trim()) exercise.weight = inputs[5].value.trim();
                         
-                        // Set defaults if nothing specified
                         if (!exercise.duration && !exercise.reps) {
                             exercise.reps = '10-12';
                         }
@@ -4287,12 +4346,10 @@
                     customWorkouts[workoutIndex].difficulty = workoutDifficulty;
                     customWorkouts[workoutIndex].exercises = exercises;
                     
-                    // Recalculate calories if custom/AI generated
                     if (customWorkouts[workoutIndex].custom || customWorkouts[workoutIndex].aiGenerated) {
                         customWorkouts[workoutIndex].calories = calculateCalories(workoutType, originalDuration, workoutDifficulty);
                     }
                     
-                    // Update AI workout weights if needed
                     if (customWorkouts[workoutIndex].aiGenerated) {
                         exercises.forEach(exercise => {
                             const recommendedWeight = getRecommendedWeight(exercise.name, null, workoutType, workoutDifficulty);
@@ -4324,11 +4381,10 @@
                 progressiveOverload = { enabled: false, percentage: 5, weeks: 2 };
                 
                 // Reset daily tracking
-                dailyCalories = 0;
-                dailyMinutes = 0;
-                localStorage.removeItem('fitflow-daily-calories');
-                localStorage.removeItem('fitflow-daily-minutes');
-                localStorage.removeItem('fitflow-calories-date');
+                localStorage.removeItem('fitflow-workout-calories');
+                localStorage.removeItem('fitflow-workout-minutes');
+                localStorage.removeItem('fitflow-workout-date');
+                updateWorkoutCaloriesAndMinutes();
                 
                 saveData();
                 showProfileTab();
@@ -4339,13 +4395,12 @@
         // Initialize app when page loads
         window.addEventListener('load', init);
 
-        // Add error handling for the entire app
+        // Add error handling
         window.addEventListener('error', function(event) {
             console.error('App error:', event.error);
-            // Don't alert for every error, but log them
         });
 
-        // Add input validation for forms
+        // Add form validation
         function validateNumberInput(input, min = 0, max = 999) {
             if (input && input.type === 'number') {
                 const value = parseInt(input.value);
@@ -4360,38 +4415,26 @@
             return true;
         }
 
-        // Add form validation listeners
         document.addEventListener('input', function(e) {
             if (e.target.type === 'number') {
                 validateNumberInput(e.target);
             }
         });
 
-        // Enhanced mobile experience
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                    console.log('SW registered: ', registration);
-                }, function(registrationError) {
-                    console.log('SW registration failed: ', registrationError);
-                });
-            });
-        }
-
         // Prevent zoom on iOS
         document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
         });
 
-        // Handle app visibility changes
+        // Handle app visibility changes - Fixed to only update real health data
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden && healthPermissionGranted && !healthDisabled) {
-                // Refresh health data when app becomes visible
-                fetchStepData().then(() => {
+                fetchRealStepData().then(() => {
                     generateWeeklyStepsData();
-                    updateCaloriesAndMinutes();
                 });
             }
+            // Always update workout-only calories and minutes
+            updateWorkoutCaloriesAndMinutes();
         });
     </script>
 </body>
