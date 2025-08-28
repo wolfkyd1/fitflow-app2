@@ -144,11 +144,12 @@
             padding-bottom: calc(84px + env(safe-area-inset-bottom, 16px));
         }
         
-        /* Fixed Navigation - Properly positioned at bottom */
+        /* Fixed Navigation - Flush at bottom of screen */
         .nav {
             background: #2a2a2a;
             display: flex;
-            padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 16px)) 8px;
+            padding: 8px 8px 0 8px;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
             position: fixed;
             bottom: 0;
             left: 0;
@@ -156,12 +157,12 @@
             z-index: 100;
             flex-shrink: 0;
             border-radius: 25px 25px 0 0;
-            min-height: calc(68px + env(safe-area-inset-bottom, 16px));
+            min-height: calc(68px + env(safe-area-inset-bottom, 0px));
             max-width: 430px;
             margin: 0 auto;
         }
         
-        /* Ensure nav is full width on mobile and extends to bottom */
+        /* Ensure nav is full width on mobile and flush at bottom */
         @media (max-width: 429px) {
             .nav {
                 max-width: 100%;
@@ -170,16 +171,17 @@
                 left: 0;
                 right: 0;
                 margin: 0;
+                padding-bottom: env(safe-area-inset-bottom, 0px);
             }
         }
         
         @supports not (padding-bottom: env(safe-area-inset-bottom)) {
             .nav {
-                min-height: 92px;
-                padding-bottom: 24px;
+                min-height: 84px;
+                padding-bottom: 16px;
             }
             .content {
-                padding-bottom: 108px;
+                padding-bottom: 100px;
             }
         }
         
@@ -581,6 +583,21 @@
             font-size: 14px;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
             transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        /* Exercise Name positioned on right side */
+        .exercise-name-right {
+            position: absolute;
+            top: calc(60px + env(safe-area-inset-top, 0px));
+            right: 20px;
+            left: 180px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: right;
+            word-wrap: break-word;
+            line-height: 1.2;
             z-index: 10;
         }
         
@@ -1859,53 +1876,58 @@
                         Back
                     </button>
                     
-                    <h2 style="font-size: 24px; margin-bottom: 16px; color: #ffffff; margin-top: 80px;">${currentWorkout.name}</h2>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    <div class="exercise-name-right">
+                        ${currentWorkout.name}
                     </div>
-                    <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin-bottom: 16px;">
-                        Exercise ${currentExercise + (isRestingBetweenSets ? 1 : 2)} of ${currentWorkout.exercises.length}
-                    </p>
                     
-                    <div class="rest-display">
-                        <h3 style="font-size: 28px;">Rest Time</h3>
-                        <div class="rest-timer">${formatTime(restTimer)}</div>
+                    <div style="padding-top: 120px;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                        <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin-bottom: 16px;">
+                            Exercise ${currentExercise + (isRestingBetweenSets ? 1 : 2)} of ${currentWorkout.exercises.length}
+                        </p>
                         
-                        ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
-                            <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
-                                <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">
-                                    ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
+                        <div class="rest-display">
+                            <h3 style="font-size: 28px;">Rest Time</h3>
+                            <div class="rest-timer">${formatTime(restTimer)}</div>
+                            
+                            ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
+                                <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
+                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">
+                                        ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
+                                    </div>
+                                    <div style="font-size: 14px; opacity: 0.9;">
+                                        ${exercise.name}
+                                    </div>
                                 </div>
-                                <div style="font-size: 14px; opacity: 0.9;">
-                                    ${exercise.name}
+                            ` : !isRestingBetweenSets && nextExercise ? `
+                                <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
+                                    <div style="font-size: 16px; font-weight: bold;">
+                                        Moving to next exercise
+                                    </div>
                                 </div>
+                            ` : ''}
+                            
+                            <div class="next-exercise">
+                                <div style="opacity: 0.9; margin-bottom: 8px; font-size: 14px;">Up Next:</div>
+                                <strong style="font-size: 20px;">
+                                    ${isRestingBetweenSets && actualSetsRemaining > 0 ? 
+                                        `${exercise.name} - Set ${currentSet}` : 
+                                        (nextExercise ? `${nextExercise.name}` : 'Workout Complete!')}
+                                </strong>
                             </div>
-                        ` : !isRestingBetweenSets && nextExercise ? `
-                            <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
-                                <div style="font-size: 16px; font-weight: bold;">
-                                    Moving to next exercise
-                                </div>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="next-exercise">
-                            <div style="opacity: 0.9; margin-bottom: 8px; font-size: 14px;">Up Next:</div>
-                            <strong style="font-size: 20px;">
-                                ${isRestingBetweenSets && actualSetsRemaining > 0 ? 
-                                    `${exercise.name} - Set ${currentSet}` : 
-                                    (nextExercise ? `${nextExercise.name}` : 'Workout Complete!')}
-                            </strong>
+                            
+                            <button class="rest-skip-btn" onclick="skipRest()">
+                                Skip Rest
+                            </button>
                         </div>
                         
-                        <button class="rest-skip-btn" onclick="skipRest()">
-                            Skip Rest
-                        </button>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: center; margin-top: 20px;">
-                        <button onclick="endWorkout()" class="btn-end-workout">
-                            End Workout
-                        </button>
+                        <div style="display: flex; justify-content: center; margin-top: 20px;">
+                            <button onclick="endWorkout()" class="btn-end-workout">
+                                End Workout
+                            </button>
+                        </div>
                     </div>
                 `;
                 
@@ -1935,9 +1957,11 @@
                             Back
                         </button>
                         
+                        <div class="exercise-name-right">
+                            ${exercise.name}
+                        </div>
+                        
                         <div style="padding: 120px 20px 20px; text-align: center;">
-                            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 20px; color: #ffffff;">${exercise.name}</h2>
-                            
                             <div class="timer" style="color: #ffffff; text-align: center; margin-bottom: 20px; font-size: 56px; font-weight: 700;">${formatTime(timer)}</div>
                             
                             <div class="progress-bar" style="margin-bottom: 20px;">
@@ -2948,14 +2972,22 @@
                             <label class="form-label">Exercises</label>
                             <div id="editExerciseList">
                                 ${workout.exercises.map(exercise => `
-                                    <div class="exercise-item">
-                                        <div style="margin-left: 0px;">
-                                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <div class="exercise-item" draggable="true">
+                                        <div class="drag-handle" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); cursor: grab; color: rgba(255,255,255,0.4);"></div>
+                                        <div style="margin-left: 24px;">
+                                            <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
                                                 <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;" value="${exercise.name}">
+                                                <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                                    <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
+                                                    Superset
+                                                </label>
                                                 <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
                                                         class="btn btn-danger" style="width: auto; padding: 8px 12px;">
                                                     Remove
                                                 </button>
+                                            </div>
+                                            <div class="superset-partner" style="display: none; margin-bottom: 8px;">
+                                                <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input">
                                             </div>
                                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
                                                 <div>
@@ -2986,6 +3018,9 @@
                             <button type="button" class="btn btn-success" style="margin-top: 12px;" onclick="addEditExercise()">
                                 + Add Exercise
                             </button>
+                            <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 8px;">
+                                💡 Tip: Press and hold to reorganize exercises. Check "Superset" to add a partner exercise.
+                            </p>
                         </div>
                         
                         <button type="submit" class="btn btn-edit">
@@ -2997,6 +3032,10 @@
             
             document.body.appendChild(modal);
             
+            setTimeout(() => {
+                setupDragAndDrop(document.getElementById('editExerciseList'));
+            }, 100);
+            
             document.getElementById('editWorkoutForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 handleEditWorkout(workout.id);
@@ -3007,14 +3046,23 @@
             const exerciseList = document.getElementById('editExerciseList');
             const newExercise = document.createElement('div');
             newExercise.className = 'exercise-item';
+            newExercise.draggable = true;
             newExercise.innerHTML = `
-                <div style="margin-left: 0px;">
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                <div class="drag-handle" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); cursor: grab; color: rgba(255,255,255,0.4);"></div>
+                <div style="margin-left: 24px;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
                         <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;">
+                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                            <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
+                            Superset
+                        </label>
                         <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
                                 class="btn btn-danger" style="width: auto; padding: 8px 12px;">
                             Remove
                         </button>
+                    </div>
+                    <div class="superset-partner" style="display: none; margin-bottom: 8px;">
+                        <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input">
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
                         <div>
@@ -3041,6 +3089,7 @@
                 </div>
             `;
             exerciseList.appendChild(newExercise);
+            setupDragAndDrop(exerciseList);
         }
 
         function addCreateExercise() {
@@ -3540,6 +3589,8 @@
                 exerciseElements.forEach(element => {
                     const inputs = element.querySelectorAll('input');
                     const exerciseName = inputs[0].value.trim();
+                    const supersetChecked = element.querySelector('.superset-checkbox') ? element.querySelector('.superset-checkbox').checked : false;
+                    const supersetPartner = element.querySelector('.superset-partner-input') ? element.querySelector('.superset-partner-input').value.trim() : '';
                     
                     if (exerciseName) {
                         hasValidExercise = true;
@@ -3560,6 +3611,19 @@
                         if (!exercise.rest) exercise.rest = 30;
                         
                         exercises.push(exercise);
+                        
+                        // Add superset partner if checked and has value
+                        if (supersetChecked && supersetPartner) {
+                            const supersetExercise = {
+                                name: supersetPartner,
+                                reps: exercise.reps,
+                                sets: exercise.sets,
+                                rest: Math.floor(exercise.rest / 2), // Shorter rest for superset
+                                superset: true
+                            };
+                            if (exercise.weight) supersetExercise.weight = exercise.weight;
+                            exercises.push(supersetExercise);
+                        }
                     }
                 });
                 
@@ -3697,7 +3761,149 @@
 
         // Drag and drop functionality
         function setupDragAndDrop(container) {
-            // Not implemented for this version
+            let draggedElement = null;
+            let touchTimeout = null;
+            let longPressTriggered = false;
+
+            container.querySelectorAll('.exercise-item').forEach(item => {
+                // Remove existing event listeners
+                item.removeEventListener('dragstart', handleDragStart);
+                item.removeEventListener('dragend', handleDragEnd);
+                item.removeEventListener('dragover', handleDragOver);
+                item.removeEventListener('drop', handleDrop);
+                item.removeEventListener('touchstart', handleTouchStart);
+                item.removeEventListener('touchmove', handleTouchMove);
+                item.removeEventListener('touchend', handleTouchEnd);
+
+                // Add drag event listeners
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                
+                // Add touch event listeners for mobile
+                item.addEventListener('touchstart', handleTouchStart, { passive: false });
+                item.addEventListener('touchmove', handleTouchMove, { passive: false });
+                item.addEventListener('touchend', handleTouchEnd);
+            });
+
+            function handleDragStart(e) {
+                draggedElement = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', this.outerHTML);
+            }
+
+            function handleDragEnd(e) {
+                this.classList.remove('dragging');
+                draggedElement = null;
+            }
+
+            function handleDragOver(e) {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+                e.dataTransfer.dropEffect = 'move';
+                this.classList.add('drag-over');
+                return false;
+            }
+
+            function handleDrop(e) {
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                }
+                
+                if (draggedElement !== this) {
+                    const draggedHTML = draggedElement.outerHTML;
+                    const thisHTML = this.outerHTML;
+                    
+                    draggedElement.outerHTML = thisHTML;
+                    this.outerHTML = draggedHTML;
+                    
+                    // Re-setup drag and drop for the new elements
+                    setTimeout(() => setupDragAndDrop(container), 100);
+                }
+                
+                this.classList.remove('drag-over');
+                return false;
+            }
+
+            function handleTouchStart(e) {
+                const touch = e.touches[0];
+                longPressTriggered = false;
+                
+                touchTimeout = setTimeout(() => {
+                    longPressTriggered = true;
+                    this.style.opacity = '0.5';
+                    this.style.transform = 'scale(0.95)';
+                    
+                    // Add visual feedback
+                    const rect = this.getBoundingClientRect();
+                    this.style.position = 'relative';
+                    this.style.zIndex = '1000';
+                }, 500);
+            }
+
+            function handleTouchMove(e) {
+                if (longPressTriggered) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const targetItem = elementBelow ? elementBelow.closest('.exercise-item') : null;
+                    
+                    // Remove previous drag-over classes
+                    container.querySelectorAll('.exercise-item').forEach(item => {
+                        item.classList.remove('drag-over');
+                    });
+                    
+                    if (targetItem && targetItem !== this) {
+                        targetItem.classList.add('drag-over');
+                    }
+                }
+            }
+
+            function handleTouchEnd(e) {
+                if (touchTimeout) {
+                    clearTimeout(touchTimeout);
+                }
+                
+                if (longPressTriggered) {
+                    const touch = e.changedTouches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const targetItem = elementBelow ? elementBelow.closest('.exercise-item') : null;
+                    
+                    if (targetItem && targetItem !== this) {
+                        // Swap the elements
+                        const thisHTML = this.outerHTML;
+                        const targetHTML = targetItem.outerHTML;
+                        
+                        const thisParent = this.parentNode;
+                        const targetParent = targetItem.parentNode;
+                        const thisNext = this.nextSibling;
+                        const targetNext = targetItem.nextSibling;
+                        
+                        // Insert elements in swapped positions
+                        thisParent.insertBefore(targetItem, thisNext);
+                        targetParent.insertBefore(this, targetNext);
+                        
+                        // Re-setup drag and drop
+                        setTimeout(() => setupDragAndDrop(container), 100);
+                    }
+                    
+                    // Reset styles
+                    this.style.opacity = '';
+                    this.style.transform = '';
+                    this.style.position = '';
+                    this.style.zIndex = '';
+                    
+                    // Remove drag-over classes
+                    container.querySelectorAll('.exercise-item').forEach(item => {
+                        item.classList.remove('drag-over');
+                    });
+                }
+                
+                longPressTriggered = false;
+            }
         }
 
         function resetProgress() {
