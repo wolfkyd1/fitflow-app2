@@ -563,7 +563,7 @@
         /* Back Button */
         .back-button {
             position: absolute;
-            top: calc(60px + env(safe-area-inset-top, 0px));
+            top: calc(62.5px + env(safe-area-inset-top, 0px));
             left: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -584,26 +584,38 @@
         /* Exercise Name positioned on right side */
         .exercise-name-right {
             position: absolute;
-            top: calc(60px + env(safe-area-inset-top, 0px));
-            right: 20px;
+            top: calc(44px + env(safe-area-inset-top, 0px));
+            right: 30px;
             left: 180px;
-            font-size: 20px;
+            font-size: 28px;
             font-weight: 700;
             color: #ffffff;
             text-align: right;
             word-wrap: break-word;
             line-height: 1.2;
             z-index: 10;
+            display: flex;
+        }
+
+        /* Exercise Name positioned in the center */
+        .exercise-name-center {
+            position: absolute;
+            top: calc(55px + env(safe-area-inset-top, 0px));
+            font-size: 30px;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            line-height: 1.2;
         }
         
         @supports not (top: env(safe-area-inset-top)) {
-            .back-button {
+            .back-button, .exercise-name-right, .exercise-name-center {
                 top: 80px;
             }
         }
-        
+
         @media (max-height: 700px) {
-            .back-button {
+            .back-button, .exercise-name-right, .exercise-name-center {
                 top: calc(50px + env(safe-area-inset-top, 0px));
             }
         }
@@ -619,6 +631,7 @@
         
         .workout-hero {
             position: relative;
+            bottom: 200px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 24px;
             padding: 40px 20px;
@@ -635,6 +648,24 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .btn-browse-workouts {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            position: relative;
+            bottom: 200px;
+            overflow: hidden;            
         }
         
         .timer {
@@ -899,8 +930,6 @@
             padding: 32px;
             margin: 20px 0;
             text-align: center;
-            max-width: 90%;
-            width: 100%;
         }
         
         .rest-display h3 {
@@ -1163,7 +1192,7 @@
                 padding: 10px 14px;
             }
             .rest-active .back-button {
-                top: calc(15px + env(safe-area-inset-top, 0px));
+                top: calc(40px + env(safe-area-inset-top, 0px));
             }
         }
         
@@ -1391,7 +1420,7 @@
 
         // Weight training phases
         const weightPhases = {
-            "hypertrophy": {"percentages": [0.65, 0.7, 0.75], "sets_reps": [[4,10], [5,8], [6,8]]},
+            "hypertrophy": {"percentages": [0.65, 0.7, 0.75], "sets_reps": [[4,12], [5,8], [6,8]]},
             "strength": {"percentages": [0.75, 0.8, 0.85], "sets_reps": [[4,6], [5,5], [5,4]]},
             "power": {"percentages": [0.85, 0.9, 0.95], "sets_reps": [[3,4], [4,3], [5,2]]},
             "deload": {"percentages": [0.5, 0.6], "sets_reps": [[2,8], [3,5]]}
@@ -1844,7 +1873,7 @@
                             <h2 style="margin-bottom: 16px; position: relative; z-index: 1;">Ready to Workout?</h2>
                             <p style="opacity: 0.8; margin-bottom: 24px; position: relative; z-index: 1;">Select a workout from the home screen to begin your fitness journey!</p>
                         </div>
-                        <button class="btn" onclick="scrollToWorkoutsSection()">Browse Workouts</button>
+                        <button class="btn-browse-workouts" onclick="scrollToWorkoutsSection()">Browse Workouts</button>
                     </div>
                 `;
                 return;
@@ -1865,13 +1894,8 @@
                 const actualSetsRemaining = isRestingBetweenSets ? (totalSets - currentSet + 1) : 0;
                 const nextExercise = currentWorkout.exercises[currentExercise + 1];
                 
-                restDiv.innerHTML = `
-                    <button class="back-button" onclick="showTab('home')">
-                        <span class="icon">←</span>
-                        Back
-                    </button>
-                    
-                    <div class="exercise-name-right">
+                restDiv.innerHTML = `                  
+                    <div class="exercise-name-center">
                         ${currentWorkout.name}
                     </div>
                     
@@ -2022,9 +2046,9 @@
                                     Previous
                                 </button>
                                 <button class="btn-play" 
-                                        style="width: 80px; height: 80px; font-size: 28px;" 
+                                        style="width: 70px; height: 70px; font-size: 30px; position: relative;" 
                                         onclick="toggleTimer()">
-                                    ${isTimerRunning ? '⏸' : '▶'}
+                                    ${isTimerRunning ? '||' : '▶'}
                                 </button>
                                 <button class="btn-control" onclick="nextExercise()" style="border-radius: 25px;">
                                     Next
@@ -2878,19 +2902,19 @@
                                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
                                             <div>
                                                 <div class="exercise-control-label">Duration(s)</div>
-                                                <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                                                <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
                                             </div>
                                             <div>
                                                 <div class="exercise-control-label">Reps</div>
-                                                <input type="text" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                                                <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
                                             </div>
                                             <div>
                                                 <div class="exercise-control-label">Sets</div>
-                                                <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                                                <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
                                             </div>
                                             <div>
                                                 <div class="exercise-control-label">Rest(s)</div>
-                                                <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                                                <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
                                             </div>
                                             <div>
                                                 <div class="exercise-control-label">Weight</div>
@@ -2972,10 +2996,6 @@
                                         <div style="margin-left: 24px;">
                                             <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
                                                 <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;" value="${exercise.name}">
-                                                <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
-                                                    <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
-                                                    Superset
-                                                </label>
                                                 <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
                                                         class="btn btn-danger" style="width: auto; padding: 8px 12px;">
                                                     Remove
@@ -2987,23 +3007,29 @@
                                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
                                                 <div>
                                                     <div class="exercise-control-label">Duration(s)</div>
-                                                    <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.duration || ''}">
+                                                    <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.duration || ''}">
                                                 </div>
                                                 <div>
                                                     <div class="exercise-control-label">Reps</div>
-                                                    <input type="text" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.reps || ''}">
+                                                    <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.reps || ''}">
                                                 </div>
                                                 <div>
                                                     <div class="exercise-control-label">Sets</div>
-                                                    <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.sets || ''}">
+                                                    <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.sets || ''}">
                                                 </div>
                                                 <div>
                                                     <div class="exercise-control-label">Rest(s)</div>
-                                                    <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.rest || ''}">
+                                                    <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.rest || ''}">
                                                 </div>
                                                 <div>
-                                                    <div class="exercise-control-label">Weight</div>
-                                                    <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;" value="${exercise.weight || ''}">
+                                                  <div class="exercise-control-label">Weight</div>
+                                                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                                                    <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1 0 65px;" value="${exercise.weight || ''}">
+                                                    <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                                      <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
+                                                      Superset
+                                                    </label>
+                                                  </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -3047,10 +3073,6 @@
                 <div style="margin-left: 24px;">
                     <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
                         <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;">
-                        <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
-                            <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
-                            Superset
-                        </label>
                         <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
                                 class="btn btn-danger" style="width: auto; padding: 8px 12px;">
                             Remove
@@ -3062,23 +3084,33 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
                         <div>
                             <div class="exercise-control-label">Duration(s)</div>
-                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Reps</div>
-                            <input type="text" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Sets</div>
-                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Rest(s)</div>
-                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Weight</div>
                             <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;">
+                            <div>
+                                <div class="exercise-control-label">Weight</div>
+                                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                                <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1 0 65px;" value="${exercise.weight || ''}">
+                                <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                    <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
+                                     Superset
+                                 </label>
+                                </div>
+                             </div>                            
                         </div>
                     </div>
                 </div>
@@ -3103,19 +3135,19 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
                         <div>
                             <div class="exercise-control-label">Duration(s)</div>
-                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Reps</div>
-                            <input type="text" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Sets</div>
-                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Rest(s)</div>
-                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
                         </div>
                         <div>
                             <div class="exercise-control-label">Weight</div>
