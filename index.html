@@ -141,36 +141,45 @@
             position: relative;
             min-height: 0;
             background: #1a1a1a;
-            padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: calc(84px + env(safe-area-inset-bottom, 16px));
         }
         
         /* Fixed Navigation - Properly positioned at bottom */
         .nav {
-            background: #2a2a2a;;
+            background: #2a2a2a;
             display: flex;
-            padding: 8px;
-            padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
-            position: relative;
+            padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 16px)) 8px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
             flex-shrink: 0;
+            border-radius: 25px 25px 0 0;
+            min-height: calc(68px + env(safe-area-inset-bottom, 16px));
+            max-width: 430px;
+            margin: 0 auto;
         }
         
-        /* Ensure nav is full width on mobile */
+        /* Ensure nav is full width on mobile and extends to bottom */
         @media (max-width: 429px) {
             .nav {
                 max-width: 100%;
                 border-radius: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0;
             }
         }
         
         @supports not (padding-bottom: env(safe-area-inset-bottom)) {
             .nav {
-                min-height: 76px;
-                padding-bottom: 16px;
+                min-height: 92px;
+                padding-bottom: 24px;
             }
             .content {
-                padding-bottom: 92px;
+                padding-bottom: 108px;
             }
         }
         
@@ -522,7 +531,36 @@
             padding: 20px;
             background: #1a1a1a;
             position: relative;
+            min-height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Rest Screen Specific Styles */
+        .rest-active {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a1a;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            padding-bottom: calc(100px + env(safe-area-inset-bottom, 16px));
+        }
+        
+        .rest-active .back-button {
+            position: absolute;
+            top: calc(20px + env(safe-area-inset-top, 0px));
+            left: 20px;
+            z-index: 60;
         }
         
         /* Back Button */
@@ -849,6 +887,8 @@
             padding: 32px;
             margin: 20px 0;
             text-align: center;
+            max-width: 90%;
+            width: 100%;
         }
         
         .rest-display h3 {
@@ -1062,6 +1102,20 @@
             }
         }
         
+        /* Superset styles */
+        .superset-partner {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            padding: 8px;
+        }
+        
+        .superset-checkbox {
+            width: 16px !important;
+            height: 16px !important;
+            margin: 0 4px 0 0 !important;
+        }
+        
         /* Responsive Design */
         @media (max-width: 414px) {
             .header { 
@@ -1070,6 +1124,9 @@
             .back-button {
                 top: calc(50px + env(safe-area-inset-top, 0px));
             }
+            .rest-active .back-button {
+                top: calc(20px + env(safe-area-inset-top, 0px));
+            }
         }
         
         @media (max-width: 390px) {
@@ -1077,6 +1134,7 @@
             .header p { font-size: 12px; }
             .header { padding-bottom: 12px; }
             .timer { font-size: 48px; }
+            .rest-timer { font-size: 48px; }
             .exercise-name { font-size: 22px; }
             .stat-number { font-size: 28px; }
             .btn { padding: 12px 16px; font-size: 14px; }
@@ -1091,6 +1149,9 @@
                 top: calc(40px + env(safe-area-inset-top, 0px));
                 font-size: 12px;
                 padding: 10px 14px;
+            }
+            .rest-active .back-button {
+                top: calc(15px + env(safe-area-inset-top, 0px));
             }
         }
         
@@ -1134,11 +1195,11 @@
         
         <div class="nav">
             <button class="nav-item active" onclick="showTab('home')">
-                <span class="icon">𖠿</span>
+                <span class="icon">🏠</span>
                 Home
             </button>
             <button class="nav-item" onclick="showTab('workout')">
-                <span class="icon">▷</span>
+                <span class="icon">▶</span>
                 Workout
             </button>
             <button class="nav-item" onclick="showTab('profile')">
@@ -1162,6 +1223,10 @@
         let isTimerRunning = false;
         let restTimer = 0;
         let isResting = false;
+        let exerciseTimer = 0;
+        let exerciseTimeLimit = 0;
+        let wakeLock = null;
+        let manualSkip = false;
         let userStats = {
             totalWorkouts: 0,
             totalTime: 0,
@@ -1423,6 +1488,26 @@
             }
         ];
 
+        // Wake lock functions
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake lock activated');
+                }
+            } catch (err) {
+                console.log('Wake lock failed:', err);
+            }
+        }
+
+        function releaseWakeLock() {
+            if (wakeLock) {
+                wakeLock.release();
+                wakeLock = null;
+                console.log('Wake lock released');
+            }
+        }
+
         // Workout calories and minutes tracking
         function updateWorkoutCaloriesAndMinutes() {
             const today = new Date().toDateString();
@@ -1561,7 +1646,13 @@
             setInterval(() => {
                 if (isTimerRunning && workoutInProgress && !isResting) {
                     timer++;
+                    exerciseTimer++;
                     updateTimerDisplay();
+                    
+                    // Auto-advance when exercise duration is complete (if not manually controlled)
+                    if (!manualSkip && exerciseTimeLimit > 0 && exerciseTimer >= exerciseTimeLimit) {
+                        completeExercise();
+                    }
                 }
                 if (isResting && restTimer > 0) {
                     restTimer--;
@@ -1569,6 +1660,7 @@
                         playDingSound();
                         isResting = false;
                         isTimerRunning = true;
+                        exerciseTimer = 0;
                         
                         if (currentTab === 'workout') {
                             showWorkoutTab();
@@ -1752,72 +1844,88 @@
             const setsRemaining = totalSets - currentSet + 1;
 
             if (isResting) {
+                // Create rest screen content directly in body
+                const restDiv = document.createElement('div');
+                restDiv.className = 'rest-active';
+                restDiv.id = 'restScreen';
+                
                 const isRestingBetweenSets = currentSet <= totalSets;
                 const actualSetsRemaining = isRestingBetweenSets ? (totalSets - currentSet + 1) : 0;
                 const nextExercise = currentWorkout.exercises[currentExercise + 1];
                 
-                content.innerHTML = `
-                    <div class="header">
-                        <h1>FitFlow</h1>
-                        <p>Your Personal Workout Companion</p>
+                restDiv.innerHTML = `
+                    <button class="back-button" onclick="showTab('home')">
+                        <span class="icon">←</span>
+                        Back
+                    </button>
+                    
+                    <h2 style="font-size: 24px; margin-bottom: 16px; color: #ffffff; margin-top: 80px;">${currentWorkout.name}</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
                     </div>
-                    <div class="workout-active">
-                        <button class="back-button" onclick="showTab('home')">
-                            <span class="icon">←</span>
-                            Back
-                        </button>
+                    <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin-bottom: 16px;">
+                        Exercise ${currentExercise + (isRestingBetweenSets ? 1 : 2)} of ${currentWorkout.exercises.length}
+                    </p>
+                    
+                    <div class="rest-display">
+                        <h3 style="font-size: 28px;">Rest Time</h3>
+                        <div class="rest-timer">${formatTime(restTimer)}</div>
                         
-                        <h2 style="font-size: 24px; margin-bottom: 16px; color: #ffffff; margin-top: 100px;">${currentWorkout.name}</h2>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progress}%"></div>
-                        </div>
-                        <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin-bottom: 16px;">
-                            Exercise ${currentExercise + (isRestingBetweenSets ? 1 : 2)} of ${currentWorkout.exercises.length}
-                        </p>
-                        
-                        <div class="rest-display">
-                            <h3 style="font-size: 28px;">Rest Time</h3>
-                            <div class="rest-timer">${formatTime(restTimer)}</div>
-                            
-                            ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
-                                <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
-                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">
-                                        ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
-                                    </div>
-                                    <div style="font-size: 14px; opacity: 0.9;">
-                                        ${exercise.name}
-                                    </div>
+                        ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
+                            <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
+                                <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">
+                                    ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
                                 </div>
-                            ` : !isRestingBetweenSets && nextExercise ? `
-                                <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
-                                    <div style="font-size: 16px; font-weight: bold;">
-                                        Moving to next exercise
-                                    </div>
+                                <div style="font-size: 14px; opacity: 0.9;">
+                                    ${exercise.name}
                                 </div>
-                            ` : ''}
-                            
-                            <div class="next-exercise">
-                                <div style="opacity: 0.9; margin-bottom: 8px; font-size: 14px;">Up Next:</div>
-                                <strong style="font-size: 20px;">
-                                    ${isRestingBetweenSets && actualSetsRemaining > 0 ? 
-                                        `${exercise.name} - Set ${currentSet}` : 
-                                        (nextExercise ? `${nextExercise.name}` : 'Workout Complete!')}
-                                </strong>
                             </div>
-                            
-                            <button class="rest-skip-btn" onclick="skipRest()">
-                                Skip Rest
-                            </button>
+                        ` : !isRestingBetweenSets && nextExercise ? `
+                            <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
+                                <div style="font-size: 16px; font-weight: bold;">
+                                    Moving to next exercise
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="next-exercise">
+                            <div style="opacity: 0.9; margin-bottom: 8px; font-size: 14px;">Up Next:</div>
+                            <strong style="font-size: 20px;">
+                                ${isRestingBetweenSets && actualSetsRemaining > 0 ? 
+                                    `${exercise.name} - Set ${currentSet}` : 
+                                    (nextExercise ? `${nextExercise.name}` : 'Workout Complete!')}
+                            </strong>
                         </div>
                         
-                        <div style="display: flex; justify-content: center; margin-top: 20px;">
-                            <button onclick="endWorkout()" class="btn-end-workout">
-                                End Workout
-                            </button>
-                        </div>
+                        <button class="rest-skip-btn" onclick="skipRest()">
+                            Skip Rest
+                        </button>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; margin-top: 20px;">
+                        <button onclick="endWorkout()" class="btn-end-workout">
+                            End Workout
+                        </button>
                     </div>
                 `;
+                
+                // Remove existing rest screen if any
+                const existingRest = document.getElementById('restScreen');
+                if (existingRest) {
+                    existingRest.remove();
+                }
+                
+                document.body.appendChild(restDiv);
+                
+                // Update main content to empty since rest screen is overlaid
+                content.innerHTML = '';
             } else {
+                // Remove rest screen if it exists
+                const existingRest = document.getElementById('restScreen');
+                if (existingRest) {
+                    existingRest.remove();
+                }
+                
                 const instruction = exerciseInstructions[exercise.name] || exerciseInstructions['Default'];
                 
                 content.innerHTML = `
@@ -1899,7 +2007,7 @@
                                         onclick="toggleTimer()">
                                     ${isTimerRunning ? '⏸' : '▶'}
                                 </button>
-                                <button class="btn-control" onclick="completeExercise()" style="border-radius: 25px;">
+                                <button class="btn-control" onclick="nextExercise()" style="border-radius: 25px;">
                                     Next
                                 </button>
                             </div>
@@ -2080,11 +2188,18 @@
 
         // Utility functions
         function previousExercise() {
+            manualSkip = true;
             if (currentExercise > 0) {
                 currentExercise--;
                 currentSet = 1;
+                exerciseTimer = 0;
                 showWorkoutTab();
             }
+        }
+
+        function nextExercise() {
+            manualSkip = true;
+            completeExercise();
         }
 
         // Get recommended weight
@@ -2170,9 +2285,19 @@
             currentSet = 1;
             workoutInProgress = true;
             timer = 0;
+            exerciseTimer = 0;
             isTimerRunning = true;
             isResting = false;
             restTimer = 0;
+            manualSkip = false;
+            
+            // Set exercise time limit if duration exists
+            const firstExercise = currentWorkout.exercises[0];
+            exerciseTimeLimit = firstExercise && firstExercise.duration ? firstExercise.duration : 0;
+            
+            // Request wake lock to prevent screen timeout
+            requestWakeLock();
+            
             showTab('workout');
             
             setTimeout(() => {
@@ -2205,6 +2330,7 @@
             
             if (currentSet < totalSets) {
                 currentSet++;
+                exerciseTimer = 0;
                 if (exercise.rest && exercise.rest > 0) {
                     isResting = true;
                     restTimer = exercise.rest;
@@ -2215,6 +2341,12 @@
                 if (currentExercise < currentWorkout.exercises.length - 1) {
                     currentExercise++;
                     currentSet = 1;
+                    exerciseTimer = 0;
+                    
+                    // Set new exercise time limit
+                    const nextExercise = currentWorkout.exercises[currentExercise];
+                    exerciseTimeLimit = nextExercise && nextExercise.duration ? nextExercise.duration : 0;
+                    
                     if (exercise.rest && exercise.rest > 0) {
                         isResting = true;
                         restTimer = exercise.rest;
@@ -2240,6 +2372,7 @@
         function skipRest() {
             isResting = false;
             restTimer = 0;
+            exerciseTimer = 0;
             isTimerRunning = true;
             showWorkoutTab();
             
@@ -2324,9 +2457,21 @@
             currentExercise = 0;
             currentSet = 1;
             timer = 0;
+            exerciseTimer = 0;
+            exerciseTimeLimit = 0;
             isTimerRunning = false;
             isResting = false;
             restTimer = 0;
+            manualSkip = false;
+            
+            // Release wake lock
+            releaseWakeLock();
+            
+            // Remove rest screen if it exists
+            const existingRest = document.getElementById('restScreen');
+            if (existingRest) {
+                existingRest.remove();
+            }
         }
 
         function deleteWorkout(id) {
@@ -2348,6 +2493,17 @@
             }
 
             showEditWorkoutModal(workout);
+        }
+
+        // Superset toggle function
+        function toggleSuperset(checkbox) {
+            const supersetPartner = checkbox.closest('.exercise-item').querySelector('.superset-partner');
+            if (checkbox.checked) {
+                supersetPartner.style.display = 'block';
+            } else {
+                supersetPartner.style.display = 'none';
+                supersetPartner.querySelector('.superset-partner-input').value = '';
+            }
         }
 
         // AI Workout Generation
@@ -2750,6 +2906,141 @@
                 e.preventDefault();
                 handleCreateWorkout();
             });
+        }
+
+        function showEditWorkoutModal(workout) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'editModal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Workout</h3>
+                        <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
+                    </div>
+                    <form id="editWorkoutForm">
+                        <div class="form-group">
+                            <label class="form-label">Workout Name</label>
+                            <input type="text" id="edit-workout-name" class="form-input" value="${workout.name}" required>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="form-group">
+                                <label class="form-label">Type</label>
+                                <select id="edit-workout-type" class="form-select">
+                                    ${workoutTypes.map(type => `<option value="${type}" ${type === workout.type ? 'selected' : ''}>${type}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Difficulty</label>
+                                <select id="edit-workout-difficulty" class="form-select">
+                                    <option value="Beginner" ${workout.difficulty === 'Beginner' ? 'selected' : ''}>Beginner</option>
+                                    <option value="Intermediate" ${workout.difficulty === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
+                                    <option value="Advanced" ${workout.difficulty === 'Advanced' ? 'selected' : ''}>Advanced</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Duration (min)</label>
+                            <input type="number" id="edit-workout-duration" class="form-input" min="1" value="${workout.duration}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Exercises</label>
+                            <div id="editExerciseList">
+                                ${workout.exercises.map(exercise => `
+                                    <div class="exercise-item">
+                                        <div style="margin-left: 0px;">
+                                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                                <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;" value="${exercise.name}">
+                                                <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
+                                                        class="btn btn-danger" style="width: auto; padding: 8px 12px;">
+                                                    Remove
+                                                </button>
+                                            </div>
+                                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
+                                                <div>
+                                                    <div class="exercise-control-label">Duration(s)</div>
+                                                    <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.duration || ''}">
+                                                </div>
+                                                <div>
+                                                    <div class="exercise-control-label">Reps</div>
+                                                    <input type="text" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.reps || ''}">
+                                                </div>
+                                                <div>
+                                                    <div class="exercise-control-label">Sets</div>
+                                                    <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.sets || ''}">
+                                                </div>
+                                                <div>
+                                                    <div class="exercise-control-label">Rest(s)</div>
+                                                    <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;" value="${exercise.rest || ''}">
+                                                </div>
+                                                <div>
+                                                    <div class="exercise-control-label">Weight</div>
+                                                    <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;" value="${exercise.weight || ''}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button type="button" class="btn btn-success" style="margin-top: 12px;" onclick="addEditExercise()">
+                                + Add Exercise
+                            </button>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-edit">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            document.getElementById('editWorkoutForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleEditWorkout(workout.id);
+            });
+        }
+
+        function addEditExercise() {
+            const exerciseList = document.getElementById('editExerciseList');
+            const newExercise = document.createElement('div');
+            newExercise.className = 'exercise-item';
+            newExercise.innerHTML = `
+                <div style="margin-left: 0px;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;">
+                        <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
+                                class="btn btn-danger" style="width: auto; padding: 8px 12px;">
+                            Remove
+                        </button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
+                        <div>
+                            <div class="exercise-control-label">Duration(s)</div>
+                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <div class="exercise-control-label">Reps</div>
+                            <input type="text" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <div class="exercise-control-label">Sets</div>
+                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <div class="exercise-control-label">Rest(s)</div>
+                            <input type="number" class="form-input" placeholder="" style="padding: 6px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <div class="exercise-control-label">Weight</div>
+                            <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;">
+                        </div>
+                    </div>
+                </div>
+            `;
+            exerciseList.appendChild(newExercise);
         }
 
         function addCreateExercise() {
@@ -3162,6 +3453,8 @@
                 exerciseElements.forEach(element => {
                     const inputs = element.querySelectorAll('input');
                     const exerciseName = inputs[0].value.trim();
+                    const supersetChecked = element.querySelector('.superset-checkbox').checked;
+                    const supersetPartner = element.querySelector('.superset-partner-input').value.trim();
                     
                     if (exerciseName) {
                         hasValidExercise = true;
@@ -3169,11 +3462,11 @@
                             name: exerciseName
                         };
                         
-                        if (inputs[1].value) exercise.duration = parseInt(inputs[1].value);
-                        if (inputs[2].value.trim()) exercise.reps = inputs[2].value.trim();
-                        if (inputs[3].value) exercise.sets = parseInt(inputs[3].value);
-                        if (inputs[4].value) exercise.rest = parseInt(inputs[4].value);
-                        if (inputs[5].value.trim()) exercise.weight = inputs[5].value.trim();
+                        if (inputs[1] && inputs[1].value) exercise.duration = parseInt(inputs[1].value);
+                        if (inputs[2] && inputs[2].value.trim()) exercise.reps = inputs[2].value.trim();
+                        if (inputs[3] && inputs[3].value) exercise.sets = parseInt(inputs[3].value);
+                        if (inputs[4] && inputs[4].value) exercise.rest = parseInt(inputs[4].value);
+                        if (inputs[5] && inputs[5].value.trim()) exercise.weight = inputs[5].value.trim();
                         
                         if (!exercise.duration && !exercise.reps) {
                             exercise.reps = '10-12';
@@ -3182,6 +3475,19 @@
                         if (!exercise.rest) exercise.rest = 30;
                         
                         exercises.push(exercise);
+                        
+                        // Add superset partner if checked and has value
+                        if (supersetChecked && supersetPartner) {
+                            const supersetExercise = {
+                                name: supersetPartner,
+                                reps: exercise.reps,
+                                sets: exercise.sets,
+                                rest: Math.floor(exercise.rest / 2), // Shorter rest for superset
+                                superset: true
+                            };
+                            if (exercise.weight) supersetExercise.weight = exercise.weight;
+                            exercises.push(supersetExercise);
+                        }
                     }
                 });
                 
@@ -3211,6 +3517,78 @@
             } catch (error) {
                 console.error('Create workout failed:', error);
                 alert('Failed to create workout. Please check your inputs and try again.');
+            }
+        }
+
+        function handleEditWorkout(workoutId) {
+            try {
+                const workoutName = document.getElementById('edit-workout-name').value.trim();
+                const workoutType = document.getElementById('edit-workout-type').value;
+                const workoutDifficulty = document.getElementById('edit-workout-difficulty').value;
+                const workoutDuration = parseInt(document.getElementById('edit-workout-duration').value);
+                
+                if (!workoutName || !workoutDuration || workoutDuration < 1) {
+                    alert('Please enter a valid workout name and duration.');
+                    return;
+                }
+                
+                const exerciseElements = document.querySelectorAll('#editExerciseList .exercise-item');
+                const exercises = [];
+                
+                let hasValidExercise = false;
+                
+                exerciseElements.forEach(element => {
+                    const inputs = element.querySelectorAll('input');
+                    const exerciseName = inputs[0].value.trim();
+                    
+                    if (exerciseName) {
+                        hasValidExercise = true;
+                        const exercise = {
+                            name: exerciseName
+                        };
+                        
+                        if (inputs[1] && inputs[1].value) exercise.duration = parseInt(inputs[1].value);
+                        if (inputs[2] && inputs[2].value.trim()) exercise.reps = inputs[2].value.trim();
+                        if (inputs[3] && inputs[3].value) exercise.sets = parseInt(inputs[3].value);
+                        if (inputs[4] && inputs[4].value) exercise.rest = parseInt(inputs[4].value);
+                        if (inputs[5] && inputs[5].value.trim()) exercise.weight = inputs[5].value.trim();
+                        
+                        if (!exercise.duration && !exercise.reps) {
+                            exercise.reps = '10-12';
+                        }
+                        if (!exercise.sets) exercise.sets = 1;
+                        if (!exercise.rest) exercise.rest = 30;
+                        
+                        exercises.push(exercise);
+                    }
+                });
+                
+                if (!hasValidExercise) {
+                    alert('Please add at least one exercise with a name.');
+                    return;
+                }
+                
+                // Find and update the workout
+                const workoutIndex = customWorkouts.findIndex(w => w.id === workoutId);
+                if (workoutIndex !== -1) {
+                    customWorkouts[workoutIndex] = {
+                        ...customWorkouts[workoutIndex],
+                        name: workoutName,
+                        type: workoutType,
+                        difficulty: workoutDifficulty,
+                        duration: workoutDuration,
+                        calories: calculateCalories(workoutType, workoutDuration, workoutDifficulty),
+                        exercises: exercises
+                    };
+                }
+                
+                saveData();
+                closeModal('editModal');
+                showHomeTab();
+                alert(`Workout "${workoutName}" updated successfully!`);
+            } catch (error) {
+                console.error('Edit workout failed:', error);
+                alert('Failed to update workout. Please check your inputs and try again.');
             }
         }
 
@@ -3315,6 +3693,11 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) modal.remove();
+        }
+
+        // Drag and drop functionality
+        function setupDragAndDrop(container) {
+            // Not implemented for this version
         }
 
         function resetProgress() {
