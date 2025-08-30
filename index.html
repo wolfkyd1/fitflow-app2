@@ -534,6 +534,20 @@
             justify-content: center;
         }
         
+        /* ALIGN FIX: Workout Header Layout */
+        .workout-header {
+            position: absolute;
+            top: calc(20px + env(safe-area-inset-top, 0px));
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            min-height: 44px;
+        }
+        
         /* Rest Screen Specific Styles */
         .rest-active {
             text-align: center;
@@ -562,9 +576,6 @@
         
         /* Back Button */
         .back-button {
-            position: absolute;
-            top: calc(62.5px + env(safe-area-inset-top, 0px));
-            left: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -578,23 +589,23 @@
             font-size: 14px;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
             transition: all 0.3s ease;
-            z-index: 10;
+            flex-shrink: 0; /* ALIGN FIX: Prevent shrinking */
         }
 
-        /* Exercise Name positioned on right side */
+        /* ALIGN FIX: Exercise Name - Dynamic Font Sizing */
         .exercise-name-right {
-            position: absolute;
-            top: calc(44px + env(safe-area-inset-top, 0px));
-            right: 30px;
-            left: 180px;
+            flex: 1;
+            margin-left: 16px;
             font-size: 28px;
+            font-size: clamp(14px, 4vw, 28px); /* ALIGN FIX: Dynamic sizing with min/max */
             font-weight: 700;
             color: #ffffff;
             text-align: right;
             word-wrap: break-word;
             line-height: 1.2;
-            z-index: 10;
             display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         /* Exercise Name positioned in the center */
@@ -609,13 +620,19 @@
         }
         
         @supports not (top: env(safe-area-inset-top)) {
-            .back-button, .exercise-name-right, .exercise-name-center {
+            .workout-header {
+                top: 40px;
+            }
+            .exercise-name-center {
                 top: 80px;
             }
         }
 
         @media (max-height: 700px) {
-            .back-button, .exercise-name-right, .exercise-name-center {
+            .workout-header {
+                top: calc(10px + env(safe-area-inset-top, 0px));
+            }
+            .exercise-name-center {
                 top: calc(50px + env(safe-area-inset-top, 0px));
             }
         }
@@ -922,7 +939,7 @@
             color: #ef4444;
         }
         
-        /* Rest Display */
+        /* CARD FIX: Rest Display with Fixed Height */
         .rest-display {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -930,12 +947,42 @@
             padding: 32px;
             margin: 20px 0;
             text-align: center;
+            height: 420px; /* CARD FIX: Fixed height */
+            max-height: 50vh; /* CARD FIX: Responsive max-height */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto; /* CARD FIX: Allow scroll for long content */
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* CARD FIX: Responsive heights for different screen sizes */
+        @media (max-height: 700px) {
+            .rest-display {
+                height: 380px;
+                max-height: 55vh;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            .rest-display {
+                height: 340px;
+                max-height: 60vh;
+            }
+        }
+        
+        @media (min-height: 800px) {
+            .rest-display {
+                height: 460px;
+                max-height: 45vh;
+            }
         }
         
         .rest-display h3 {
             font-size: 24px;
             margin-bottom: 20px;
             font-weight: 700;
+            flex-shrink: 0; /* CARD FIX: Prevent title from shrinking */
         }
         
         .rest-timer {
@@ -943,6 +990,7 @@
             font-weight: 700;
             margin: 24px 0;
             color: #ffffff;
+            flex-shrink: 0; /* CARD FIX: Keep timer size consistent */
         }
         
         .next-exercise {
@@ -951,6 +999,7 @@
             border-radius: 16px;
             backdrop-filter: blur(10px);
             margin-top: 20px;
+            flex-shrink: 0; /* CARD FIX: Prevent next exercise box from shrinking */
         }
         
         .rest-skip-btn {
@@ -968,6 +1017,7 @@
             margin-top: 24px;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0; /* CARD FIX: Keep button size consistent */
         }
         
         .rest-skip-btn::before {
@@ -1162,8 +1212,8 @@
             .header { 
                 padding-top: calc(20px + env(safe-area-inset-top, 0px)); 
             }
-            .back-button {
-                top: calc(50px + env(safe-area-inset-top, 0px));
+            .workout-header {
+                top: calc(20px + env(safe-area-inset-top, 0px));
             }
             .rest-active .back-button {
                 top: calc(20px + env(safe-area-inset-top, 0px));
@@ -1186,13 +1236,21 @@
             .workout-info { font-size: 12px; }
             .modal-content { padding: 16px; }
             .form-input, .form-select { font-size: 16px !important; }
+            .workout-header {
+                top: calc(15px + env(safe-area-inset-top, 0px));
+            }
             .back-button {
-                top: calc(40px + env(safe-area-inset-top, 0px));
                 font-size: 12px;
                 padding: 10px 14px;
             }
+            .exercise-name-right {
+                font-size: clamp(14px, 3.5vw, 24px); /* ALIGN FIX: Smaller on small screens */
+            }
             .rest-active .back-button {
                 top: calc(40px + env(safe-area-inset-top, 0px));
+            }
+            .rest-display {
+                height: 360px; /* CARD FIX: Smaller height for small screens */
             }
         }
         
@@ -1206,8 +1264,8 @@
             .header { 
                 padding-top: calc(20px + env(safe-area-inset-top, 0px)); 
             }
-            .back-button {
-                top: calc(60px + env(safe-area-inset-top, 0px));
+            .workout-header {
+                top: calc(25px + env(safe-area-inset-top, 0px));
             }
         }
         
@@ -1858,7 +1916,7 @@
             `;
         }
 
-        // Workout tab
+        // Workout tab - ALIGN FIX: Updated layout
         function showWorkoutTab() {
             const content = document.getElementById('content');
             
@@ -1883,6 +1941,10 @@
             const progress = ((currentExercise + 1) / currentWorkout.exercises.length) * 100;
             const totalSets = exercise.sets || 1;
             const setsRemaining = totalSets - currentSet + 1;
+
+            // ALIGN FIX: Auto-scale exercise name font size
+            const exerciseName = exercise.name;
+            let exerciseNameEl = `<div class="exercise-name-right" id="exerciseNameEl">${exerciseName}</div>`;
 
             if (isResting) {
                 // Create rest screen content directly in body
@@ -1969,15 +2031,15 @@
                 
                 const instruction = exerciseInstructions[exercise.name] || exerciseInstructions['Default'];
                 
+                // ALIGN FIX: Use new header layout structure
                 content.innerHTML = `
                     <div class="workout-active">
-                        <button class="back-button" onclick="showTab('home')">
-                            <span class="icon">←</span>
-                            Back
-                        </button>
-                        
-                        <div class="exercise-name-right">
-                            ${exercise.name}
+                        <div class="workout-header">
+                            <button class="back-button" onclick="showTab('home')">
+                                <span class="icon">←</span>
+                                Back
+                            </button>
+                            ${exerciseNameEl}
                         </div>
                         
                         <div style="padding: 120px 20px 20px; text-align: center;">
@@ -2065,6 +2127,24 @@
                         </div>
                     </div>
                 `;
+                
+                // ALIGN FIX: Auto-scale font size if text is too long
+                setTimeout(() => {
+                    const nameEl = document.getElementById('exerciseNameEl');
+                    if (nameEl) {
+                        const container = nameEl.parentElement;
+                        const maxWidth = container.offsetWidth - 160; // Account for back button width
+                        
+                        // Check if text overflows
+                        if (nameEl.scrollWidth > maxWidth) {
+                            // Calculate scale factor
+                            const scale = maxWidth / nameEl.scrollWidth;
+                            const currentSize = parseFloat(window.getComputedStyle(nameEl).fontSize);
+                            const newSize = Math.max(14, Math.floor(currentSize * scale));
+                            nameEl.style.fontSize = `${newSize}px`;
+                        }
+                    }
+                }, 10);
             }
         }
 
