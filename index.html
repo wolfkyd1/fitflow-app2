@@ -1966,11 +1966,6 @@
                 const nextExercise = currentWorkout.exercises[currentExercise + 1];
                 
                 restDiv.innerHTML = `
-                    <button class="back-button" onclick="endWorkout()" style="position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); left: 20px; z-index: 60;">
-                        <span class="icon">×</span>
-                        End
-                    </button>
-                    
                     <div class="exercise-name-center">
                         ${currentWorkout.name}
                     </div>
@@ -2122,7 +2117,7 @@
                                 <button class="btn-play"
                                         style="width: 70px; height: 70px; font-size: 30px; position: relative;"
                                         onclick="toggleTimer()">
-                                    ${isTimerRunning ? '⏸' : '▶'}
+                                    ${isTimerRunning ? '||' : '▶'}
                                 </button>
                                 <button class="btn-control" onclick="nextExercise()" ${currentExercise >= currentWorkout.exercises.length - 1 ? 'disabled style="opacity: 0.5;"' : ''}>
                                     Next
@@ -2138,7 +2133,7 @@
                                     End Workout
                                 </button>
                                 <button onclick="showWorkoutSettings()" class="btn-control" style="flex: 0 0 auto; padding: 12px;">
-                                    ⚙️
+                                    ⚙︎
                                 </button>
                             </div>
                         </div>
