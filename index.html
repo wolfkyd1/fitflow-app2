@@ -596,16 +596,18 @@
         .exercise-name-right {
             flex: 1;
             margin-left: 16px;
-            font-size: 28px;
-            font-size: clamp(14px, 4vw, 28px); /* ALIGN FIX: Dynamic sizing with min/max */
+            font-size: clamp(14px, 4vw, 28px);
             font-weight: 700;
             color: #ffffff;
             text-align: right;
             word-wrap: break-word;
+            word-break: break-word; /* Add this */
+            overflow-wrap: break-word; /* Add this */
             line-height: 1.2;
             display: flex;
             align-items: center;
             justify-content: flex-end;
+            max-width: calc(100% - 160px); /* Add this */
         }
 
         /* Exercise Name positioned in the center */
@@ -1166,9 +1168,10 @@
         }
         
         .drag-handle::before {
-            content: '⋮⋮';
+            content: ':::';
             display: block;
             line-height: 0.8;
+            letter-spacing: -2px;
         }
         
         .exercise-controls {
@@ -1298,16 +1301,16 @@
         </div>
         
         <div class="nav">
-            <button class="nav-item active" onclick="showTab('home')">
-                <span class="icon">𖠿</span>
+            <button class="nav-item active" onclick="showTab('home')" aria-label="Home tab">
+                <span class="icon" aria-hidden="true">𖠿</span>
                 Home
             </button>
-            <button class="nav-item" onclick="showTab('workout')">
-                <span class="icon">▶</span>
+            <button class="nav-item" onclick="showTab('workout')" aria-label="Workout tab">
+                <span class="icon" aria-hidden="true">▶</span>
                 Workout
             </button>
-            <button class="nav-item" onclick="showTab('profile')">
-                <span class="icon">☰</span>
+            <button class="nav-item" onclick="showTab('profile')" aria-label="Profile tab">
+                <span class="icon" aria-hidden="true">☰</span>
                 Profile
             </button>
         </div>
@@ -1693,6 +1696,26 @@
 
         function saveData() {
             try {
+                const data = {
+                    history: workoutHistory,
+                    stats: userStats,
+                    custom: customWorkouts,
+                    weights: userWeights,
+                    exerciseHistory: exerciseHistory,
+                    progressiveOverload: progressiveOverload,
+                    userBody: userBody
+                };
+                
+                // Check if we're approaching localStorage limit
+                const dataString = JSON.stringify(data);
+                if (dataString.length > 4000000) { // ~4MB limit warning
+                    console.warn('Data approaching localStorage limit');
+                    // Trim old workout history if needed
+                    if (workoutHistory.length > 100) {
+                        workoutHistory = workoutHistory.slice(0, 50);
+                    }
+                }
+                
                 localStorage.setItem('fitflow-history', JSON.stringify(workoutHistory));
                 localStorage.setItem('fitflow-stats', JSON.stringify(userStats));
                 localStorage.setItem('fitflow-custom', JSON.stringify(customWorkouts));
@@ -1702,6 +1725,9 @@
                 localStorage.setItem('fitflow-user-body', JSON.stringify(userBody));
             } catch (e) {
                 console.error('Error saving data:', e);
+                if (e.name === 'QuotaExceededError') {
+                    showNotification('Storage full. Some data may not be saved.', 'error');
+                }
             }
         }
 
@@ -1745,38 +1771,39 @@
             const secs = seconds % 60;
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
-
         function startTimerLoop() {
             setInterval(() => {
-                if (isTimerRunning && workoutInProgress && !isResting) {
-                    timer++;
-                    exerciseTimer++;
-                    updateTimerDisplay();
-                    
-                    // Auto-advance when exercise duration is complete (if not manually controlled)
-                    if (!manualSkip && exerciseTimeLimit > 0 && exerciseTimer >= exerciseTimeLimit) {
-                        completeExercise();
-                    }
-                }
-                if (isResting && restTimer > 0) {
-                    restTimer--;
-                    if (restTimer <= 0) {
-                        playDingSound();
-                        isResting = false;
-                        isTimerRunning = true;
-                        exerciseTimer = 0;
+                // Only run timer logic when actually needed
+                if (workoutInProgress) {
+                    if (isTimerRunning && !isResting) {
+                        timer++;
+                        exerciseTimer++;
+                        updateTimerDisplay();
                         
-                        if (currentTab === 'workout') {
-                            showWorkoutTab();
-                            setTimeout(() => {
-                                const content = document.getElementById('content');
-                                if (content) {
-                                    content.scrollTo({ top: 0, behavior: 'smooth' });
-                                }
-                            }, 100);
+                        if (!manualSkip && exerciseTimeLimit > 0 && exerciseTimer >= exerciseTimeLimit) {
+                            completeExercise();
                         }
                     }
-                    updateRestTimerDisplay();
+                    if (isResting && restTimer > 0) {
+                        restTimer--;
+                        if (restTimer <= 0) {
+                            playDingSound();
+                            isResting = false;
+                            isTimerRunning = true;
+                            exerciseTimer = 0;
+                            
+                            if (currentTab === 'workout') {
+                                showWorkoutTab();
+                                setTimeout(() => {
+                                    const content = document.getElementById('content');
+                                    if (content) {
+                                        content.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }
+                                }, 100);
+                            }
+                        }
+                        updateRestTimerDisplay();
+                    }
                 }
             }, 1000);
         }
@@ -3154,7 +3181,7 @@
                     <form id="editWorkoutForm">
                         <div class="form-group">
                             <label class="form-label">Workout Name</label>
-                            <input type="text" id="edit-workout-name" class="form-input" value="${workout.name}" required>
+                            <input type="text" id="edit-workout-name" class="form-input" value="${workout.name}" required maxlength="50">
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                             <div class="form-group">
@@ -3174,7 +3201,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Duration (min)</label>
-                            <input type="number" id="edit-workout-duration" class="form-input" min="1" value="${workout.duration}" required>
+                            <input type="number" id="edit-workout-duration" class="form-input" min="1" max="180" value="${workout.duration}" required>
                         </div>
                         
                         <div class="form-group">
@@ -3182,44 +3209,44 @@
                             <div id="editExerciseList">
                                 ${workout.exercises.map(exercise => `
                                     <div class="exercise-item" draggable="true">
-                                        <div class="drag-handle" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); cursor: grab; color: rgba(255,255,255,0.4);"></div>
+                                        <div class="drag-handle"></div>
                                         <div style="margin-left: 24px;">
                                             <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
-                                                <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;" value="${exercise.name}">
-                                                <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
+                                                <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;" value="${exercise.name}" maxlength="50">
+                                                <button type="button" onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(() => setupDragAndDrop(document.getElementById('editExerciseList')), 50);" 
                                                         class="btn btn-danger" style="width: auto; padding: 8px 12px;">
                                                     Remove
                                                 </button>
                                             </div>
                                             <div class="superset-partner" style="display: none; margin-bottom: 8px;">
-                                                <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input">
+                                                <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input" maxlength="50">
                                             </div>
                                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
                                                 <div>
                                                     <div class="exercise-control-label">Duration(s)</div>
-                                                    <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.duration || ''}">
+                                                    <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.duration || ''}" min="0" max="600">
                                                 </div>
                                                 <div>
                                                     <div class="exercise-control-label">Reps</div>
-                                                    <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.reps || ''}">
+                                                    <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.reps || ''}" maxlength="10">
                                                 </div>
                                                 <div>
                                                     <div class="exercise-control-label">Sets</div>
-                                                    <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.sets || ''}">
+                                                    <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.sets || ''}" min="1" max="10">
                                                 </div>
                                                 <div>
                                                     <div class="exercise-control-label">Rest(s)</div>
-                                                    <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.rest || ''}">
+                                                    <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.rest || ''}" min="0" max="600">
                                                 </div>
                                                 <div>
-                                                  <div class="exercise-control-label">Weight</div>
-                                                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                                                    <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1 0 65px;" value="${exercise.weight || ''}">
-                                                    <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
-                                                      <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
-                                                      Superset
-                                                    </label>
-                                                  </div>
+                                                    <div class="exercise-control-label">Weight</div>
+                                                    <div style="display: flex; align-items: center; gap: 4px;">
+                                                        <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1; min-width: 45px;" value="${exercise.weight || ''}" maxlength="15">
+                                                        <label style="display: flex; align-items: center; gap: 2px; font-size: 10px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                                            <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)" style="width: 12px; height: 12px;">
+                                                            SS
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -3230,7 +3257,7 @@
                                 + Add Exercise
                             </button>
                             <p style="font-size: 12px; color: rgba(255, 255, 255, 0.6); margin-top: 8px;">
-                                💡 Tip: Press and hold to reorganize exercises. Check "Superset" to add a partner exercise.
+                                💡 Tip: Drag exercises to reorder. Check "SS" (Superset) to add a partner exercise.
                             </p>
                         </div>
                         
@@ -3738,8 +3765,26 @@
                     return;
                 }
                 
+                if (workoutName.length > 50) {
+                    showNotification('Workout name must be 50 characters or less.', 'error');
+                    return;
+                }
+                
+                // Check for potentially harmful content
+                if (/<script|javascript:|data:|vbscript:|onload|onerror/i.test(workoutName)) {
+                    showNotification('Invalid characters in workout name.', 'error');
+                    return;
+                }
+                
                 if (!workoutDuration || workoutDuration < 1 || workoutDuration > 180) {
                     showNotification('Duration must be between 1 and 180 minutes.', 'error');
+                    return;
+                }
+                
+                // Check if name already exists
+                const allWorkouts = [...workouts, ...customWorkouts];
+                if (allWorkouts.some(w => w.name.toLowerCase() === workoutName.toLowerCase())) {
+                    showNotification('A workout with this name already exists.', 'error');
                     return;
                 }
                 
@@ -3748,14 +3793,27 @@
                 
                 let hasValidExercise = false;
                 let exerciseCount = 0;
+                let validationErrors = [];
                 
-                exerciseElements.forEach(element => {
+                exerciseElements.forEach((element, index) => {
                     const inputs = element.querySelectorAll('input');
                     const exerciseName = inputs[0].value.trim();
                     const supersetChecked = element.querySelector('.superset-checkbox') ? element.querySelector('.superset-checkbox').checked : false;
                     const supersetPartner = element.querySelector('.superset-partner-input') ? element.querySelector('.superset-partner-input').value.trim() : '';
                     
                     if (exerciseName) {
+                        // Validate exercise name
+                        if (exerciseName.length > 50) {
+                            validationErrors.push(`Exercise ${index + 1}: Name too long (max 50 characters)`);
+                            return;
+                        }
+                        
+                        // Check for harmful content
+                        if (/<script|javascript:|data:|vbscript:|onload|onerror/i.test(exerciseName)) {
+                            validationErrors.push(`Exercise ${index + 1}: Invalid characters in name`);
+                            return;
+                        }
+                        
                         hasValidExercise = true;
                         exerciseCount++;
                         
@@ -3763,23 +3821,58 @@
                             name: exerciseName
                         };
                         
-                        // Validate numeric inputs
+                        // Validate and set numeric inputs with proper bounds
                         if (inputs[1] && inputs[1].value) {
                             const duration = parseInt(inputs[1].value);
-                            if (duration > 0 && duration <= 600) exercise.duration = duration;
+                            if (duration > 0 && duration <= 600) {
+                                exercise.duration = duration;
+                            } else if (duration > 600) {
+                                validationErrors.push(`Exercise ${index + 1}: Duration too long (max 600 seconds)`);
+                                return;
+                            }
                         }
-                        if (inputs[2] && inputs[2].value.trim()) exercise.reps = inputs[2].value.trim();
+                        
+                        if (inputs[2] && inputs[2].value.trim()) {
+                            const reps = inputs[2].value.trim();
+                            if (reps.length <= 10) {
+                                exercise.reps = reps;
+                            } else {
+                                validationErrors.push(`Exercise ${index + 1}: Reps field too long`);
+                                return;
+                            }
+                        }
+                        
                         if (inputs[3] && inputs[3].value) {
                             const sets = parseInt(inputs[3].value);
-                            if (sets > 0 && sets <= 10) exercise.sets = sets;
+                            if (sets > 0 && sets <= 10) {
+                                exercise.sets = sets;
+                            } else if (sets > 10) {
+                                validationErrors.push(`Exercise ${index + 1}: Too many sets (max 10)`);
+                                return;
+                            }
                         }
+                        
                         if (inputs[4] && inputs[4].value) {
                             const rest = parseInt(inputs[4].value);
-                            if (rest >= 0 && rest <= 600) exercise.rest = rest;
+                            if (rest >= 0 && rest <= 600) {
+                                exercise.rest = rest;
+                            } else if (rest > 600) {
+                                validationErrors.push(`Exercise ${index + 1}: Rest time too long (max 600 seconds)`);
+                                return;
+                            }
                         }
-                        if (inputs[5] && inputs[5].value.trim()) exercise.weight = inputs[5].value.trim();
                         
-                        // Set defaults
+                        if (inputs[5] && inputs[5].value.trim()) {
+                            const weight = inputs[5].value.trim();
+                            if (weight.length <= 15) {
+                                exercise.weight = weight;
+                            } else {
+                                validationErrors.push(`Exercise ${index + 1}: Weight field too long`);
+                                return;
+                            }
+                        }
+                        
+                        // Set defaults if nothing specified
                         if (!exercise.duration && !exercise.reps) {
                             exercise.reps = '10-12';
                         }
@@ -3790,11 +3883,21 @@
                         
                         // Add superset partner if checked and has value
                         if (supersetChecked && supersetPartner) {
+                            if (supersetPartner.length > 50) {
+                                validationErrors.push(`Exercise ${index + 1}: Superset partner name too long`);
+                                return;
+                            }
+                            
+                            if (/<script|javascript:|data:|vbscript:|onload|onerror/i.test(supersetPartner)) {
+                                validationErrors.push(`Exercise ${index + 1}: Invalid characters in superset partner name`);
+                                return;
+                            }
+                            
                             const supersetExercise = {
                                 name: supersetPartner,
                                 reps: exercise.reps,
                                 sets: exercise.sets,
-                                rest: Math.floor(exercise.rest / 2),
+                                rest: Math.max(15, Math.floor(exercise.rest / 2)), // Minimum 15s rest
                                 superset: true
                             };
                             if (exercise.weight) supersetExercise.weight = exercise.weight;
@@ -3804,13 +3907,27 @@
                     }
                 });
                 
+                // Check for validation errors
+                if (validationErrors.length > 0) {
+                    showNotification(validationErrors[0], 'error');
+                    return;
+                }
+                
                 if (!hasValidExercise) {
                     showNotification('Please add at least one exercise with a name.', 'error');
                     return;
                 }
                 
                 if (exerciseCount > 15) {
-                    showNotification('Maximum 15 exercises allowed per workout.', 'error');
+                    showNotification('Maximum 15 exercises allowed per workout (including supersets).', 'error');
+                    return;
+                }
+                
+                // Check for duplicate exercise names
+                const exerciseNames = exercises.map(ex => ex.name.toLowerCase());
+                const duplicates = exerciseNames.filter((name, index) => exerciseNames.indexOf(name) !== index);
+                if (duplicates.length > 0) {
+                    showNotification('Duplicate exercise names found. Please use unique names.', 'error');
                     return;
                 }
                 
@@ -3821,10 +3938,11 @@
                     difficulty: workoutDifficulty,
                     duration: workoutDuration,
                     calories: calculateCalories(workoutType, workoutDuration, workoutDifficulty),
-                    equipment: ['Bodyweight'],
+                    equipment: ['Bodyweight'], // Default equipment
                     exercises: exercises,
                     custom: true,
-                    muscleGroups: ['Full Body']
+                    muscleGroups: ['Full Body'], // Default muscle group
+                    createdAt: new Date().toISOString()
                 };
                 
                 customWorkouts.unshift(workoutData);
@@ -3832,6 +3950,7 @@
                 closeModal('createModal');
                 showHomeTab();
                 showNotification(`Custom workout "${workoutData.name}" created successfully!`);
+                
             } catch (error) {
                 console.error('Create workout failed:', error);
                 showNotification('Failed to create workout. Please check your inputs and try again.', 'error');
@@ -4034,16 +4153,17 @@
             let touchTimeout = null;
             let longPressTriggered = false;
 
+            // Clear existing event listeners and setup fresh ones
             container.querySelectorAll('.exercise-item').forEach(item => {
-                // Remove existing event listeners
-                item.removeEventListener('dragstart', handleDragStart);
-                item.removeEventListener('dragend', handleDragEnd);
-                item.removeEventListener('dragover', handleDragOver);
-                item.removeEventListener('drop', handleDrop);
-                item.removeEventListener('touchstart', handleTouchStart);
-                item.removeEventListener('touchmove', handleTouchMove);
-                item.removeEventListener('touchend', handleTouchEnd);
+                // Clone element to remove all existing event listeners
+                const newItem = item.cloneNode(true);
+                item.parentNode.replaceChild(newItem, item);
+            });
 
+            // Re-query after cloning and add event listeners to fresh elements
+            container.querySelectorAll('.exercise-item').forEach(item => {
+                item.draggable = true;
+                
                 // Add drag event listeners
                 item.addEventListener('dragstart', handleDragStart);
                 item.addEventListener('dragend', handleDragEnd);
@@ -4065,6 +4185,9 @@
 
             function handleDragEnd(e) {
                 this.classList.remove('dragging');
+                container.querySelectorAll('.exercise-item').forEach(item => {
+                    item.classList.remove('drag-over');
+                });
                 draggedElement = null;
             }
 
@@ -4073,7 +4196,16 @@
                     e.preventDefault();
                 }
                 e.dataTransfer.dropEffect = 'move';
-                this.classList.add('drag-over');
+                
+                // Remove drag-over from all items first
+                container.querySelectorAll('.exercise-item').forEach(item => {
+                    item.classList.remove('drag-over');
+                });
+                
+                // Add to current item
+                if (this !== draggedElement) {
+                    this.classList.add('drag-over');
+                }
                 return false;
             }
 
@@ -4082,14 +4214,27 @@
                     e.stopPropagation();
                 }
                 
-                if (draggedElement !== this) {
-                    const draggedHTML = draggedElement.outerHTML;
-                    const thisHTML = this.outerHTML;
+                if (draggedElement && draggedElement !== this) {
+                    // Get parent and sibling references
+                    const draggedParent = draggedElement.parentNode;
+                    const thisParent = this.parentNode;
+                    const draggedNext = draggedElement.nextSibling;
+                    const thisNext = this.nextSibling;
                     
-                    draggedElement.outerHTML = thisHTML;
-                    this.outerHTML = draggedHTML;
+                    // Swap the elements
+                    if (draggedNext) {
+                        draggedParent.insertBefore(this, draggedNext);
+                    } else {
+                        draggedParent.appendChild(this);
+                    }
                     
-                    // Re-setup drag and drop for the new elements
+                    if (thisNext) {
+                        thisParent.insertBefore(draggedElement, thisNext);
+                    } else {
+                        thisParent.appendChild(draggedElement);
+                    }
+                    
+                    // Re-setup drag and drop for the new arrangement
                     setTimeout(() => setupDragAndDrop(container), 100);
                 }
                 
@@ -4101,15 +4246,21 @@
                 const touch = e.touches[0];
                 longPressTriggered = false;
                 
+                // Clear any existing timeout
+                if (touchTimeout) {
+                    clearTimeout(touchTimeout);
+                }
+                
                 touchTimeout = setTimeout(() => {
                     longPressTriggered = true;
                     this.style.opacity = '0.5';
                     this.style.transform = 'scale(0.95)';
+                    this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.3)';
                     
-                    // Add visual feedback
-                    const rect = this.getBoundingClientRect();
-                    this.style.position = 'relative';
-                    this.style.zIndex = '1000';
+                    // Haptic feedback if available
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(50);
+                    }
                 }, 500);
             }
 
@@ -4134,6 +4285,7 @@
             function handleTouchEnd(e) {
                 if (touchTimeout) {
                     clearTimeout(touchTimeout);
+                    touchTimeout = null;
                 }
                 
                 if (longPressTriggered) {
@@ -4142,18 +4294,24 @@
                     const targetItem = elementBelow ? elementBelow.closest('.exercise-item') : null;
                     
                     if (targetItem && targetItem !== this) {
-                        // Swap the elements
-                        const thisHTML = this.outerHTML;
-                        const targetHTML = targetItem.outerHTML;
-                        
+                        // Perform the swap
                         const thisParent = this.parentNode;
                         const targetParent = targetItem.parentNode;
                         const thisNext = this.nextSibling;
                         const targetNext = targetItem.nextSibling;
                         
                         // Insert elements in swapped positions
-                        thisParent.insertBefore(targetItem, thisNext);
-                        targetParent.insertBefore(this, targetNext);
+                        if (thisNext) {
+                            thisParent.insertBefore(targetItem, thisNext);
+                        } else {
+                            thisParent.appendChild(targetItem);
+                        }
+                        
+                        if (targetNext) {
+                            targetParent.insertBefore(this, targetNext);
+                        } else {
+                            targetParent.appendChild(this);
+                        }
                         
                         // Re-setup drag and drop
                         setTimeout(() => setupDragAndDrop(container), 100);
@@ -4162,8 +4320,7 @@
                     // Reset styles
                     this.style.opacity = '';
                     this.style.transform = '';
-                    this.style.position = '';
-                    this.style.zIndex = '';
+                    this.style.boxShadow = '';
                     
                     // Remove drag-over classes
                     container.querySelectorAll('.exercise-item').forEach(item => {
