@@ -1771,10 +1771,11 @@
             const secs = seconds % 60;
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
+
         function startTimerLoop() {
             setInterval(() => {
-                // Only run timer logic when actually needed
-                if (workoutInProgress) {
+                // Only run timer logic when workout is actually active
+                if (workoutInProgress && currentWorkout && currentWorkout.exercises) {
                     if (isTimerRunning && !isResting) {
                         timer++;
                         exerciseTimer++;
@@ -2748,7 +2749,7 @@
             if (!workout) return;
 
             if (!workout.custom && !workout.aiGenerated) {
-                alert('You can only edit custom and AI-generated workouts.');
+                showNotification('You can only edit custom and AI-generated workouts.');
                 return;
             }
 
@@ -2943,7 +2944,7 @@
         function copyToClipboard(text) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('Share code copied to clipboard!');
+                    showNotification('Share code copied to clipboard!');
                 }).catch(() => {
                     fallbackCopyToClipboard(text);
                 });
@@ -2963,17 +2964,27 @@
             textArea.select();
             try {
                 document.execCommand('copy');
-                alert('Share code copied to clipboard!');
+                showNotification('Share code copied to clipboard!');
             } catch (err) {
-                alert('Could not copy to clipboard. Please copy the code manually.');
+                showNotification('Could not copy to clipboard. Please copy the code manually.');
             }
             document.body.removeChild(textArea);
         }
 
         // Sound effects
+        let audioContext = null;
+
         function playDingSound() {
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                // Resume context if suspended (required for some browsers)
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
                 
@@ -3134,8 +3145,13 @@
                                                 <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
                                             </div>
                                             <div>
-                                                <div class="exercise-control-label">Weight</div>
-                                                <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;">
+                                            <div class="exercise-control-label">Weight</div>
+                                            <div style="display: flex; align-items: center; gap: 4px;">
+                                                <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1; min-width: 45px;">
+                                                <label style="display: flex; align-items: center; gap: 2px; font-size: 10px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                                    <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)" style="width: 12px; height: 12px;">
+                                                    SS
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
@@ -3443,13 +3459,13 @@
             if (!workout) return;
 
             if (!workout.custom && !workout.aiGenerated) {
-                alert('Only custom and AI-generated workouts can be shared.');
+                showNotification('Only custom and AI-generated workouts can be shared.');
                 return;
             }
 
             const shareCode = exportWorkout(workout);
             if (!shareCode) {
-                alert('Failed to generate share code.');
+                showNotification('Failed to generate share code.');
                 return;
             }
 
@@ -3965,7 +3981,7 @@
                 const workoutDuration = parseInt(document.getElementById('edit-workout-duration').value);
                 
                 if (!workoutName || !workoutDuration || workoutDuration < 1) {
-                    alert('Please enter a valid workout name and duration.');
+                    showNotification('Please enter a valid workout name and duration.');
                     return;
                 }
                 
@@ -4016,7 +4032,7 @@
                 });
                 
                 if (!hasValidExercise) {
-                    alert('Please add at least one exercise with a name.');
+                    showNotification('Please add at least one exercise with a name.');
                     return;
                 }
                 
@@ -4037,10 +4053,10 @@
                 saveData();
                 closeModal('editModal');
                 showHomeTab();
-                alert(`Workout "${workoutName}" updated successfully!`);
+                showNotification(`Workout "${workoutName}" updated successfully!`);
             } catch (error) {
                 console.error('Edit workout failed:', error);
-                alert('Failed to update workout. Please check your inputs and try again.');
+                showNotification('Failed to update workout. Please check your inputs and try again.');
             }
         }
 
@@ -4048,7 +4064,7 @@
             const shareCode = document.getElementById('share-code-input').value.trim();
             
             if (!shareCode) {
-                alert('Please enter a share code.');
+                showNotification('Please enter a share code.');
                 return;
             }
             
@@ -4056,30 +4072,36 @@
                 const importedWorkout = importWorkout(shareCode);
                 closeModal('importModal');
                 showHomeTab();
-                alert(`Successfully imported "${importedWorkout.name}"!`);
+                showNotification(`Successfully imported "${importedWorkout.name}"!`);
             } catch (error) {
-                alert(`Import failed: ${error.message}`);
+                showNotification(`Import failed: ${error.message}`);
             }
         }
 
         function handleBodyUpdate() {
-            const weight = parseInt(document.getElementById('body-weight').value);
+            const weight = parseFloat(document.getElementById('body-weight').value);
             const feet = parseInt(document.getElementById('body-height-feet').value) || 0;
             const inches = parseInt(document.getElementById('body-height-inches').value) || 0;
             
-            if (weight && weight > 0) {
-                userBody.weight = weight;
-                userBody.height = (feet * 12) + inches;
-                
-                refreshWorkoutData();
-                
-                saveData();
-                closeModal('bodyModal');
-                showProfileTab();
-                alert('Measurements updated! Workout calories have been recalculated.');
-            } else {
-                alert('Please enter a valid weight.');
+            // Enhanced validation
+            if (!weight || weight < 50 || weight > 1000) {
+                showNotification('Please enter a valid weight between 50-1000 lbs.', 'error');
+                return;
             }
+            
+            if (feet < 3 || feet > 8 || inches < 0 || inches > 11) {
+                showNotification('Please enter a valid height.', 'error');
+                return;
+            }
+            
+            userBody.weight = Math.round(weight * 10) / 10; // Round to 1 decimal
+            userBody.height = (feet * 12) + inches;
+            
+            refreshWorkoutData();
+            saveData();
+            closeModal('bodyModal');
+            showProfileTab();
+            showNotification('Measurements updated! Workout calories have been recalculated.');
         }
 
         function handleWeightUpdate() {
@@ -4100,7 +4122,7 @@
             saveData();
             closeModal('weightModal');
             showProfileTab();
-            alert('Weights updated! AI workout weights have been automatically adjusted.');
+            showNotification('Weights updated! AI workout weights have been automatically adjusted.');
         }
 
         function handleProgressiveOverloadUpdate() {
@@ -4113,7 +4135,7 @@
             saveData();
             closeModal('progressiveModal');
             showProfileTab();
-            alert('Progressive overload settings updated!');
+            showNotification('Progressive overload settings updated!');
         }
 
         function updateAIWorkoutWeights() {
@@ -4144,7 +4166,22 @@
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
-            if (modal) modal.remove();
+            if (modal) {
+                // Clean up any event listeners
+                const buttons = modal.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    btn.onclick = null;
+                });
+                
+                // Clean up form listeners
+                const forms = modal.querySelectorAll('form');
+                forms.forEach(form => {
+                    const newForm = form.cloneNode(true);
+                    form.parentNode.replaceChild(newForm, form);
+                });
+                
+                modal.remove();
+            }
         }
 
         // Drag and drop functionality
@@ -4349,7 +4386,7 @@
                 
                 saveData();
                 showProfileTab();
-                alert('All progress has been reset. Start fresh with your fitness journey!');
+                showNotification('All progress has been reset. Start fresh with your fitness journey!');
             }
         }
 
