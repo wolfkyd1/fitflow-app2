@@ -731,9 +731,24 @@
         
         .exercise-details {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 12px;
             margin-bottom: 24px;
+        }
+
+        /* Default: 1-3 cards in a single row */
+        .exercise-details {
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        }
+
+        /* When there are exactly 4 cards: 3 on top, 1 full-width below */
+        .exercise-details.four-cards {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto auto;
+        }
+
+        .exercise-details.four-cards .detail-card:nth-child(4) {
+            grid-column: 1 / -1; /* Spans all columns */
+            grid-row: 2;
         }
         
         .detail-card {
@@ -2270,7 +2285,7 @@
             let exerciseNameEl = `<div class="exercise-name-right" id="exerciseNameEl">${exerciseName}</div>`;
 
             if (isResting) {
-                // Create rest screen content directly in body
+                // Simple rest screen without gradient card
                 const restDiv = document.createElement('div');
                 restDiv.className = 'rest-active';
                 restDiv.id = 'restScreen';
@@ -2280,64 +2295,62 @@
                 const nextExercise = currentWorkout.exercises[currentExercise + 1];
                 
                 restDiv.innerHTML = `
-                    <div class="exercise-name-center">
-                        ${currentWorkout.name}
-                    </div>
-                    
-                    <div style="padding-top: 140px;">
-                        <div class="progress-bar" style="margin-top: 20px;">
-                            <div class="progress-fill" style="width: ${progress}%"></div>
-                        </div>
-                        <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin-bottom: 16px;">
-                            Exercise ${currentExercise + (isRestingBetweenSets ? 1 : 2)} of ${currentWorkout.exercises.length}
-                        </p>
+                    <div style="text-align: center; color: white; padding: 20px;">
+                        <h1 style="font-size: clamp(24px, 6vw, 32px); margin-bottom: 20px;">${currentWorkout.name}</h1>
                         
-                        <div class="rest-display">
-                            <h3>Rest Time</h3>
-                            
-                            <div class="rest-timer">${formatTime(restTimer)}</div>
-                            
-                            ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
-                                <div class="next-exercise">
-                                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; opacity: 0.9;">
-                                        ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
-                                    </div>
-                                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
-                                        ${exercise.name}
-                                    </div>
+                        <div style="margin-bottom: 30px;">
+                            <div style="background: rgba(255, 255, 255, 0.1); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
+                                <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: ${progress}%; border-radius: 4px; transition: width 0.3s ease;"></div>
+                            </div>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin: 0;">
+                                Exercise ${currentExercise + (isRestingBetweenSets ? 1 : 2)} of ${currentWorkout.exercises.length}
+                            </p>
+                        </div>
+                        
+                        <h2 style="font-size: clamp(20px, 5vw, 28px); margin-bottom: 10px;">Rest Time</h2>
+                        <div style="font-size: clamp(48px, 15vw, 72px); font-weight: 800; margin-bottom: 30px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);">
+                            ${formatTime(restTimer)}
+                        </div>
+                        
+                        ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
+                            <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                                    ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
                                 </div>
-                            ` : !isRestingBetweenSets && nextExercise ? `
-                                <div class="next-exercise">
-                                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; opacity: 0.9;">
-                                        Moving to next exercise
-                                    </div>
-                                    <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Up Next:</div>
-                                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
-                                        ${nextExercise.name}
-                                    </div>
-                                </div>
-                            ` : `
-                                <div class="next-exercise">
-                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px; opacity: 0.9;">
-                                        Final Exercise Complete!
-                                    </div>
-                                    <div style="font-size: 16px; font-weight: 700; color: #ffffff;">
-                                        Workout finishing soon
-                                    </div>
-                                </div>
-                            `}
-                            
-                            <div class="rest-buttons">
-                                <div style="display: flex; gap: 12px;">
-                                    <button class="rest-skip-btn" onclick="skipRest()" style="flex: 1;">
-                                        Skip Rest
-                                    </button>
-                                    <button class="rest-skip-btn" onclick="addRestTime()" style="flex: 1; background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
-                                        +30s
-                                    </button>
+                                <div style="font-size: 16px; opacity: 0.9;">
+                                    ${exercise.name}
                                 </div>
                             </div>
+                        ` : !isRestingBetweenSets && nextExercise ? `
+                            <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">
+                                    Moving to next exercise
+                                </div>
+                                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Up Next:</div>
+                                <div style="font-size: 18px; font-weight: 700;">
+                                    ${nextExercise.name}
+                                </div>
+                            </div>
+                        ` : `
+                            <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                <div style="font-size: 18px; font-weight: bold;">
+                                    Workout Complete!
+                                </div>
+                            </div>
+                        `}
+                        
+                        <div style="display: flex; gap: 12px; max-width: 300px; margin: 0 auto;">
+                            <button style="flex: 1; background: linear-gradient(135deg, #ffffff, #f8fafc); color: #667eea; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;" onclick="skipRest()">
+                                Skip Rest
+                            </button>
+                            <button style="flex: 1; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;" onclick="addRestTime()">
+                                +30s
+                            </button>
                         </div>
+                        
+                        <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; margin-top: 20px;" onclick="confirmEndWorkout()">
+                            End Workout
+                        </button>
                     </div>
                 `;
                 
@@ -2360,6 +2373,62 @@
                 
                 const instruction = exerciseInstructions[exercise.name] || exerciseInstructions['Default'];
                 
+                // Count detail cards and build HTML
+                let detailCardCount = 0;
+                let detailCardsHTML = '';
+
+                if (exercise.duration) {
+                    detailCardCount++;
+                    detailCardsHTML += `
+                        <div class="detail-card">
+                            <strong style="font-size: 24px; color: #ffffff;">${exercise.duration}s</strong><br>
+                            <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Duration</span>
+                        </div>
+                    `;
+                }
+
+                if (exercise.reps) {
+                    detailCardCount++;
+                    detailCardsHTML += `
+                        <div class="detail-card">
+                            <strong style="font-size: 24px; color: #ffffff;">${exercise.reps}</strong><br>
+                            <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Reps</span>
+                        </div>
+                    `;
+                }
+
+                if (totalSets > 1) {
+                    detailCardCount++;
+                    detailCardsHTML += `
+                        <div class="detail-card">
+                            <strong style="font-size: 24px; color: #ffffff;">${setsRemaining}</strong><br>
+                            <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Sets Left</span>
+                        </div>
+                    `;
+                }
+
+                if (exercise.rest > 0) {
+                    detailCardCount++;
+                    detailCardsHTML += `
+                        <div class="detail-card">
+                            <strong style="font-size: 24px; color: #ffffff;">${exercise.rest}s</strong><br>
+                            <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Rest</span>
+                        </div>
+                    `;
+                }
+
+                if (exercise.weight) {
+                    detailCardCount++;
+                    detailCardsHTML += `
+                        <div class="detail-card">
+                            <strong style="font-size: 20px; color: #ffffff;">${exercise.weight}</strong><br>
+                            <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Weight</span>
+                        </div>
+                    `;
+                }
+
+                const gridClass = detailCardCount === 4 ? 'exercise-details four-cards' : 'exercise-details';
+                
                 content.innerHTML = `
                     <div class="workout-active">
                         <div class="workout-header">
@@ -2371,7 +2440,7 @@
                         </div>
                         
                         <div style="padding: 80px 20px 20px; text-align: center;">
-                            <div class="timer" style="color: #ffffff; text-align: center; margin-bottom: 20px; font-size: 56px; font-weight: 700;">${formatTime(timer)}</div>
+                            <div class="timer" style="color: #ffffff; text-align: center; margin-bottom: 20px; font-size: 48px; font-weight: 700;">${formatTime(timer)}</div>
                             
                             <div class="progress-bar" style="margin-bottom: 20px;">
                                 <div class="progress-fill" style="width: ${progress}%"></div>
@@ -2389,7 +2458,7 @@
                                     <div class="set-indicator">
                                         ${Array.from({length: totalSets}, (_, i) => `
                                             <div class="set-dot ${i < currentSet - 1 ? 'completed' : i === currentSet - 1 ? 'current' : ''}"
-                                                 style="width: 16px; height: 16px;"></div>
+                                                style="width: 16px; height: 16px;"></div>
                                         `).join('')}
                                     </div>
                                     <p style="color: #ffffff; margin-top: 8px; font-weight: 600; font-size: 18px;">
@@ -2398,37 +2467,8 @@
                                 </div>
                             ` : ''}
                             
-                            <div class="exercise-details" style="margin-bottom: 24px;">
-                                ${exercise.duration ? `
-                                    <div class="detail-card">
-                                        <strong style="font-size: 24px; color: #ffffff;">${exercise.duration}s</strong><br>
-                                        <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Duration</span>
-                                    </div>
-                                ` : ''}
-                                ${exercise.reps ? `
-                                    <div class="detail-card">
-                                        <strong style="font-size: 24px; color: #ffffff;">${exercise.reps}</strong><br>
-                                        <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Reps</span>
-                                    </div>
-                                ` : ''}
-                                ${totalSets > 1 ? `
-                                    <div class="detail-card">
-                                        <strong style="font-size: 24px; color: #ffffff;">${setsRemaining}</strong><br>
-                                        <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Sets Left</span>
-                                    </div>
-                                ` : ''}
-                                ${exercise.rest > 0 ? `
-                                    <div class="detail-card">
-                                        <strong style="font-size: 24px; color: #ffffff;">${exercise.rest}s</strong><br>
-                                        <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Rest</span>
-                                    </div>
-                                ` : ''}
-                                ${exercise.weight ? `
-                                    <div class="detail-card">
-                                        <strong style="font-size: 20px; color: #ffffff;">${exercise.weight}</strong><br>
-                                        <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Weight</span>
-                                    </div>
-                                ` : ''}
+                            <div class="${gridClass}" style="margin-bottom: 24px;">
+                                ${detailCardsHTML}
                             </div>
                             
                             <div style="display: flex; gap: 16px; align-items: center; justify-content: center; margin-bottom: 20px; width: 100%; padding: 0 20px; box-sizing: border-box;">
@@ -2453,8 +2493,8 @@
                                 <button onclick="confirmEndWorkout()" class="btn-end-workout" style="flex: 1;">
                                     End Workout
                                 </button>
-                                <button onclick="showWorkoutSettings()" class="btn-control" style="flex: 0 0 auto; padding: 12px;">
-                                    ⚙︎
+                                <button onclick="showWorkoutSettings()" class="btn-control" style="flex: 0 0 auto; padding: 12px; font-size: 14px;">
+                                    ⚙️
                                 </button>
                             </div>
                         </div>
