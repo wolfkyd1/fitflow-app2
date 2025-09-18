@@ -202,6 +202,15 @@
             margin-bottom: 4px;
             display: block;
         }
+
+        .nav.hidden {
+            display: none !important;
+        }
+
+        /* Adjust content padding when nav is hidden */
+        .content.nav-hidden {
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 16px));
+        }
         
         .card {
             background: #2a2a2a;
@@ -2038,8 +2047,8 @@
                         ${currentWorkout.name}
                     </div>
                     
-                    <div style="padding-top: 120px;">
-                        <div class="progress-bar">
+                    <div style="padding-top: 140px;">
+                        <div class="progress-bar" style="margin-top: 20px;">
                             <div class="progress-fill" style="width: ${progress}%"></div>
                         </div>
                         <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin-bottom: 16px;">
@@ -2499,12 +2508,14 @@
             restTimer = 0;
             manualSkip = false;
             
-            // Set exercise time limit if duration exists
             const firstExercise = currentWorkout.exercises[0];
             exerciseTimeLimit = firstExercise && firstExercise.duration ? firstExercise.duration : 0;
             
-            // Request wake lock to prevent screen timeout
             requestWakeLock();
+            
+            // Hide nav bar during workout
+            document.querySelector('.nav').classList.add('hidden');
+            document.querySelector('.content').classList.add('nav-hidden');
             
             showTab('workout');
             
@@ -2772,10 +2783,12 @@
             restTimer = 0;
             manualSkip = false;
             
-            // Release wake lock
             releaseWakeLock();
             
-            // Remove rest screen if it exists
+            // Show nav bar again
+            document.querySelector('.nav').classList.remove('hidden');
+            document.querySelector('.content').classList.remove('nav-hidden');
+            
             const existingRest = document.getElementById('restScreen');
             if (existingRest) {
                 existingRest.remove();
