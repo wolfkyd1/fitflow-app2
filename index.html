@@ -1437,351 +1437,966 @@
         ];
 
         const muscleGroups = [
-            'Full Body', 'Upper Body', 'Lower Body', 'Push (Chest/Shoulders/Triceps)', 
-            'Pull (Back/Biceps)', 'Legs', 'Chest', 'Back', 'Shoulders', 'Arms', 
-            'Biceps', 'Triceps', 'Core/Abs', 'Glutes', 'Quadriceps', 'Hamstrings', 
-            'Calves', 'Forearms', 'Traps', 'Lats'
+            'Full Body', 'Upper Body', 'Lower Body', 
+            'Chest', 'Back', 'Shoulders', 'Arms', 'Biceps', 'Triceps',
+            'Legs', 'Glutes', 'Quadriceps', 'Hamstrings', 'Calves', 
+            'Core/Abs'
         ];
 
-        // Exercise database
+        // Comprehensive Equipment Exercise Database - Anatomically Accurate
         const equipmentExerciseDatabase = {
             'Bodyweight': {
-                'Full Body': ['Burpees', 'Mountain Climbers', 'Jumping Jacks', 'Bear Crawls'],
-                'Upper Body': ['Push-ups', 'Pike Push-ups', 'Handstand Push-ups', 'Tricep Dips'],
-                'Lower Body': ['Squats', 'Lunges', 'Jump Squats', 'Wall Sits', 'Calf Raises'],
-                'Core/Abs': ['Plank', 'Russian Twists', 'Bicycle Crunches', 'Leg Raises'],
-                'Chest': ['Push-ups', 'Wide Push-ups', 'Diamond Push-ups', 'Decline Push-ups'],
-                'Back': ['Superman', 'Reverse Snow Angels', 'Good Mornings'],
-                'Shoulders': ['Pike Push-ups', 'Handstand Push-ups', 'Arm Circles'],
-                'Arms': ['Close-Grip Push-ups', 'Tricep Dips', 'Pike Push-ups'],
-                'Legs': ['Squats', 'Lunges', 'Single Leg Deadlifts', 'Wall Sits']
+                'Full Body': [
+                    'Burpees', 'Mountain Climbers', 'Jumping Jacks', 'Bear Crawls', 
+                    'Sprawls', 'Hindu Push-ups', 'Dive Bomber Push-ups', 'Star Jumps'
+                ],
+                'Upper Body': [
+                    'Push-ups', 'Pike Push-ups', 'Decline Push-ups', 'Tricep Dips',
+                    'Pull-ups', 'Chin-ups', 'Handstand Push-ups', 'Diamond Push-ups'
+                ],
+                'Lower Body': [
+                    'Squats', 'Jump Squats', 'Lunges', 'Reverse Lunges', 'Lateral Lunges',
+                    'Single Leg Squats', 'Bulgarian Split Squats', 'Step-ups', 'Wall Sits',
+                    'Cossack Squats', 'Curtsy Lunges'
+                ],
+                'Chest': [
+                    'Push-ups', 'Wide Push-ups', 'Diamond Push-ups', 'Decline Push-ups',
+                    'Incline Push-ups', 'Archer Push-ups', 'Clap Push-ups', 'One-Arm Push-ups'
+                ],
+                'Back': [
+                    'Pull-ups', 'Chin-ups', 'Wide-Grip Pull-ups', 'Superman', 
+                    'Reverse Snow Angels', 'Inverted Rows', 'Good Mornings'
+                ],
+                'Shoulders': [
+                    'Pike Push-ups', 'Handstand Push-ups', 'Arm Circles', 'Wall Handstand Hold',
+                    'Shoulder Shrugs', 'Y-Raises', 'T-Raises'
+                ],
+                'Arms': [
+                    'Tricep Dips', 'Diamond Push-ups', 'Close-Grip Push-ups', 'Pike Push-ups',
+                    'Chin-ups', 'Tricep Push-ups'
+                ],
+                'Biceps': [
+                    'Chin-ups', 'Commando Pull-ups', 'Isometric Bicep Hold'
+                ],
+                'Triceps': [
+                    'Tricep Dips', 'Diamond Push-ups', 'Close-Grip Push-ups', 'Tricep Push-ups'
+                ],
+                'Legs': [
+                    'Squats', 'Jump Squats', 'Lunges', 'Single Leg Deadlifts', 'Wall Sits',
+                    'Calf Raises', 'Single Leg Calf Raises', 'Lateral Lunges'
+                ],
+                'Glutes': [
+                    'Glute Bridges', 'Single Leg Glute Bridges', 'Hip Thrusts', 'Clamshells',
+                    'Fire Hydrants', 'Donkey Kicks', 'Reverse Lunges'
+                ],
+                'Quadriceps': [
+                    'Squats', 'Jump Squats', 'Lunges', 'Wall Sits', 'Single Leg Squats'
+                ],
+                'Hamstrings': [
+                    'Single Leg Deadlifts', 'Good Mornings', 'Glute Bridges', 'Nordic Curls'
+                ],
+                'Calves': [
+                    'Calf Raises', 'Single Leg Calf Raises', 'Jump Rope (imaginary)', 'Toe Walks'
+                ],
+                'Core/Abs': [
+                    'Plank', 'Side Plank', 'Russian Twists', 'Bicycle Crunches', 'Leg Raises',
+                    'Dead Bug', 'Bird Dog', 'Hollow Body Hold', 'V-Ups', 'Mountain Climbers',
+                    'High Knees', 'Knee-to-Elbow Crunches'
+                ]
             },
+
             'Dumbbells': {
-                'Full Body': ['Thrusters', 'Man Makers', 'Dumbbell Burpees'],
-                'Upper Body': ['Dumbbell Bench Press', 'Dumbbell Rows', 'Overhead Press', 'Bicep Curls'],
-                'Chest': ['Dumbbell Bench Press', 'Dumbbell Flyes', 'Incline Dumbbell Press'],
-                'Back': ['Bent-over Rows', 'Single Arm Rows', 'Reverse Flyes'],
-                'Shoulders': ['Overhead Press', 'Lateral Raises', 'Front Raises', 'Arnold Press'],
-                'Arms': ['Bicep Curls', 'Hammer Curls', 'Tricep Extensions', 'Overhead Tricep Press'],
-                'Legs': ['Dumbbell Squats', 'Dumbbell Lunges', 'Romanian Deadlifts', 'Calf Raises'],
-                'Core/Abs': ['Russian Twists', 'Dumbbell Side Bends', 'Dumbbell Sit-ups']
+                'Full Body': [
+                    'Thrusters', 'Man Makers', 'Dumbbell Burpees', 'Dumbbell Turkish Get-ups',
+                    'Dumbbell Squat to Press', 'Dumbbell Deadlift to Row'
+                ],
+                'Upper Body': [
+                    'Dumbbell Bench Press', 'Dumbbell Rows', 'Overhead Press', 'Dumbbell Pullover',
+                    'Chest Flyes', 'Reverse Flyes'
+                ],
+                'Chest': [
+                    'Dumbbell Bench Press', 'Incline Dumbbell Press', 'Decline Dumbbell Press',
+                    'Dumbbell Flyes', 'Incline Dumbbell Flyes', 'Dumbbell Pullover',
+                    'Single-Arm Dumbbell Press', 'Chest Press'
+                ],
+                'Back': [
+                    'Bent-over Dumbbell Rows', 'Single Arm Dumbbell Rows', 'Chest-Supported Row',
+                    'Reverse Flyes', 'Dumbbell Deadlifts', 'Dumbbell Pullovers',
+                    'Renegade Rows', 'Wide-Grip Rows'
+                ],
+                'Shoulders': [
+                    'Dumbbell Shoulder Press', 'Lateral Raises', 'Front Raises', 'Arnold Press',
+                    'Rear Delt Flyes', 'Upright Rows', 'Dumbbell Shrugs', 'Cuban Press',
+                    'Pike Press', '6-Way Shoulder Raise'
+                ],
+                'Arms': [
+                    'Bicep Curls', 'Hammer Curls', 'Tricep Extensions', 'Overhead Tricep Press',
+                    'Concentration Curls', 'Tricep Kickbacks', 'Zottman Curls', '21s Bicep Curls'
+                ],
+                'Biceps': [
+                    'Dumbbell Bicep Curls', 'Hammer Curls', 'Concentration Curls', 
+                    'Incline Dumbbell Curls', 'Zottman Curls', '21s', 'Cross-Body Hammer Curls'
+                ],
+                'Triceps': [
+                    'Overhead Tricep Extension', 'Tricep Kickbacks', 'Close-Grip Dumbbell Press',
+                    'Lying Tricep Extension', 'Single-Arm Tricep Extension', 'Tate Press'
+                ],
+                'Legs': [
+                    'Dumbbell Squats', 'Dumbbell Lunges', 'Romanian Deadlifts', 'Step-ups',
+                    'Bulgarian Split Squats', 'Goblet Squats', 'Single Leg Deadlifts'
+                ],
+                'Glutes': [
+                    'Dumbbell Hip Thrusts', 'Dumbbell Deadlifts', 'Single Leg Deadlifts',
+                    'Dumbbell Step-ups', 'Reverse Lunges', 'Lateral Lunges'
+                ],
+                'Quadriceps': [
+                    'Dumbbell Squats', 'Goblet Squats', 'Dumbbell Lunges', 'Step-ups',
+                    'Bulgarian Split Squats', 'Wall Squats with Dumbbells'
+                ],
+                'Hamstrings': [
+                    'Romanian Deadlifts', 'Single Leg Deadlifts', 'Dumbbell Stiff Leg Deadlifts',
+                    'Reverse Lunges', 'Good Mornings with Dumbbells'
+                ],
+                'Calves': [
+                    'Dumbbell Calf Raises', 'Single Leg Calf Raises', 'Seated Dumbbell Calf Raises'
+                ],
+                'Core/Abs': [
+                    'Russian Twists with Dumbbell', 'Dumbbell Side Bends', 'Weighted Sit-ups',
+                    'Dumbbell Wood Chops', 'Farmer Walks', 'Suitcase Carries', 'Weighted Plank'
+                ]
             },
+
             'Barbell': {
-                'Full Body': ['Deadlifts', 'Thrusters', 'Barbell Complexes'],
-                'Upper Body': ['Bench Press', 'Bent-over Rows', 'Overhead Press'],
-                'Chest': ['Bench Press', 'Incline Bench Press', 'Close-Grip Bench Press'],
-                'Back': ['Deadlifts', 'Bent-over Rows', 'T-Bar Rows'],
-                'Shoulders': ['Overhead Press', 'Upright Rows', 'Barbell Shrugs'],
-                'Arms': ['Barbell Curls', 'Close-Grip Bench Press', 'Skull Crushers'],
-                'Legs': ['Squats', 'Deadlifts', 'Front Squats', 'Romanian Deadlifts'],
-                'Core/Abs': ['Barbell Rollouts', 'Landmine Twists']
+                'Full Body': [
+                    'Deadlifts', 'Clean and Press', 'Thrusters', 'Barbell Complexes',
+                    'Clean and Jerk', 'Snatch', 'Front Squat to Press'
+                ],
+                'Upper Body': [
+                    'Bench Press', 'Bent-over Barbell Rows', 'Overhead Press', 'Upright Rows'
+                ],
+                'Chest': [
+                    'Barbell Bench Press', 'Incline Barbell Press', 'Decline Barbell Press',
+                    'Close-Grip Bench Press', 'Floor Press', 'Guillotine Press'
+                ],
+                'Back': [
+                    'Deadlifts', 'Bent-over Barbell Rows', 'T-Bar Rows', 'Pendlay Rows',
+                    'Rack Pulls', 'Good Mornings', 'Barbell Shrugs'
+                ],
+                'Shoulders': [
+                    'Overhead Press', 'Behind-the-Neck Press', 'Push Press', 'Bradford Press',
+                    'Upright Rows', 'Barbell Shrugs', 'High Pulls'
+                ],
+                'Arms': [
+                    'Barbell Curls', 'Close-Grip Bench Press', 'Barbell Skull Crushers',
+                    'Reverse Barbell Curls', 'EZ-Bar Curls'
+                ],
+                'Biceps': [
+                    'Barbell Curls', 'EZ-Bar Curls', 'Reverse Barbell Curls', 'Drag Curls',
+                    'Wide-Grip Barbell Curls', '21s Barbell Curls'
+                ],
+                'Triceps': [
+                    'Close-Grip Bench Press', 'Barbell Skull Crushers', 'Overhead Barbell Extension',
+                    'JM Press', 'California Press'
+                ],
+                'Legs': [
+                    'Back Squats', 'Front Squats', 'Deadlifts', 'Romanian Deadlifts',
+                    'Barbell Lunges', 'Hip Thrusts', 'Sumo Deadlifts'
+                ],
+                'Glutes': [
+                    'Hip Thrusts', 'Romanian Deadlifts', 'Sumo Deadlifts', 'Good Mornings',
+                    'Back Squats', 'Bulgarian Split Squats'
+                ],
+                'Quadriceps': [
+                    'Back Squats', 'Front Squats', 'Zercher Squats', 'Overhead Squats',
+                    'Barbell Lunges', 'Split Squats'
+                ],
+                'Hamstrings': [
+                    'Romanian Deadlifts', 'Stiff Leg Deadlifts', 'Good Mornings',
+                    'Deficit Deadlifts'
+                ],
+                'Calves': [
+                    'Barbell Calf Raises', 'Donkey Calf Raises'
+                ],
+                'Core/Abs': [
+                    'Barbell Rollouts', 'Landmine Twists', 'Overhead Barbell Carries',
+                    'Front-Loaded Carries', 'Zercher Carries'
+                ]
             },
+
             'Kettlebells': {
-                'Full Body': ['Kettlebell Swings', 'Turkish Get-ups', 'Kettlebell Snatches'],
-                'Upper Body': ['Kettlebell Press', 'Kettlebell Rows', 'Kettlebell High Pulls'],
-                'Lower Body': ['Goblet Squats', 'Kettlebell Deadlifts', 'Kettlebell Lunges'],
-                'Core/Abs': ['Russian Twists', 'Kettlebell Windmills', 'Kettlebell Carries'],
-                'Arms': ['Kettlebell Curls', 'Kettlebell Tricep Press'],
-                'Legs': ['Goblet Squats', 'Single Leg Deadlifts', 'Kettlebell Swings']
+                'Full Body': [
+                    'Kettlebell Swings', 'Turkish Get-ups', 'Kettlebell Snatches',
+                    'Kettlebell Clean and Press', 'Kettlebell Complexes', 'Kettlebell Flow'
+                ],
+                'Upper Body': [
+                    'Kettlebell Press', 'Kettlebell Rows', 'Kettlebell High Pulls',
+                    'Kettlebell Upright Rows'
+                ],
+                'Chest': [
+                    'Kettlebell Floor Press', 'Single-Arm Kettlebell Press', 
+                    'Kettlebell Chest Flyes', 'Kettlebell Push-ups'
+                ],
+                'Back': [
+                    'Single-Arm Kettlebell Rows', 'Kettlebell Deadlifts', 'Kettlebell High Pulls',
+                    'Kettlebell Renegade Rows', 'Kettlebell Swings'
+                ],
+                'Shoulders': [
+                    'Kettlebell Press', 'Kettlebell Clean and Press', 'Kettlebell Halos',
+                    'Kettlebell Upright Rows', 'Kettlebell High Pulls', 'Bottoms-up Press'
+                ],
+                'Arms': [
+                    'Kettlebell Curls', 'Kettlebell Tricep Press', 'Kettlebell Hammer Curls',
+                    'Bottoms-up Press'
+                ],
+                'Biceps': [
+                    'Kettlebell Curls', 'Kettlebell Hammer Curls', 'Kettlebell Drag Curls'
+                ],
+                'Triceps': [
+                    'Kettlebell Tricep Press', 'Kettlebell Floor Press', 'Kettlebell Skull Crushers'
+                ],
+                'Legs': [
+                    'Goblet Squats', 'Kettlebell Deadlifts', 'Kettlebell Lunges',
+                    'Single Leg Deadlifts', 'Kettlebell Swings', 'Cossack Squats'
+                ],
+                'Glutes': [
+                    'Kettlebell Swings', 'Kettlebell Deadlifts', 'Single Leg Deadlifts',
+                    'Kettlebell Hip Thrusts', 'Goblet Squats'
+                ],
+                'Quadriceps': [
+                    'Goblet Squats', 'Kettlebell Front Squats', 'Kettlebell Lunges',
+                    'Kettlebell Step-ups'
+                ],
+                'Hamstrings': [
+                    'Kettlebell Swings', 'Kettlebell Deadlifts', 'Single Leg Deadlifts',
+                    'Kettlebell Good Mornings'
+                ],
+                'Calves': [
+                    'Kettlebell Calf Raises', 'Single Leg Kettlebell Calf Raises'
+                ],
+                'Core/Abs': [
+                    'Russian Twists with Kettlebell', 'Kettlebell Windmills', 'Kettlebell Carries',
+                    'Turkish Get-ups', 'Kettlebell Figure 8s', 'Kettlebell Wood Chops'
+                ]
             },
+
             'Resistance Bands': {
-                'Full Body': ['Band Thrusters', 'Band Squat-to-Press'],
-                'Upper Body': ['Band Chest Press', 'Band Rows'],
-                'Chest': ['Band Flyes', 'Band Push-ups'],
-                'Back': ['Band Rows', 'Band Pull-aparts'],
-                'Shoulders': ['Band Lateral Raises', 'Band Front Raises'],
-                'Arms': ['Band Bicep Curls', 'Band Tricep Extensions'],
-                'Legs': ['Band Squats', 'Band Deadlifts', 'Band Glute Bridges'],
-                'Core/Abs': ['Band Woodchoppers', 'Band Pallof Press']
+                'Full Body': [
+                    'Band Thrusters', 'Band Squat-to-Press', 'Band Mountain Climbers',
+                    'Band Burpees'
+                ],
+                'Upper Body': [
+                    'Band Chest Press', 'Band Rows', 'Band Shoulder Press', 'Band Pull-aparts'
+                ],
+                'Chest': [
+                    'Band Chest Press', 'Band Flyes', 'Band Push-ups', 'Incline Band Press',
+                    'Single-Arm Band Press', 'Band Crossover'
+                ],
+                'Back': [
+                    'Band Rows', 'Band Pull-aparts', 'Band Lat Pulldowns', 'Band Face Pulls',
+                    'Single-Arm Band Rows', 'Wide-Grip Band Rows'
+                ],
+                'Shoulders': [
+                    'Band Shoulder Press', 'Band Lateral Raises', 'Band Front Raises',
+                    'Band Rear Delt Flyes', 'Band External Rotations', 'Band Face Pulls'
+                ],
+                'Arms': [
+                    'Band Bicep Curls', 'Band Tricep Extensions', 'Band Hammer Curls',
+                    'Band Tricep Pushdowns'
+                ],
+                'Biceps': [
+                    'Band Bicep Curls', 'Band Hammer Curls', 'Band Concentration Curls',
+                    'Band 21s', 'Single-Arm Band Curls'
+                ],
+                'Triceps': [
+                    'Band Tricep Extensions', 'Band Tricep Pushdowns', 'Band Overhead Extensions',
+                    'Band Tricep Kickbacks'
+                ],
+                'Legs': [
+                    'Band Squats', 'Band Deadlifts', 'Band Lunges', 'Band Leg Press',
+                    'Band Step-ups', 'Band Clamshells'
+                ],
+                'Glutes': [
+                    'Band Glute Bridges', 'Band Hip Thrusts', 'Band Clamshells',
+                    'Band Monster Walks', 'Band Fire Hydrants', 'Band Kickbacks'
+                ],
+                'Quadriceps': [
+                    'Band Squats', 'Band Leg Extensions', 'Band Lunges', 'Band Wall Squats'
+                ],
+                'Hamstrings': [
+                    'Band Deadlifts', 'Band Leg Curls', 'Band Good Mornings',
+                    'Single Leg Band Deadlifts'
+                ],
+                'Calves': [
+                    'Band Calf Raises', 'Band Ankle Flexion', 'Band Toe Points'
+                ],
+                'Core/Abs': [
+                    'Band Wood Chops', 'Band Pallof Press', 'Band Russian Twists',
+                    'Band Dead Bug', 'Band Bicycle Crunches'
+                ]
             },
+
             'Cable Machine': {
-                'Chest': ['Cable Flyes', 'Cable Press'],
-                'Back': ['Cable Rows', 'Lat Pulldowns'],
-                'Shoulders': ['Cable Lateral Raises', 'Face Pulls'],
-                'Arms': ['Cable Bicep Curls', 'Cable Tricep Pushdowns'],
-                'Core/Abs': ['Cable Woodchoppers', 'Cable Crunches'],
-                'Glutes': ['Cable Kickbacks']
+                'Full Body': [
+                    'Cable Wood Chops', 'Cable Squat to Press', 'Cable Thrusters'
+                ],
+                'Upper Body': [
+                    'Cable Chest Press', 'Cable Rows', 'Cable Lat Pulldowns', 'Cable Flyes'
+                ],
+                'Chest': [
+                    'Cable Chest Press', 'Cable Flyes', 'Incline Cable Press',
+                    'Cable Crossover', 'Single-Arm Cable Press', 'Cable Chest Squeeze'
+                ],
+                'Back': [
+                    'Cable Rows', 'Lat Pulldowns', 'Cable Face Pulls', 'Cable Reverse Flyes',
+                    'Single-Arm Cable Rows', 'Wide-Grip Pulldowns', 'Cable Pullovers'
+                ],
+                'Shoulders': [
+                    'Cable Lateral Raises', 'Cable Front Raises', 'Cable Rear Delt Flyes',
+                    'Cable Shoulder Press', 'Cable Upright Rows', 'Cable External Rotations'
+                ],
+                'Arms': [
+                    'Cable Bicep Curls', 'Cable Tricep Pushdowns', 'Cable Hammer Curls',
+                    'Cable Overhead Tricep Extension'
+                ],
+                'Biceps': [
+                    'Cable Bicep Curls', 'Cable Hammer Curls', 'Cable Concentration Curls',
+                    'Cable Preacher Curls', 'Cable 21s'
+                ],
+                'Triceps': [
+                    'Cable Tricep Pushdowns', 'Cable Overhead Tricep Extension',
+                    'Cable Tricep Kickbacks', 'Cable Diamond Press'
+                ],
+                'Legs': [
+                    'Cable Squats', 'Cable Leg Press', 'Cable Lunges', 'Cable Step-ups'
+                ],
+                'Glutes': [
+                    'Cable Kickbacks', 'Cable Hip Abduction', 'Cable Deadlifts',
+                    'Cable Glute Bridges'
+                ],
+                'Quadriceps': [
+                    'Cable Leg Extensions', 'Cable Squats', 'Cable Lunges'
+                ],
+                'Hamstrings': [
+                    'Cable Leg Curls', 'Cable Romanian Deadlifts', 'Cable Good Mornings'
+                ],
+                'Calves': [
+                    'Cable Calf Raises', 'Single Leg Cable Calf Raises'
+                ],
+                'Core/Abs': [
+                    'Cable Wood Chops', 'Cable Crunches', 'Cable Russian Twists',
+                    'Cable Pallof Press', 'Cable Knee Raises'
+                ]
             },
-            'Smith Machine': {
-                'Chest': ['Smith Machine Bench Press', 'Incline Press'],
-                'Back': ['Smith Machine Rows'],
-                'Legs': ['Smith Machine Squats', 'Smith Machine Lunges'],
-                'Shoulders': ['Smith Machine Overhead Press'],
-                'Arms': ['Smith Machine Close-Grip Press']
-            },
+
             'Pull-up Bar': {
-                'Upper Body': ['Pull-ups', 'Chin-ups', 'Hanging Leg Raises'],
-                'Back': ['Pull-ups', 'Wide-Grip Pull-ups', 'Chin-ups'],
-                'Arms': ['Chin-ups', 'Commando Pull-ups'],
-                'Core/Abs': ['Hanging Leg Raises', 'Hanging Knee Raises', 'L-Sits']
+                'Upper Body': [
+                    'Pull-ups', 'Chin-ups', 'Wide-Grip Pull-ups', 'Neutral Grip Pull-ups'
+                ],
+                'Back': [
+                    'Pull-ups', 'Wide-Grip Pull-ups', 'Chin-ups', 'Commando Pull-ups',
+                    'L-Sit Pull-ups', 'Archer Pull-ups'
+                ],
+                'Arms': [
+                    'Chin-ups', 'Close-Grip Chin-ups', 'Commando Pull-ups'
+                ],
+                'Biceps': [
+                    'Chin-ups', 'Close-Grip Chin-ups', 'Commando Pull-ups',
+                    'Supinated Pull-ups'
+                ],
+                'Core/Abs': [
+                    'Hanging Leg Raises', 'Hanging Knee Raises', 'L-Sits',
+                    'Hanging Windshield Wipers', 'Toes to Bar', 'Hanging Oblique Crunches'
+                ],
+                'Shoulders': [
+                    'Pull-ups', 'Wide-Grip Pull-ups', 'Archer Pull-ups'
+                ]
             },
-            'Yoga Mat': {
-                'Core/Abs': ['Plank', 'Bicycle Crunches', 'Leg Raises'],
-                'Flexibility': ['Cat-Cow', 'Childs Pose', 'Cobra Stretch'],
-                'Yoga': ['Downward Dog', 'Warrior Pose', 'Bridge Pose'],
-                'Pilates': ['Hundred', 'Roll-ups', 'Leg Circles']
-            },
+
             'Medicine Ball': {
-                'Full Body': ['Medicine Ball Slams', 'Medicine Ball Cleans'],
-                'Core/Abs': ['Russian Twists', 'Medicine Ball Sit-ups'],
-                'Chest': ['Medicine Ball Push-ups', 'Chest Pass'],
-                'Shoulders': ['Overhead Throws']
+                'Full Body': [
+                    'Medicine Ball Slams', 'Medicine Ball Burpees', 'Medicine Ball Thrusters',
+                    'Medicine Ball Turkish Get-ups'
+                ],
+                'Upper Body': [
+                    'Medicine Ball Chest Pass', 'Medicine Ball Overhead Press',
+                    'Medicine Ball Push-ups'
+                ],
+                'Chest': [
+                    'Medicine Ball Push-ups', 'Medicine Ball Chest Pass', 
+                    'Medicine Ball Chest Throw', 'Explosive Medicine Ball Push-ups'
+                ],
+                'Shoulders': [
+                    'Medicine Ball Overhead Throws', 'Medicine Ball Shoulder Press',
+                    'Medicine Ball Circles', 'Medicine Ball Slams'
+                ],
+                'Arms': [
+                    'Medicine Ball Bicep Curls', 'Medicine Ball Tricep Extension'
+                ],
+                'Legs': [
+                    'Medicine Ball Squats', 'Medicine Ball Lunges', 'Medicine Ball Wall Squats'
+                ],
+                'Core/Abs': [
+                    'Medicine Ball Russian Twists', 'Medicine Ball Sit-ups', 
+                    'Medicine Ball V-ups', 'Medicine Ball Wood Chops', 'Medicine Ball Crunches',
+                    'Medicine Ball Dead Bug'
+                ],
+                'Glutes': [
+                    'Medicine Ball Hip Thrusts', 'Medicine Ball Deadlifts', 'Medicine Ball Squats'
+                ]
             },
+
             'Battle Ropes': {
-                'Full Body': ['Alternating Waves', 'Slams'],
-                'Arms': ['Double Arm Waves', 'Side-to-Side Waves'],
-                'Shoulders': ['Battle Rope Circles'],
-                'Cardio': ['Alternating Waves Sprint Intervals']
+                'Full Body': [
+                    'Alternating Waves', 'Double Arm Waves', 'Battle Rope Slams',
+                    'Battle Rope Spirals', 'Battle Rope Burpees'
+                ],
+                'Upper Body': [
+                    'Alternating Waves', 'Double Arm Waves', 'Battle Rope Spirals'
+                ],
+                'Arms': [
+                    'Alternating Waves', 'Double Arm Waves', 'Side-to-Side Waves',
+                    'In-Out Waves'
+                ],
+                'Shoulders': [
+                    'Battle Rope Circles', 'Overhead Slams', 'Lateral Waves',
+                    'Shoulder Spirals'
+                ],
+                'Core/Abs': [
+                    'Battle Rope Spirals', 'Seated Battle Ropes', 'Russian Twist Waves',
+                    'Plank Battle Ropes'
+                ],
+                'Cardio': [
+                    'Alternating Waves Sprint Intervals', 'Double Wave Intervals',
+                    'Battle Rope Tabata'
+                ]
             },
+
             'TRX': {
-                'Full Body': ['TRX Burpees', 'TRX Atomic Push-ups'],
-                'Upper Body': ['TRX Rows', 'TRX Push-ups'],
-                'Lower Body': ['TRX Lunges', 'TRX Hamstring Curls'],
-                'Core/Abs': ['TRX Pikes', 'TRX Mountain Climbers']
-            },
-            'Bench': {
-                'Chest': ['Bench Press (Dumbbells/Barbell)', 'Chest Flyes'],
-                'Triceps': ['Bench Dips'],
-                'Legs': ['Step-ups', 'Bulgarian Split Squats'],
-                'Core/Abs': ['Bench Leg Raises']
-            },
-            'Squat Rack': {
-                'Legs': ['Back Squats', 'Front Squats'],
-                'Glutes': ['Hip Thrusts'],
-                'Full Body': ['Squat-to-Press (with barbell)']
-            },
-            'Leg Press Machine': {
-                'Legs': ['Leg Press', 'Single Leg Press'],
-                'Glutes': ['Wide Stance Leg Press']
-            },
-            'Treadmill': {
-                'Cardio': ['Running', 'Walking', 'Incline Walking'],
-                'HIIT': ['Sprint Intervals']
-            },
-            'Stationary Bike': {
-                'Cardio': ['Cycling'],
-                'HIIT': ['Sprints', 'Tabata Intervals'],
-                'Endurance': ['Steady-State Rides']
-            },
-            'Elliptical': {
-                'Cardio': ['Elliptical Stride'],
-                'HIIT': ['Elliptical Sprint Intervals'],
-                'Endurance': ['Long Duration Stride']
-            },
-            'Rowing Machine': {
-                'Full Body': ['Rowing'],
-                'Cardio': ['Steady-State Rowing'],
-                'HIIT': ['Rowing Intervals'],
-                'Endurance': ['Long Row Sessions']
-            },
-            'Stair Climber': {
-                'Cardio': ['Climbing'],
-                'Legs': ['Step Climbing'],
-                'Glutes': ['Glute-Focused Climbing']
+                'Full Body': [
+                    'TRX Burpees', 'TRX Atomic Push-ups', 'TRX Mountain Climbers',
+                    'TRX Jump Squats'
+                ],
+                'Upper Body': [
+                    'TRX Rows', 'TRX Push-ups', 'TRX Chest Press', 'TRX Y-Pulls'
+                ],
+                'Chest': [
+                    'TRX Push-ups', 'TRX Chest Press', 'TRX Chest Flye',
+                    'Incline TRX Push-ups', 'Single-Arm TRX Press'
+                ],
+                'Back': [
+                    'TRX Rows', 'TRX Y-Pulls', 'TRX T-Pulls', 'TRX Face Pulls',
+                    'Single-Arm TRX Rows'
+                ],
+                'Shoulders': [
+                    'TRX Y-Pulls', 'TRX T-Pulls', 'TRX Pike Push-ups',
+                    'TRX Rear Delt Flye'
+                ],
+                'Arms': [
+                    'TRX Bicep Curls', 'TRX Tricep Press', 'TRX Face Pulls'
+                ],
+                'Biceps': [
+                    'TRX Bicep Curls', 'TRX Face Pulls'
+                ],
+                'Triceps': [
+                    'TRX Tricep Press', 'TRX Push-ups'
+                ],
+                'Legs': [
+                    'TRX Squats', 'TRX Lunges', 'TRX Single Leg Squats',
+                    'TRX Jump Squats', 'TRX Hamstring Curls'
+                ],
+                'Glutes': [
+                    'TRX Hip Press', 'TRX Single Leg Glute Bridge',
+                    'TRX Hamstring Curls', 'TRX Side Lunge'
+                ],
+                'Quadriceps': [
+                    'TRX Squats', 'TRX Lunges', 'TRX Single Leg Squats', 'TRX Jump Squats'
+                ],
+                'Hamstrings': [
+                    'TRX Hamstring Curls', 'TRX Single Leg Deadlift'
+                ],
+                'Core/Abs': [
+                    'TRX Pikes', 'TRX Mountain Climbers', 'TRX Knee Tucks',
+                    'TRX Oblique Crunches', 'TRX Plank', 'TRX Side Plank'
+                ]
             }
         };
 
-
-        // Exercise instructions
+        // Comprehensive Exercise Instructions Database - Focus on Safety and Proper Form
         const exerciseInstructions = {
-            // --- Bodyweight ---
-            'Burpees': 'Start standing, drop into a push-up position, do a push-up, jump feet to hands, then jump explosively upward. Land softly and repeat.',
-            'Mountain Climbers': 'Start in plank position. Drive knees alternately toward chest in a running motion, keeping hips low.',
-            'Jumping Jacks': 'Jump feet apart while raising arms overhead. Jump back to start. Land softly.',
-            'Bear Crawls': 'Crawl forward/backward on hands and feet, keeping knees close to ground and core engaged.',
-            'Push-ups': 'Start in plank position, lower until chest nearly touches floor, push back up. Keep core tight.',
-            'Pike Push-ups': 'From downward-dog position, lower head toward floor by bending elbows, then push back up.',
-            'Handstand Push-ups': 'Kick up to wall-supported handstand. Lower head to floor, then press up to full lockout.',
-            'Tricep Dips': 'With hands on bench or bars, lower body by bending elbows, then press back up. Keep elbows close.',
-            'Squats': 'Stand with feet shoulder-width apart, push hips back and bend knees. Drive through heels to return upright.',
-            'Lunges': 'Step forward, bend both knees to 90°, push back to start. Keep torso upright.',
-            'Jump Squats': 'Perform a squat, then explode upward into a jump. Land softly and repeat.',
-            'Wall Sits': 'Sit against wall with thighs parallel to floor. Hold position, knees at 90°.',
-            'Calf Raises': 'Rise onto toes, hold briefly, then lower with control. Repeat.',
-            'Plank': 'Support body on forearms and toes, maintaining a straight line. Hold without letting hips sag.',
-            'Russian Twists': 'Sit with feet off floor, lean back slightly, twist torso side-to-side.',
-            'Bicycle Crunches': 'Lie on back, alternate elbow-to-opposite knee in a pedaling motion.',
-            'Leg Raises': 'Lie flat, raise legs upward together, lower with control.',
-            'Wide Push-ups': 'Perform push-ups with hands wider than shoulder-width.',
-            'Diamond Push-ups': 'Perform push-ups with hands together under chest forming a diamond shape.',
-            'Decline Push-ups': 'Place feet elevated on surface, perform push-ups at downward angle.',
-            'Superman': 'Lie face down, lift arms and legs simultaneously, hold briefly, lower down.',
-            'Reverse Snow Angels': 'Lie face down, move arms in wide arc from hips to overhead without lifting chest.',
-            'Good Mornings': 'Stand tall, hinge hips forward with slight knee bend, then return upright.',
-            'Arm Circles': 'Extend arms sideways and make small/large circles forward and backward.',
-            'Close-Grip Push-ups': 'Perform push-ups with hands close together to target triceps.',
-            'Single Leg Deadlifts': 'Balance on one leg, hinge at hips to lower torso, return upright.',
+            // === BODYWEIGHT EXERCISES ===
+            
+            // Full Body
+            'Burpees': 'Start standing, squat down and place hands on floor. Jump feet back to plank position, perform push-up (optional), jump feet to hands, then explosively jump up with arms overhead. Land softly and repeat.',
+            'Mountain Climbers': 'Start in plank position with hands under shoulders. Drive knees alternately toward chest in running motion. Keep hips level, core tight, and maintain steady breathing.',
+            'Jumping Jacks': 'Stand with feet together, arms at sides. Jump feet apart while raising arms overhead. Jump back to start position. Land softly on balls of feet.',
+            'Bear Crawls': 'Start on hands and knees, lift knees 2 inches off ground. Crawl forward moving opposite hand and foot together. Keep back flat and core engaged.',
+            'Sprawls': 'From standing, squat down and place hands on floor. Jump feet back to plank, then immediately jump feet back to squat and return to standing.',
+            'Hindu Push-ups': 'Start in downward dog position. Dive forward lowering chest toward ground, then push up into upward dog. Reverse motion back to downward dog.',
+            'Dive Bomber Push-ups': 'Start in downward dog. Lower head and chest toward ground in swooping motion, then push up to upward dog. Return along same path.',
+            'Star Jumps': 'Jump up spreading arms and legs wide to form star shape. Land softly with feet together and arms at sides. Focus on explosive movement.',
 
-            // --- Dumbbells ---
-            'Dumbbell Bench Press': 'Lie on bench, hold dumbbells at chest, press up until arms extend, lower with control.',
-            'Dumbbell Rows': 'Hinge at hips, pull dumbbells toward ribcage, squeeze shoulder blades together.',
-            'Overhead Press': 'Press dumbbells from shoulders to overhead, lower slowly. Keep core tight.',
-            'Bicep Curls': 'Curl dumbbells from sides to shoulders, keep elbows stationary.',
-            'Dumbbell Flyes': 'On bench, lower dumbbells in wide arc to chest level, then bring back together.',
-            'Incline Dumbbell Press': 'On incline bench, press dumbbells upward at angle targeting upper chest.',
-            'Single Arm Rows': 'Support one hand on bench, row dumbbell with other hand toward waist.',
-            'Reverse Flyes': 'Hinge at hips, raise dumbbells outward to side, squeeze shoulder blades.',
-            'Lateral Raises': 'Raise dumbbells from sides to shoulder height with straight arms.',
-            'Front Raises': 'Lift dumbbells forward to shoulder height with straight arms.',
-            'Arnold Press': 'Start with dumbbells in front of shoulders, palms facing you, rotate outward while pressing overhead.',
-            'Hammer Curls': 'Curl dumbbells with palms facing each other.',
-            'Tricep Extensions': 'Hold dumbbell overhead, bend elbows to lower behind head, extend upward.',
-            'Overhead Tricep Press': 'Hold dumbbell overhead with both hands, lower behind head, extend arms up.',
-            'Dumbbell Squats': 'Hold dumbbells at sides, squat down, push back up.',
-            'Dumbbell Lunges': 'Hold dumbbells, lunge forward, push back up.',
-            'Romanian Deadlifts': 'Hold dumbbells in front, hinge hips to lower weights down legs, return upright.',
-            'Dumbbell Side Bends': 'Hold dumbbell at one side, bend torso sideways, return to upright.',
-            'Dumbbell Sit-ups': 'Perform sit-ups holding dumbbell across chest.',
+            // Upper Body
+            'Push-ups': 'Start in plank with hands slightly wider than shoulders. Lower chest to within 2 inches of floor, then push back up. Keep body straight throughout.',
+            'Pike Push-ups': 'Start in downward dog position with feet closer to hands. Lower head toward floor by bending elbows, then press back up. Targets shoulders.',
+            'Decline Push-ups': 'Place feet on elevated surface, hands on ground. Perform push-up with body angled downward. Increases difficulty and targets upper chest.',
+            'Tricep Dips': 'Sit on edge of bench/chair, hands beside hips. Lower body by bending elbows to 90 degrees, then press back up. Keep body close to surface.',
+            'Pull-ups': 'Hang from bar with overhand grip, hands shoulder-width apart. Pull body up until chin clears bar. Lower with control. Engage core throughout.',
+            'Chin-ups': 'Hang from bar with underhand grip. Pull up until chin clears bar, focusing on squeezing shoulder blades. Lower slowly with control.',
+            'Handstand Push-ups': 'Kick up to handstand against wall. Lower head toward floor by bending elbows, then press back up. Advanced exercise requiring significant strength.',
+            'Diamond Push-ups': 'Form diamond shape with hands under chest. Perform push-up keeping elbows close to body. Targets triceps heavily.',
 
-            // --- Barbell ---
-            'Bench Press': 'Lie on bench, lower bar to chest, press upward until arms fully extend.',
-            'Incline Bench Press': 'On incline bench, lower bar to upper chest, press upward.',
-            'Close-Grip Bench Press': 'Grip bar shoulder-width, lower to chest, press up to emphasize triceps.',
-            'Bent-over Rows': 'Hinge forward, pull bar to lower chest/waist, lower with control.',
-            'Deadlifts': 'Lift barbell from ground by hinging hips and extending knees, keep back straight.',
-            'T-Bar Rows': 'Row barbell handle toward chest while torso leans forward.',
-            'Upright Rows': 'Pull barbell vertically to chin, elbows high.',
-            'Barbell Shrugs': 'Hold barbell, shrug shoulders upward, lower slowly.',
-            'Barbell Curls': 'Curl barbell upward, keep elbows tucked.',
-            'Skull Crushers': 'Lie on bench, lower barbell to forehead by bending elbows, extend arms.',
-            'Front Squats': 'Hold barbell across front shoulders, squat down, stand up.',
-            'Barbell Rollouts': 'Kneel with barbell, roll forward keeping core tight, pull back.',
-            'Landmine Twists': 'Hold barbell end in landmine, rotate torso side-to-side.',
+            // Lower Body
+            'Squats': 'Stand with feet shoulder-width apart. Push hips back and bend knees, lowering until thighs parallel to floor. Drive through heels to return up.',
+            'Jump Squats': 'Perform regular squat, then explode upward jumping as high as possible. Land softly and immediately descend into next squat.',
+            'Lunges': 'Step forward into split stance, lower back knee toward ground until both knees at 90 degrees. Push through front heel to return to start.',
+            'Reverse Lunges': 'Step backward into lunge position. Lower back knee toward ground, then push through front heel to return to standing.',
+            'Lateral Lunges': 'Step wide to one side, sit back on that hip while keeping other leg straight. Push off bent leg to return to center.',
+            'Single Leg Squats': 'Balance on one leg, extend other leg forward. Squat down as far as possible while maintaining balance. Very challenging exercise.',
+            'Bulgarian Split Squats': 'Place rear foot on bench behind you. Lower into lunge position on front leg. Focus weight on front leg throughout movement.',
+            'Step-ups': 'Step onto bench with one foot, drive through that heel to step up completely. Step down with control. Alternate legs or complete all reps on one side.',
+            'Wall Sits': 'Lean back against wall, slide down until thighs parallel to floor. Hold position with knees at 90 degrees. Keep back flat against wall.',
+            'Cossack Squats': 'Stand wide, shift weight to one side and squat down on that leg while keeping other leg straight. Alternate sides.',
+            'Curtsy Lunges': 'Step one leg behind and across the other into curtsy position. Lower back knee toward ground, then return to standing.',
 
-            // --- Kettlebells ---
-            'Kettlebell Swings': 'Swing kettlebell from between legs to chest level using hip drive.',
-            'Turkish Get-ups': 'From lying, stand while holding kettlebell overhead, reverse movement.',
-            'Kettlebell Snatches': 'Swing kettlebell overhead in one motion, lock out arm at top.',
-            'Kettlebell Press': 'Press kettlebell overhead from shoulder, lower with control.',
-            'Kettlebell Rows': 'Row kettlebell toward waist with flat back.',
-            'Kettlebell High Pulls': 'Explosively pull kettlebell to chest height with elbows high.',
-            'Goblet Squats': 'Hold kettlebell at chest, squat down, stand back up.',
-            'Kettlebell Deadlifts': 'Lift kettlebell from ground by hinging hips, extend back up.',
-            'Kettlebell Lunges': 'Hold kettlebell, step into lunge, return upright.',
-            'Kettlebell Windmills': 'Hold kettlebell overhead, hinge sideways, touch floor, return upright.',
-            'Kettlebell Carries': 'Walk while holding kettlebell(s) at sides or overhead.',
-            'Kettlebell Curls': 'Perform bicep curls with kettlebells.',
-            'Kettlebell Tricep Press': 'Press kettlebell overhead to target triceps.',
-            'Single Leg Deadlifts': 'Balance on one leg, lower kettlebell to floor, return upright.',
+            // Chest
+            'Wide Push-ups': 'Perform push-ups with hands placed wider than shoulders. This variation targets outer portion of chest muscles.',
+            'Incline Push-ups': 'Place hands on elevated surface (bench, step). Perform push-up with body angled upward. Easier variation that targets lower chest.',
+            'Archer Push-ups': 'Start in wide push-up position. Lower to one side, straightening opposite arm. Push back to center and repeat on other side.',
+            'Clap Push-ups': 'Perform explosive push-up, pushing up with enough force to clap hands before landing. Advanced plyometric exercise.',
+            'One-Arm Push-ups': 'Perform push-up using only one arm, other arm behind back. Extremely advanced exercise requiring exceptional strength.',
 
-            // --- Resistance Bands ---
-            'Band Thrusters': 'Hold band under feet, press overhead as you squat up.',
-            'Band Squat-to-Press': 'Perform squat while pressing band overhead.',
-            'Band Chest Press': 'Anchor band behind, press handles forward.',
-            'Band Rows': 'Anchor band, row handles toward torso.',
-            'Band Flyes': 'Anchor behind, open arms wide then close together.',
-            'Band Push-ups': 'Wrap band across back, perform push-ups with added resistance.',
-            'Band Pull-aparts': 'Hold band with straight arms, pull outward to stretch band.',
-            'Band Lateral Raises': 'Step on band, raise arms sideways to shoulder height.',
-            'Band Front Raises': 'Step on band, lift arms forward to shoulder height.',
-            'Band Bicep Curls': 'Step on band, curl handles upward.',
-            'Band Tricep Extensions': 'Anchor band overhead, extend arms downward.',
-            'Band Deadlifts': 'Stand on band, hinge hips to lift handles upward.',
-            'Band Glute Bridges': 'Wrap band across hips, perform glute bridges.',
-            'Band Woodchoppers': 'Anchor band high/low, pull diagonally across body.',
-            'Band Pallof Press': 'Anchor band sideways, press forward resisting rotation.',
+            // Back
+            'Wide-Grip Pull-ups': 'Hang from bar with hands wider than shoulders. Pull up focusing on squeezing shoulder blades together. Targets lat muscles.',
+            'Superman': 'Lie face down, extend arms overhead. Simultaneously lift chest, arms, and legs off ground. Hold briefly then lower with control.',
+            'Reverse Snow Angels': 'Lie face down with arms at sides. Lift chest slightly and move arms in arc from hips to overhead. Focus on squeezing shoulder blades.',
+            'Inverted Rows': 'Lie under horizontal bar or table. Pull chest up to bar keeping body straight. Excellent pulling exercise for beginners.',
+            'Good Mornings': 'Stand with hands behind head. Hinge at hips, pushing them back while keeping slight knee bend. Return to upright position.',
 
-            // --- Cable Machine ---
-            'Cable Flyes': 'Stand between pulleys, bring handles together in front of chest.',
-            'Cable Press': 'Push cable handles forward like chest press.',
-            'Cable Rows': 'Sit, pull handle to torso, squeeze shoulder blades.',
-            'Lat Pulldowns': 'Pull bar down to chest from overhead pulley.',
-            'Cable Lateral Raises': 'Lift cable handle sideways to shoulder height.',
-            'Face Pulls': 'Pull cable rope to face height, elbows high.',
-            'Cable Bicep Curls': 'Curl bar/handle upward.',
-            'Cable Tricep Pushdowns': 'Push bar/rope downward from overhead pulley.',
-            'Cable Woodchoppers': 'Pull cable diagonally across body.',
-            'Cable Crunches': 'Kneel, pull rope down while crunching torso.',
-            'Cable Kickbacks': 'Attach ankle strap, kick leg backward.',
+            // Shoulders
+            'Arm Circles': 'Extend arms to sides at shoulder height. Make small circles, gradually increasing size. Reverse direction. Good warm-up exercise.',
+            'Wall Handstand Hold': 'Kick up to handstand against wall. Hold position focusing on balance and core engagement. Build up time gradually.',
+            'Shoulder Shrugs': 'Stand tall, lift shoulders toward ears, hold briefly, then lower slowly. Can be done with or without weight.',
+            'Y-Raises': 'Lie face down, extend arms overhead in Y position. Lift arms and chest off ground, squeezing shoulder blades.',
+            'T-Raises': 'Lie face down, extend arms to sides at shoulder height. Lift arms and chest, forming T shape with body.',
 
-            // --- Smith Machine ---
-            'Smith Machine Bench Press': 'Lie on bench under bar, lower to chest, press upward.',
-            'Incline Press': 'On incline bench, press bar upward and lower with control.',
-            'Smith Machine Rows': 'Hinge forward, row bar to torso.',
-            'Smith Machine Squats': 'Stand under bar, squat down and back up.',
-            'Smith Machine Lunges': 'Step forward/backward into lunge with barbell on shoulders.',
-            'Smith Machine Overhead Press': 'Press bar upward overhead.',
-            'Smith Machine Close-Grip Press': 'Grip bar narrowly, press upward to target triceps.',
+            // Arms/Biceps/Triceps
+            'Close-Grip Push-ups': 'Perform push-up with hands close together under chest. Keep elbows close to body. Targets triceps primarily.',
+            'Tricep Push-ups': 'Perform push-up with elbows staying close to sides throughout movement. More tricep-focused than regular push-ups.',
+            'Commando Pull-ups': 'Hang from bar with hands close together. Alternate pulling one side of head above bar, then the other.',
+            'Isometric Bicep Hold': 'Hang from pull-up bar with arms bent at 90 degrees. Hold position as long as possible.',
 
-            // --- Pull-up Bar ---
-            'Pull-ups': 'Hang from bar, pull chin above bar, lower with control.',
-            'Chin-ups': 'Underhand grip, pull chin above bar, lower with control.',
-            'Hanging Leg Raises': 'Hang from bar, lift legs to 90°, lower slowly.',
-            'Wide-Grip Pull-ups': 'Wide grip, pull chin above bar, lower slowly.',
-            'Commando Pull-ups': 'Grip bar with hands close, alternate pulling one side of head above bar.',
-            'Hanging Knee Raises': 'Hang from bar, lift knees toward chest.',
-            'L-Sits': 'Hang from bar, hold legs extended straight forward.',
+            // Legs/Glutes/Hamstrings/Calves
+            'Single Leg Deadlifts': 'Balance on one leg, hinge at hip lowering torso while lifting other leg behind you. Return to upright position.',
+            'Glute Bridges': 'Lie on back, knees bent, feet flat. Lift hips up squeezing glutes at top. Lower with control.',
+            'Single Leg Glute Bridges': 'Perform glute bridge with one leg extended. Focus on squeezing glute of supporting leg.',
+            'Hip Thrusts': 'Lean upper back against bench, knees bent. Thrust hips up squeezing glutes. More range of motion than glute bridges.',
+            'Clamshells': 'Lie on side, knees bent, feet together. Lift top knee while keeping feet together. Focus on glute activation.',
+            'Fire Hydrants': 'Start on hands and knees. Lift one leg to side keeping knee bent. Focus on glute engagement.',
+            'Donkey Kicks': 'Start on hands and knees. Kick one leg back and up keeping knee bent. Squeeze glute at top.',
+            'Nordic Curls': 'Kneel with feet anchored. Slowly lower body forward using hamstrings to control descent. Very advanced exercise.',
+            'Calf Raises': 'Rise up on toes, hold briefly, then lower slowly. Can be done on flat ground or edge of step for more range.',
+            'Single Leg Calf Raises': 'Perform calf raises on one leg at a time for increased difficulty and unilateral strength.',
+            'Toe Walks': 'Walk forward on toes for set distance or time. Builds calf strength and endurance.',
 
-            // --- Yoga Mat ---
-            'Cat-Cow': 'On hands and knees, alternate arching and rounding back.',
-            'Child’s Pose': 'Sit back on heels, stretch arms forward, relax torso down.',
-            'Cobra Stretch': 'Lie face down, press torso upward with arms extended.',
-            'Downward Dog': 'Form inverted V-shape, press heels toward floor.',
-            'Warrior Pose': 'Step forward, bend front knee, extend arms wide.',
-            'Bridge Pose': 'Lie on back, lift hips upward, squeeze glutes.',
-            'Hundred': 'Lie on back, pump arms while legs raised.',
-            'Roll-ups': 'Lie flat, roll torso upward to seated, then back down.',
-            'Leg Circles': 'Lie on back, circle one leg at a time.',
+            // Core/Abs
+            'Plank': 'Support body on forearms and toes, maintaining straight line from head to heels. Hold position without letting hips sag.',
+            'Side Plank': 'Lie on side, support body on forearm and feet. Maintain straight line from head to feet. Hold position.',
+            'Russian Twists': 'Sit with knees bent, lean back slightly. Rotate torso side to side, touching ground beside hips.',
+            'Bicycle Crunches': 'Lie on back, hands behind head. Bring opposite elbow to knee in pedaling motion.',
+            'Leg Raises': 'Lie flat, hands at sides or under lower back. Lift straight legs up to 90 degrees, lower slowly without touching ground.',
+            'Dead Bug': 'Lie on back, arms up, knees bent at 90 degrees. Lower opposite arm and leg, then return to start.',
+            'Bird Dog': 'Start on hands and knees. Extend opposite arm and leg, hold briefly, then return to start.',
+            'Hollow Body Hold': 'Lie on back, press lower back to floor. Lift shoulders and legs creating hollow shape. Hold position.',
+            'V-Ups': 'Lie flat, simultaneously lift legs and torso to form V shape. Touch hands to feet if possible.',
+            'High Knees': 'Run in place bringing knees up toward chest. Maintain quick pace and good posture.',
+            'Knee-to-Elbow Crunches': 'Lie on back, hands behind head. Bring knee to opposite elbow in crunching motion.',
 
-            // --- Medicine Ball ---
-            'Medicine Ball Slams': 'Lift ball overhead, slam it to ground with force.',
-            'Medicine Ball Cleans': 'Lift ball from ground to chest, stand tall.',
-            'Medicine Ball Sit-ups': 'Perform sit-ups holding ball to chest.',
-            'Chest Pass': 'Throw ball forward explosively to partner/wall.',
-            'Overhead Throws': 'Throw ball overhead against wall/floor.',
+            // === DUMBBELL EXERCISES ===
+            
+            // Full Body
+            'Thrusters': 'Hold dumbbells at shoulders. Squat down, then drive up explosively while pressing weights overhead. Combine squat and press.',
+            'Man Makers': 'Start in plank with hands on dumbbells. Do push-up, row each arm, jump feet to squat, then thruster to standing.',
+            'Dumbbell Burpees': 'Hold dumbbells, perform burpee while maintaining grip on weights. Add overhead press at top for extra challenge.',
+            'Dumbbell Turkish Get-ups': 'Lie down holding dumbbell in one hand. Complex movement to standing position while keeping weight overhead.',
+            'Dumbbell Squat to Press': 'Hold dumbbells at shoulders, squat down, then drive up while pressing weights overhead.',
+            'Dumbbell Deadlift to Row': 'Perform dumbbell deadlift, then hinge forward and row weights to ribs. Return to standing.',
 
-            // --- Battle Ropes ---
-            'Alternating Waves': 'Make alternating rope waves with each arm.',
-            'Slams': 'Lift both ropes overhead, slam to ground.',
+            // Upper Body
+            'Dumbbell Bench Press': 'Lie on bench, press dumbbells from chest level to arm extension. Lower with control, feeling stretch in chest.',
+            'Dumbbell Rows': 'Hinge at hips, pull dumbbells to ribs squeezing shoulder blades together. Keep core tight throughout.',
+            'Overhead Press': 'Press dumbbells from shoulder level to overhead, then lower with control. Keep core engaged.',
+            'Dumbbell Pullover': 'Lie on bench, lower dumbbell over head with slight elbow bend, then pull back over chest.',
+
+            // Chest
+            'Incline Dumbbell Press': 'On incline bench, press dumbbells from chest to extension. Targets upper portion of chest.',
+            'Decline Dumbbell Press': 'On decline bench, press dumbbells from chest to extension. Targets lower portion of chest.',
+            'Dumbbell Flyes': 'Lie on bench, lower dumbbells in wide arc until chest stretch, then bring back together over chest.',
+            'Incline Dumbbell Flyes': 'Perform flyes on incline bench to target upper chest with isolation movement.',
+            'Single-Arm Dumbbell Press': 'Press one dumbbell at a time, requiring more core stability and unilateral strength.',
+            'Chest Press': 'Alternative name for dumbbell bench press, focusing on chest muscle development.',
+
+            // Back
+            'Bent-over Dumbbell Rows': 'Hinge at hips, pull dumbbells to lower ribs. Focus on squeezing shoulder blades together.',
+            'Single Arm Dumbbell Rows': 'Support one hand on bench, row dumbbell with other arm. Allows heavier weight and focus.',
+            'Chest-Supported Row': 'Use incline bench for support, row dumbbells without lower back stress.',
+            'Reverse Flyes': 'Hinge forward, raise dumbbells to sides with slight elbow bend. Targets rear deltoids and rhomboids.',
+            'Dumbbell Deadlifts': 'Hold dumbbells, hinge at hips lowering weights toward floor, then drive hips forward to stand.',
+            'Renegade Rows': 'In plank position with hands on dumbbells, alternate rowing each weight while maintaining plank.',
+            'Wide-Grip Rows': 'Row dumbbells with wider grip to target different portions of back muscles.',
+
+            // Shoulders
+            'Dumbbell Shoulder Press': 'Press dumbbells from shoulder level to overhead. Can be done seated or standing.',
+            'Lateral Raises': 'Raise dumbbells to sides until arms parallel to floor. Focus on lifting with shoulders, not momentum.',
+            'Front Raises': 'Raise dumbbells forward to shoulder height with slight elbow bend. Control the negative portion.',
+            'Arnold Press': 'Start with palms facing you, rotate to palms forward while pressing overhead.',
+            'Rear Delt Flyes': 'Hinge forward, raise dumbbells to sides targeting rear portion of shoulder muscles.',
+            'Upright Rows': 'Pull dumbbells vertically to chest level, leading with elbows. Keep weights close to body.',
+            'Dumbbell Shrugs': 'Lift shoulders toward ears while holding dumbbells, then lower slowly with control.',
+            'Cuban Press': 'Complex shoulder movement combining external rotation with overhead press.',
+            'Pike Press': 'In pike position, push down into the floor hard with your hands and keep your elbows in close to your body to straighten your arms and return to the start position.',
+            '6-Way Shoulder Raise': 'Perform lateral raises in six different directions for complete shoulder development.',
+
+            // Arms/Biceps/Triceps
+            'Dumbbell Bicep Curls': 'Curl dumbbells from arms extended to full contraction. Keep elbows stationary at sides.',
+            'Hammer Curls': 'Curl dumbbells with neutral grip (palms facing each other). Targets biceps and forearms.',
+            'Tricep Extensions': 'Hold dumbbell overhead with both hands, lower behind head, then extend back up.',
+            'Overhead Tricep Press': 'Similar to tricep extension, focusing on tricep muscle development.',
+            'Concentration Curls': 'Sit, brace elbow on inner thigh, curl dumbbell with focus on bicep isolation.',
+            'Tricep Kickbacks': 'Hinge forward, extend dumbbell back from bent-arm position. Focus on tricep squeeze.',
+            'Zottman Curls': 'Curl up with palms up, rotate to palms down, lower slowly. Targets biceps and forearms.',
+            '21s Bicep Curls': 'Perform 7 partial reps bottom half, 7 partial reps top half, then 7 full range reps.',
+            'Cross-Body Hammer Curls': 'Curl dumbbell across body with neutral grip for different bicep activation.',
+            'Single-Arm Tricep Extension': 'Perform tricep extension with one arm at a time for unilateral development.',
+            'Tate Press': 'Lie on bench, lower dumbbells to chest with elbows flared. Unique tricep exercise.',
+
+            // Legs/Glutes/Hamstrings/Calves
+            'Dumbbell Squats': 'Hold dumbbells at sides or shoulders while performing squat movement.',
+            'Dumbbell Lunges': 'Hold dumbbells while performing forward, reverse, or lateral lunges.',
+            'Romanian Deadlifts': 'Hold dumbbells, hinge at hips keeping slight knee bend. Focus on hamstring stretch.',
+            'Goblet Squats': 'Hold one dumbbell at chest level while squatting. Great for beginners.',
+            'Dumbbell Hip Thrusts': 'Place dumbbell on hips while performing hip thrust movement for glute development.',
+            'Dumbbell Step-ups': 'Hold dumbbells while stepping up onto bench or platform.',
+            'Lateral Lunges': 'Step wide to side while holding dumbbells, return to center.',
+            'Single Leg Deadlifts': 'Balance on one leg while performing deadlift movement with dumbbells.',
+            'Wall Squats with Dumbbells': 'Perform wall squat while holding dumbbells for added resistance.',
+            'Dumbbell Stiff Leg Deadlifts': 'Keep legs straighter than Romanian deadlift, focus on hamstring flexibility.',
+            'Good Mornings with Dumbbells': 'Hold dumbbell at chest, hinge at hips keeping back straight.',
+            'Dumbbell Calf Raises': 'Hold dumbbells while performing calf raises for added resistance.',
+            'Single Leg Calf Raises': 'Hold dumbbell in one hand while doing single leg calf raises.',
+            'Seated Dumbbell Calf Raises': 'Sit with dumbbells on thighs, perform calf raises from seated position.',
+
+            // Core/Abs
+            'Russian Twists with Dumbbell': 'Hold dumbbell while performing Russian twist movement.',
+            'Dumbbell Side Bends': 'Hold dumbbell in one hand, bend to that side, return to upright.',
+            'Weighted Sit-ups': 'Hold dumbbell to chest while performing sit-up movement.',
+            'Dumbbell Wood Chops': 'Hold dumbbell, rotate diagonally across body from high to low position.',
+            'Farmer Walks': 'Hold heavy dumbbells at sides, walk forward maintaining good posture.',
+            'Suitcase Carries': 'Hold one heavy dumbbell at side, walk while resisting lateral bend.',
+            'Weighted Plank': 'Hold plank position with dumbbell placed on back for added challenge.',
+
+            // === BARBELL EXERCISES ===
+            
+            // Full Body
+            'Deadlifts': 'Stand with bar over mid-foot. Grip bar, drive through heels while extending hips and knees. Keep bar close to body.',
+            'Clean and Press': 'Pull bar from floor to shoulders in one motion, then press overhead. Complex Olympic lift movement.',
+            'Thrusters': 'Front squat to overhead press in one fluid movement. Highly demanding full-body exercise.',
+            'Barbell Complexes': 'Series of barbell exercises performed back-to-back without putting bar down.',
+            'Clean and Jerk': 'Olympic lift: clean bar to shoulders, then jerk overhead. Requires proper coaching.',
+            'Snatch': 'Lift bar from floor to overhead in one motion. Most technical Olympic lift.',
+            'Front Squat to Press': 'Combine front squat with overhead press for full-body movement.',
+
+            // Upper Body
+            'Barbell Bench Press': 'Lie on bench, lower bar to chest, then press to arm extension. Keep shoulder blades retracted.',
+            'Bent-over Barbell Rows': 'Hinge at hips, pull bar to lower chest/upper abdomen. Keep torso stable.',
+
+            // Chest
+            'Incline Barbell Press': 'Press barbell on incline bench to target upper chest muscles.',
+            'Decline Barbell Press': 'Press barbell on decline bench to target lower chest muscles.',
+            'Close-Grip Bench Press': 'Bench press with hands shoulder-width apart to emphasize triceps.',
+            'Floor Press': 'Bench press from floor position, limiting range of motion at bottom.',
+            'Guillotine Press': 'Bench press lowering bar to neck level. Advanced exercise requiring caution.',
+
+            // Back
+            'T-Bar Rows': 'Use T-bar apparatus or landmine setup to row weight toward chest.',
+            'Pendlay Rows': 'Row barbell from floor to chest, returning to floor between reps.',
+            'Rack Pulls': 'Deadlift variation starting from elevated position in power rack.',
+            'Barbell Shrugs': 'Lift shoulders toward ears while holding barbell, focusing on trap development.',
+
+            // Shoulders
+            'Behind-the-Neck Press': 'Press barbell from behind neck. Requires good shoulder mobility.',
+            'Push Press': 'Use leg drive to assist overhead barbell press. More weight than strict press.',
+            'Bradford Press': 'Press barbell from front to back of neck and return. Advanced shoulder exercise.',
+            'High Pulls': 'Pull barbell explosively to chest level, similar to clean but don\'t catch.',
+
+            // Arms/Biceps/Triceps
+            'Barbell Curls': 'Curl barbell from arm extension to full contraction. Keep elbows stationary.',
+            'Barbell Skull Crushers': 'Lie on bench, lower barbell to forehead by bending elbows, extend back up.',
+            'Reverse Barbell Curls': 'Curl barbell with overhand grip to target forearms and biceps differently.',
+            'EZ-Bar Curls': 'Use EZ-curl bar for more comfortable wrist position during curls.',
+            'Drag Curls': 'Curl barbell while dragging it up your body, keeping elbows back.',
+            'Wide-Grip Barbell Curls': 'Perform barbell curls with wider than shoulder-width grip.',
+            '21s Barbell Curls': 'Same as dumbbell version but with barbell.',
+            'Overhead Barbell Extension': 'Hold barbell overhead, lower behind head, extend back up.',
+            'JM Press': 'Hybrid between close-grip bench press and skull crusher.',
+            'California Press': 'Variation of skull crusher with different angle of elbow movement.',
+
+            // Legs/Glutes/Hamstrings/Calves
+            'Back Squats': 'Bar on upper back, squat down until thighs parallel, drive up through heels.',
+            'Front Squats': 'Bar across front shoulders, maintain upright torso while squatting.',
+            'Sumo Deadlifts': 'Wide stance deadlift variation targeting glutes and inner thighs more.',
+            'Barbell Lunges': 'Hold barbell on back while performing lunge movements.',
+            'Hip Thrusts': 'Lean upper back on bench, thrust barbell on hips upward squeezing glutes.',
+            'Zercher Squats': 'Hold barbell in crook of elbows while squatting. Unique exercise variation.',
+            'Overhead Squats': 'Hold barbell overhead while squatting. Requires excellent mobility.',
+            'Split Squats': 'Static lunge position with barbell, focusing on one leg at a time.',
+            'Stiff Leg Deadlifts': 'Keep legs straighter during deadlift to emphasize hamstring stretch.',
+            'Deficit Deadlifts': 'Stand on platform so bar starts lower, increasing range of motion.',
+            'Barbell Calf Raises': 'Hold barbell on back while performing calf raises.',
+            'Donkey Calf Raises': 'Bend forward with barbell on back while doing calf raises.',
+
+            // Core/Abs
+            'Barbell Rollouts': 'Kneel with barbell, roll forward keeping core tight, pull back to start.',
+            'Landmine Twists': 'Hold end of barbell in landmine, rotate side to side.',
+            'Overhead Barbell Carries': 'Walk while holding barbell overhead, maintaining core stability.',
+            'Front-Loaded Carries': 'Walk while holding barbell in front rack position.',
+            'Zercher Carries': 'Walk while holding barbell in crook of elbows.',
+
+            // === KETTLEBELL EXERCISES ===
+            
+            // Full Body
+            'Kettlebell Swings': 'Hinge at hips, swing kettlebell from between legs to chest height using hip drive.',
+            'Turkish Get-ups': 'Complex movement from lying to standing while holding kettlebell overhead.',
+            'Kettlebell Snatches': 'Swing kettlebell overhead in one explosive motion, lock out at top.',
+            'Kettlebell Clean and Press': 'Clean kettlebell to shoulder, then press overhead.',
+            'Kettlebell Complexes': 'Series of kettlebell exercises performed in sequence.',
+            'Kettlebell Flow': 'Continuous movement pattern linking multiple kettlebell exercises.',
+
+            // Upper Body/Chest/Back/Shoulders
+            'Kettlebell Press': 'Press kettlebell from shoulder to overhead, can be single or double arm.',
+            'Kettlebell Rows': 'Row kettlebell to ribs while maintaining hip hinge position.',
+            'Kettlebell High Pulls': 'Pull kettlebell to chest height with explosive hip extension.',
+            'Kettlebell Floor Press': 'Press kettlebell from floor lying position.',
+            'Single-Arm Kettlebell Press': 'Press one kettlebell overhead while other arm remains at side.',
+            'Kettlebell Chest Flyes': 'Perform flye movement using kettlebells for chest development.',
+            'Kettlebell Push-ups': 'Perform push-ups with hands on kettlebell handles.',
+            'Single-Arm Kettlebell Rows': 'Row one kettlebell at a time for unilateral development.',
+            'Kettlebell Renegade Rows': 'Plank position with hands on kettlebells, alternate rowing.',
+            'Kettlebell Halos': 'Circle kettlebell around head for shoulder mobility and strength.',
+            'Kettlebell Upright Rows': 'Pull kettlebell vertically to chest level.',
+            'Bottoms-up Press': 'Press kettlebell with bottom facing up, requiring grip and stability.',
+
+            // Arms/Biceps/Triceps
+            'Kettlebell Curls': 'Curl kettlebell focusing on bicep contraction.',
+            'Kettlebell Tricep Press': 'Press kettlebell overhead focusing on tricep extension.',
+            'Kettlebell Hammer Curls': 'Curl kettlebell with neutral grip.',
+            'Kettlebell Drag Curls': 'Curl kettlebell while dragging up body.',
+            'Kettlebell Skull Crushers': 'Lying tricep extension using kettlebell.',
+
+            // Legs/Glutes/Hamstrings/Calves
+            'Goblet Squats': 'Hold kettlebell at chest while squatting, great for beginners.',
+            'Kettlebell Deadlifts': 'Deadlift movement using kettlebell between legs.',
+            'Kettlebell Lunges': 'Hold kettlebell while performing various lunge movements.',
+            'Single Leg Deadlifts': 'Balance on one leg while deadlifting kettlebell.',
+            'Cossack Squats': 'Wide stance, shift to one side holding kettlebell.',
+            'Kettlebell Hip Thrusts': 'Place kettlebell on hips while performing hip thrusts.',
+            'Kettlebell Front Squats': 'Hold kettlebell in front rack position while squatting.',
+            'Kettlebell Step-ups': 'Hold kettlebell while stepping up onto platform.',
+            'Kettlebell Good Mornings': 'Hip hinge movement holding kettlebell.',
+            'Kettlebell Calf Raises': 'Hold kettlebell while performing calf raises.',
+            'Single Leg Kettlebell Calf Raises': 'Single leg calf raises holding kettlebell.',
+
+            // Core/Abs
+            'Russian Twists with Kettlebell': 'Rotate side to side holding kettlebell.',
+            'Kettlebell Windmills': 'Hold kettlebell overhead, hinge to opposite side touching floor.',
+            'Kettlebell Carries': 'Walk holding kettlebell in various positions.',
+            'Kettlebell Figure 8s': 'Pass kettlebell around legs in figure 8 pattern.',
+            'Kettlebell Wood Chops': 'Diagonal chopping motion holding kettlebell.',
+
+            // === RESISTANCE BAND EXERCISES ===
+            
+            // Full Body/Upper Body
+            'Band Thrusters': 'Stand on band, hold handles at shoulders, squat and press overhead.',
+            'Band Squat-to-Press': 'Combine squat with overhead press using resistance band.',
+            'Band Mountain Climbers': 'Mountain climbers with band around feet for added resistance.',
+            'Band Burpees': 'Perform burpees while wearing resistance band for extra challenge.',
+
+            // Chest/Back
+            'Band Chest Press': 'Anchor band behind, press handles forward mimicking bench press.',
+            'Band Rows': 'Anchor band in front, pull handles to ribs squeezing shoulder blades.',
+            'Band Flyes': 'Anchor band behind, bring handles together in front of chest.',
+            'Band Push-ups': 'Perform push-ups with band across back for added resistance.',
+            'Incline Band Press': 'Chest press with band anchored low to target upper chest.',
+            'Single-Arm Band Press': 'Press one handle at a time for unilateral chest development.',
+            'Band Crossover': 'Cross bands in front of chest for different angle of resistance.',
+            'Band Pull-aparts': 'Hold band with straight arms, pull apart stretching band.',
+            'Band Lat Pulldowns': 'Anchor band high, pull down to chest simulating lat pulldown.',
+            'Band Face Pulls': 'Pull band to face level with elbows high, targets rear delts.',
+            'Wide-Grip Band Rows': 'Row with wider grip to target different back muscles.',
+
+            // Shoulders/Arms
+            'Band Shoulder Press': 'Stand on band, press handles overhead from shoulder level.',
+            'Band Lateral Raises': 'Stand on band, raise handles to sides to shoulder height.',
+            'Band Front Raises': 'Raise band handles forward to shoulder height.',
+            'Band Rear Delt Flyes': 'Pull band apart at chest level with straight arms.',
+            'Band External Rotations': 'Rotate arms outward against band resistance for shoulder health.',
+            'Band Bicep Curls': 'Stand on band, curl handles up focusing on bicep contraction.',
+            'Band Tricep Extensions': 'Anchor band high, extend arms downward.',
+            'Band Hammer Curls': 'Curl band with neutral grip targeting biceps and forearms.',
+            'Band Concentration Curls': 'Isolated bicep curls using resistance band.',
+            'Band 21s': 'Perform 21-rep protocol using resistance band.',
+            'Single-Arm Band Curls': 'Curl one arm at a time for unilateral development.',
+            'Band Tricep Pushdowns': 'Push band downward from high anchor point.',
+            'Band Overhead Extensions': 'Extend arms overhead against band resistance.',
+            'Band Tricep Kickbacks': 'Extend arms back against band resistance.',
+
+            // Legs/Glutes/Core
+            'Band Squats': 'Perform squats with band around legs or under feet.',
+            'Band Deadlifts': 'Stand on band, deadlift movement pulling against resistance.',
+            'Band Lunges': 'Lunge movements with band providing resistance.',
+            'Band Leg Press': 'Lying leg press motion using resistance band.',
+            'Band Step-ups': 'Step-ups with band providing additional resistance.',
+            'Band Clamshells': 'Side-lying leg lifts with band around thighs.',
+            'Band Glute Bridges': 'Glute bridges with band around thighs for extra activation.',
+            'Band Hip Thrusts': 'Hip thrusts with band around thighs.',
+            'Band Monster Walks': 'Walk sideways with band around ankles or thighs.',
+            'Band Fire Hydrants': 'Lift leg to side with band resistance.',
+            'Band Kickbacks': 'Kick leg back against band resistance.',
+            'Band Leg Extensions': 'Extend leg forward against band resistance.',
+            'Band Wall Squats': 'Wall squats with band providing resistance.',
+            'Band Leg Curls': 'Curl leg back against band resistance.',
+            'Band Good Mornings': 'Hip hinge movement with band resistance.',
+            'Single Leg Band Deadlifts': 'Single leg deadlift with band resistance.',
+            'Band Calf Raises': 'Calf raises with band providing resistance.',
+            'Band Ankle Flexion': 'Flex ankle against band resistance.',
+            'Band Toe Points': 'Point toes against band resistance.',
+            'Band Wood Chops': 'Diagonal chopping motion using resistance band.',
+            'Band Pallof Press': 'Anti-rotation exercise pressing band straight out.',
+            'Band Russian Twists': 'Rotational core exercise using band resistance.',
+            'Band Dead Bug': 'Dead bug exercise with band around feet.',
+            'Band Bicycle Crunches': 'Bicycle crunches with band resistance.',
+
+            // === CABLE MACHINE EXERCISES ===
+            
+            // Similar to resistance band exercises but with consistent resistance throughout range of motion
+            'Cable Wood Chops': 'Diagonal chopping motion using cable machine.',
+            'Cable Squat to Press': 'Squat and press using cable resistance.',
+            'Cable Thrusters': 'Thruster movement using cable machine.',
+            'Cable Chest Press': 'Chest press using cable machine for smooth resistance.',
+            'Cable Flyes': 'Chest flyes using cable pulleys for constant tension.',
+            'Incline Cable Press': 'Cable chest press from low to high angle.',
+            'Cable Crossover': 'Cross cables in front of chest for chest development.',
+            'Single-Arm Cable Press': 'Unilateral chest press using cable.',
+            'Cable Chest Squeeze': 'Squeeze cables together in front of chest.',
+            'Cable Rows': 'Seated or standing rows using cable machine.',
+            'Lat Pulldowns': 'Pull cable bar down to chest from overhead.',
+            'Cable Face Pulls': 'Pull cable to face level with high elbows.',
+            'Cable Reverse Flyes': 'Reverse flye movement using cable machine.',
+            'Single-Arm Cable Rows': 'Row one cable at a time.',
+            'Wide-Grip Pulldowns': 'Lat pulldowns with wider grip.',
+            'Cable Pullovers': 'Pullover movement using cable machine.',
+            'Cable Lateral Raises': 'Lateral raises using cable for constant tension.',
+            'Cable Front Raises': 'Front raises using cable resistance.',
+            'Cable Rear Delt Flyes': 'Rear delt isolation using cable.',
+            'Cable Shoulder Press': 'Shoulder press using cable machine.',
+            'Cable Upright Rows': 'Upright rows using cable.',
+            'Cable External Rotations': 'Shoulder external rotation for injury prevention.',
+            'Cable Bicep Curls': 'Bicep curls using cable machine.',
+            'Cable Hammer Curls': 'Hammer curls using cable attachment.',
+            'Cable Concentration Curls': 'Isolated bicep curls using cable.',
+            'Cable Preacher Curls': 'Preacher curls using cable machine.',
+            'Cable 21s': '21-rep protocol using cable machine.',
+            'Cable Tricep Pushdowns': 'Push cable down for tricep development.',
+            'Cable Overhead Tricep Extension': 'Overhead tricep extension using cable.',
+            'Cable Tricep Kickbacks': 'Tricep kickbacks using cable machine.',
+            'Cable Diamond Press': 'Diamond press movement using cable.',
+            'Cable Squats': 'Squats using cable resistance.',
+            'Cable Leg Press': 'Leg press movement using cable machine.',
+            'Cable Lunges': 'Lunges with cable providing resistance.',
+            'Cable Step-ups': 'Step-ups with cable resistance.',
+            'Cable Kickbacks': 'Glute kickbacks using cable machine.',
+            'Cable Hip Abduction': 'Hip abduction using cable.',
+            'Cable Deadlifts': 'Deadlift movement using cable.',
+            'Cable Glute Bridges': 'Glute bridges with cable resistance.',
+            'Cable Leg Extensions': 'Leg extensions using cable machine.',
+            'Cable Leg Curls': 'Leg curls using cable for hamstring development.',
+            'Cable Romanian Deadlifts': 'Romanian deadlifts using cable.',
+            'Cable Good Mornings': 'Good mornings using cable resistance.',
+            'Cable Calf Raises': 'Calf raises using cable machine.',
+            'Single Leg Cable Calf Raises': 'Single leg calf raises with cable.',
+            'Cable Crunches': 'Crunches using cable resistance.',
+            'Cable Russian Twists': 'Russian twists using cable.',
+            'Cable Pallof Press': 'Anti-rotation exercise using cable.',
+            'Cable Knee Raises': 'Knee raises using cable resistance.',
+
+            // === PULL-UP BAR EXERCISES ===
+            
+            'Neutral Grip Pull-ups': 'Pull-ups using parallel/neutral grip handles.',
+            'L-Sit Pull-ups': 'Pull-ups while holding L-sit position with legs.',
+            'Archer Pull-ups': 'Pull up to one side, straightening opposite arm.',
+            'Supinated Pull-ups': 'Pull-ups with underhand grip (similar to chin-ups).',
+            'Hanging Windshield Wipers': 'Rotate legs side to side while hanging.',
+            'Toes to Bar': 'Hang from bar, bring toes up to touch bar.',
+            'Hanging Oblique Crunches': 'Bring knees to elbows while hanging.',
+
+            // === MEDICINE BALL EXERCISES ===
+            
+            'Medicine Ball Burpees': 'Burpees using medicine ball for added challenge.',
+            'Medicine Ball Turkish Get-ups': 'Turkish get-ups holding medicine ball.',
+            'Medicine Ball Chest Pass': 'Explosive chest pass against wall or with partner.',
+            'Medicine Ball Overhead Press': 'Press medicine ball overhead.',
+            'Medicine Ball Push-ups': 'Push-ups with hands on medicine ball.',
+            'Explosive Medicine Ball Push-ups': 'Explosive push-ups using medicine ball.',
+            'Medicine Ball Chest Throw': 'Explosive throwing motion for power development.',
+            'Medicine Ball Overhead Throws': 'Throw ball overhead against wall or ground.',
+            'Medicine Ball Shoulder Press': 'Shoulder press using medicine ball.',
+            'Medicine Ball Circles': 'Circle medicine ball around body or overhead.',
+            'Medicine Ball Bicep Curls': 'Bicep curls holding medicine ball.',
+            'Medicine Ball Tricep Extension': 'Tricep extension using medicine ball.',
+            'Medicine Ball Squats': 'Squats holding medicine ball.',
+            'Medicine Ball Lunges': 'Lunges holding medicine ball in various positions.',
+            'Medicine Ball Wall Squats': 'Wall squats with medicine ball behind back.',
+            'Medicine Ball Hip Thrusts': 'Hip thrusts with medicine ball on hips.',
+            'Medicine Ball Deadlifts': 'Deadlift movement holding medicine ball.',
+            'Medicine Ball V-ups': 'V-ups holding medicine ball.',
+            'Medicine Ball Wood Chops': 'Diagonal chopping motion with medicine ball.',
+            'Medicine Ball Crunches': 'Crunches holding medicine ball.',
+            'Medicine Ball Dead Bug': 'Dead bug exercise holding medicine ball.',
+
+            // === BATTLE ROPES EXERCISES ===
+            
             'Double Arm Waves': 'Wave both ropes up and down together.',
-            'Side-to-Side Waves': 'Move ropes side-to-side in unison.',
-            'Battle Rope Circles': 'Move ropes in outward or inward circular motion.',
+            'Battle Rope Slams': 'Lift ropes overhead, slam down with force.',
+            'Battle Rope Spirals': 'Create spiral patterns with rope movement.',
+            'Battle Rope Burpees': 'Burpees combined with rope waves.',
+            'Side-to-Side Waves': 'Move ropes horizontally side to side.',
+            'In-Out Waves': 'Move ropes in and out horizontally.',
+            'Overhead Slams': 'Lift ropes overhead, slam down explosively.',
+            'Lateral Waves': 'Create waves moving ropes laterally.',
+            'Shoulder Spirals': 'Circle ropes using shoulder motion.',
+            'Seated Battle Ropes': 'Perform rope exercises from seated position.',
+            'Russian Twist Waves': 'Combine Russian twists with rope waves.',
+            'Plank Battle Ropes': 'Hold plank while performing rope exercises.',
+            'Battle Rope Tabata': 'High-intensity interval training with ropes.',
 
-            // --- TRX ---
-            'TRX Burpees': 'Perform burpees with feet suspended in TRX straps.',
-            'TRX Atomic Push-ups': 'With feet in straps, do push-up + knee tuck.',
-            'TRX Rows': 'Lean back holding straps, row body upward.',
-            'TRX Push-ups': 'Feet in straps, perform push-ups.',
-            'TRX Lunges': 'Rear foot in strap, perform lunges.',
-            'TRX Hamstring Curls': 'Feet in straps, curl legs inward from bridge position.',
-            'TRX Pikes': 'Feet in straps, lift hips upward into pike position.',
-            'TRX Mountain Climbers': 'Feet in straps, alternate knees to chest.',
+            // === TRX EXERCISES ===
+            
+            'TRX Jump Squats': 'Jump squats using TRX for assistance or resistance.',
+            'TRX Chest Flye': 'Chest flye movement using TRX straps.',
+            'TRX Y-Pulls': 'Pull straps into Y position overhead.',
+            'TRX T-Pulls': 'Pull straps to sides forming T shape.',
+            'TRX Face Pulls': 'Pull straps to face level with high elbows.',
+            'TRX Rear Delt Flye': 'Rear deltoid isolation using TRX.',
+            'TRX Single Leg Squats': 'Single leg squats using TRX for balance.',
+            'TRX Side Lunge': 'Lateral lunge movement using TRX.',
+            'TRX Hip Press': 'Hip thrust movement using TRX.',
+            'TRX Single Leg Glute Bridge': 'Single leg glute bridge with TRX.',
+            'TRX Single Leg Deadlift': 'Single leg deadlift using TRX for balance.',
+            'TRX Knee Tucks': 'Bring knees to chest with feet in TRX.',
+            'TRX Oblique Crunches': 'Side crunches with feet in TRX.',
+            'TRX Side Plank': 'Side plank using TRX for support.',
 
-            // --- Bench ---
-            'Chest Flyes': 'Lie on bench, open dumbbells wide, squeeze together.',
-            'Bench Dips': 'Hands behind on bench, lower body, press back up.',
-            'Step-ups': 'Step onto bench, drive through heel, return down.',
-            'Bulgarian Split Squats': 'Rear foot on bench, squat with front leg.',
-            'Bench Leg Raises': 'Lie back on bench, raise legs up, lower slowly.',
-
-            // --- Squat Rack ---
-            'Back Squats': 'Barbell on back, squat down and up.',
-            'Hip Thrusts': 'Upper back on bench, bar across hips, thrust upward.',
-            'Squat-to-Press (with barbell)': 'Perform squat then press bar overhead.',
-
-            // --- Leg Press Machine ---
-            'Leg Press': 'Push platform away using legs, lower with control.',
-            'Single Leg Press': 'Perform leg press with one leg at a time.',
-            'Wide Stance Leg Press': 'Place feet wide on platform, press upward.',
-
-            // --- Cardio Machines ---
-            'Running': 'Run at steady pace on treadmill.',
-            'Walking': 'Walk at brisk pace on treadmill.',
-            'Incline Walking': 'Walk uphill on treadmill.',
-            'Sprint Intervals': 'Alternate sprints and recovery on treadmill/bike/elliptical.',
-            'Cycling': 'Ride at steady pace on stationary bike.',
-            'Tabata Intervals': '20s max effort cycling, 10s rest, repeat.',
-            'Elliptical Stride': 'Stride smoothly on elliptical trainer.',
-            'Long Duration Stride': 'Maintain steady effort on elliptical for endurance.',
-            'Rowing': 'Pull handle while extending legs, lean back slightly, return.',
-            'Rowing Intervals': 'Alternate sprints and recovery on rower.',
-            'Long Row Sessions': 'Sustain rowing for extended endurance.',
-            'Climbing': 'Step continuously on stair climber.',
-            'Step Climbing': 'Focus on smooth, controlled stepping.',
-            'Glute-Focused Climbing': 'Drive through heels, emphasize glutes.',
-
-            //Default instruction for unknown exercises
-            'Default': 'Perform exercise with controlled form, full range of motion, and steady breathing.'
+            // Default instruction for any unlisted exercises
+            'Default': 'Perform this exercise with controlled movement, maintaining proper form throughout the full range of motion. Focus on the target muscles and breathe steadily. If you\'re unfamiliar with this exercise, start with lighter weight or reduced intensity and consider consulting a fitness professional.'
         };
             
 
@@ -2249,6 +2864,29 @@
             `;
         }
 
+        function getExerciseInstruction(exerciseName) {
+            // Clean the exercise name for lookup
+            const cleanName = exerciseName.trim();
+            
+            // First try exact match
+            if (exerciseInstructions[cleanName]) {
+                return exerciseInstructions[cleanName];
+            }
+            
+            // Try partial matching for variations
+            const partialMatch = Object.keys(exerciseInstructions).find(key => 
+                key.toLowerCase().includes(cleanName.toLowerCase()) ||
+                cleanName.toLowerCase().includes(key.toLowerCase())
+            );
+            
+            if (partialMatch) {
+                return exerciseInstructions[partialMatch];
+            }
+            
+            // Return default instruction
+            return exerciseInstructions['Default'];
+        }
+
         // Workout tab - Enhanced with better UX
         function showWorkoutTab() {
             const content = document.getElementById('content');
@@ -2284,7 +2922,7 @@
             const isSuperset = exercise.superset && exercise.superset.name;
             const currentExerciseName = (isInSuperset && supersetPhase === 'partner') ? 
                 exercise.superset.name : exercise.name;
-            const currentInstruction = exerciseInstructions[currentExerciseName] || exerciseInstructions['Default'];
+            const currentInstruction = getExerciseInstruction(currentExerciseName);
 
             // Auto-scale exercise name font size
             let exerciseNameEl = `<div class="exercise-name-right" id="exerciseNameEl">${currentExerciseName}</div>`;
@@ -3181,156 +3819,179 @@
             }
         }
 
-        // AI Workout Generation
+        // Enhanced AI Workout Generation with intelligent exercise selection
         function generateAIWorkout(preferences) {
             const exerciseCount = preferences.exerciseCount || Math.max(4, Math.min(8, Math.floor(preferences.duration / 5)));
-            const exercises = [];
             
+            // Validate inputs
+            if (!preferences.equipment || preferences.equipment.length === 0) {
+                preferences.equipment = ['Bodyweight'];
+            }
+            
+            if (!preferences.muscleGroups || preferences.muscleGroups.length === 0) {
+                preferences.muscleGroups = ['Full Body'];
+            }
+            
+            console.log('AI Workout Generation:', preferences);
+            
+            // Exercise classification for intelligent selection
+            const exerciseClassification = {
+                compound: {
+                    'Bodyweight': ['Burpees', 'Mountain Climbers', 'Push-ups', 'Squats', 'Pull-ups'],
+                    'Dumbbells': ['Thrusters', 'Dumbbell Bench Press', 'Bent-over Rows', 'Dumbbell Squats'],
+                    'Barbell': ['Deadlifts', 'Squats', 'Bench Press', 'Bent-over Rows'],
+                    'Kettlebells': ['Kettlebell Swings', 'Turkish Get-ups', 'Goblet Squats']
+                },
+                isolation: {
+                    'Bodyweight': ['Bicycle Crunches', 'Leg Raises', 'Tricep Dips', 'Calf Raises'],
+                    'Dumbbells': ['Bicep Curls', 'Lateral Raises', 'Tricep Extensions', 'Dumbbell Flyes'],
+                    'Barbell': ['Barbell Curls', 'Skull Crushers', 'Upright Rows'],
+                    'Kettlebells': ['Kettlebell Curls', 'Kettlebell Windmills']
+                }
+            };
+            
+            // Get available exercises based on equipment and muscle groups
             let availableExercises = [];
+            let compoundExercises = [];
+            let isolationExercises = [];
             
-            console.log('Selected equipment:', preferences.equipment);
-            console.log('Selected muscle groups:', preferences.muscleGroups);
-            
-            // Map compound muscle groups to individual muscle groups
+            // Expand compound muscle groups
             function expandMuscleGroups(muscleGroups) {
-                const expandedGroups = [];
+                const expanded = [];
                 muscleGroups.forEach(muscle => {
                     switch(muscle) {
                         case 'Push (Chest/Shoulders/Triceps)':
-                            expandedGroups.push('Chest', 'Shoulders', 'Arms', 'Triceps');
+                            expanded.push('Chest', 'Shoulders', 'Arms', 'Triceps');
                             break;
                         case 'Pull (Back/Biceps)':
-                            expandedGroups.push('Back', 'Arms', 'Biceps');
+                            expanded.push('Back', 'Arms', 'Biceps');
                             break;
                         case 'Upper Body':
-                            expandedGroups.push('Upper Body', 'Chest', 'Back', 'Shoulders', 'Arms');
+                            expanded.push('Upper Body', 'Chest', 'Back', 'Shoulders', 'Arms');
                             break;
                         case 'Lower Body':
-                            expandedGroups.push('Lower Body', 'Legs', 'Glutes');
+                            expanded.push('Lower Body', 'Legs', 'Glutes', 'Quadriceps', 'Hamstrings');
                             break;
                         default:
-                            expandedGroups.push(muscle);
+                            expanded.push(muscle);
                     }
                 });
-                return [...new Set(expandedGroups)]; // Remove duplicates
+                return [...new Set(expanded)];
             }
             
-            // Get exercises based on selected equipment
-            if (preferences.equipment && preferences.equipment.length > 0) {
-                preferences.equipment.forEach(equipment => {
-                    console.log(`Processing equipment: ${equipment}`);
-                    
-                    if (equipmentExerciseDatabase[equipment]) {
-                        // Get exercises for selected muscle groups from this equipment
-                        if (preferences.muscleGroups && preferences.muscleGroups.length > 0) {
-                            const expandedMuscleGroups = expandMuscleGroups(preferences.muscleGroups);
-                            console.log('Expanded muscle groups:', expandedMuscleGroups);
+            const expandedMuscleGroups = expandMuscleGroups(preferences.muscleGroups);
+            
+            // Collect exercises from selected equipment
+            preferences.equipment.forEach(equipment => {
+                if (equipmentExerciseDatabase[equipment]) {
+                    expandedMuscleGroups.forEach(muscle => {
+                        if (equipmentExerciseDatabase[equipment][muscle]) {
+                            const muscleExercises = equipmentExerciseDatabase[equipment][muscle];
+                            availableExercises.push(...muscleExercises);
                             
-                            expandedMuscleGroups.forEach(muscle => {
-                                if (equipmentExerciseDatabase[equipment][muscle]) {
-                                    console.log(`Found exercises for ${equipment} - ${muscle}:`, equipmentExerciseDatabase[equipment][muscle]);
-                                    availableExercises = [...availableExercises, ...equipmentExerciseDatabase[equipment][muscle]];
+                            // Classify exercises
+                            muscleExercises.forEach(exercise => {
+                                if (exerciseClassification.compound[equipment]?.includes(exercise)) {
+                                    compoundExercises.push(exercise);
                                 } else {
-                                    console.log(`No exercises found for ${equipment} - ${muscle}`);
+                                    isolationExercises.push(exercise);
                                 }
                             });
-                        } else {
-                            // If no muscle groups specified, get all exercises for this equipment
-                            console.log(`Getting all exercises for ${equipment}`);
-                            Object.values(equipmentExerciseDatabase[equipment]).forEach(muscleExercises => {
-                                availableExercises = [...availableExercises, ...muscleExercises];
-                            });
-                        }
-                    } else {
-                        console.warn(`Equipment "${equipment}" not found in database`);
-                    }
-                });
-            } else {
-                console.log('No equipment selected, using bodyweight');
-                // Default to bodyweight if no equipment selected
-                if (preferences.muscleGroups && preferences.muscleGroups.length > 0) {
-                    const expandedMuscleGroups = expandMuscleGroups(preferences.muscleGroups);
-                    expandedMuscleGroups.forEach(muscle => {
-                        if (equipmentExerciseDatabase['Bodyweight'][muscle]) {
-                            availableExercises = [...availableExercises, ...equipmentExerciseDatabase['Bodyweight'][muscle]];
                         }
                     });
-                } else {
-                    availableExercises = Object.values(equipmentExerciseDatabase['Bodyweight']).flat();
                 }
-            }
+            });
             
             // Remove duplicates
             availableExercises = [...new Set(availableExercises)];
-            console.log('Available exercises after deduplication:', availableExercises);
+            compoundExercises = [...new Set(compoundExercises)];
+            isolationExercises = [...new Set(isolationExercises)];
             
-            // Only add bodyweight as fallback if we still don't have enough exercises
+            console.log('Available exercises:', availableExercises.length);
+            console.log('Compound exercises:', compoundExercises.length);
+            console.log('Isolation exercises:', isolationExercises.length);
+            
+            // Ensure minimum exercises available
             if (availableExercises.length < exerciseCount) {
-                console.log(`Only ${availableExercises.length} exercises found, need ${exerciseCount}. Adding bodyweight fallback.`);
-                const bodyweightExercises = Object.values(equipmentExerciseDatabase['Bodyweight']).flat();
-                availableExercises = [...new Set([...availableExercises, ...bodyweightExercises])];
-                console.log('Available exercises after bodyweight fallback:', availableExercises);
-            }
-            
-            // Ensure we have enough exercises
-            if (availableExercises.length < exerciseCount) {
-                console.error('Still not enough exercises available');
-                showNotification('Not enough exercises available for selected criteria. Try selecting more equipment or muscle groups.', 'error');
-                return null;
-            }
-            
-            // Randomly select exercises, but try to distribute across equipment types
-            const selectedExercises = [];
-            const exercisePool = [...availableExercises];
-            
-            // Prioritize non-bodyweight exercises if multiple equipment types selected
-            if (preferences.equipment && preferences.equipment.length > 1) {
-                const nonBodyweightExercises = exercisePool.filter(ex => {
-                    // Check if exercise exists in non-bodyweight equipment
-                    return preferences.equipment.some(equipment => {
-                        if (equipment === 'Bodyweight') return false;
-                        return equipmentExerciseDatabase[equipment] && 
-                            Object.values(equipmentExerciseDatabase[equipment]).flat().includes(ex);
-                    });
+                // Add bodyweight fallback
+                Object.values(equipmentExerciseDatabase['Bodyweight']).forEach(muscleExercises => {
+                    availableExercises.push(...muscleExercises);
                 });
+                availableExercises = [...new Set(availableExercises)];
                 
-                // Select most exercises from non-bodyweight equipment
-                const priorityCount = Math.min(Math.ceil(exerciseCount * 0.8), nonBodyweightExercises.length);
-                
-                for (let i = 0; i < priorityCount; i++) {
-                    if (nonBodyweightExercises.length > 0) {
-                        const randomIndex = Math.floor(Math.random() * nonBodyweightExercises.length);
-                        const selectedExercise = nonBodyweightExercises.splice(randomIndex, 1)[0];
-                        selectedExercises.push(selectedExercise);
-                        
-                        // Remove from main pool
-                        const poolIndex = exercisePool.indexOf(selectedExercise);
-                        if (poolIndex > -1) exercisePool.splice(poolIndex, 1);
-                    }
+                if (availableExercises.length < exerciseCount) {
+                    throw new Error('Insufficient exercises available for selected criteria');
                 }
             }
             
-            // Fill remaining slots with any available exercises
-            while (selectedExercises.length < exerciseCount && exercisePool.length > 0) {
-                const randomIndex = Math.floor(Math.random() * exercisePool.length);
-                selectedExercises.push(exercisePool.splice(randomIndex, 1)[0]);
+            // Intelligent exercise selection based on workout type and preferences
+            const selectedExercises = [];
+            
+            // Determine exercise distribution based on workout type
+            let compoundRatio = 0.6; // Default 60% compound, 40% isolation
+            
+            switch(preferences.type) {
+                case 'Strength Training':
+                case 'Powerlifting':
+                case 'Functional Training':
+                    compoundRatio = 0.8; // 80% compound
+                    break;
+                case 'Bodybuilding':
+                    compoundRatio = 0.5; // 50% compound
+                    break;
+                case 'HIIT':
+                case 'CrossFit':
+                    compoundRatio = 0.9; // 90% compound
+                    break;
+                case 'Circuit Training':
+                    compoundRatio = 0.7; // 70% compound
+                    break;
+            }
+            
+            const compoundCount = Math.floor(exerciseCount * compoundRatio);
+            const isolationCount = exerciseCount - compoundCount;
+            
+            console.log(`Target: ${compoundCount} compound, ${isolationCount} isolation exercises`);
+            
+            // Select compound exercises first (they should come early in workout)
+            const shuffledCompound = [...compoundExercises].sort(() => Math.random() - 0.5);
+            for (let i = 0; i < Math.min(compoundCount, shuffledCompound.length); i++) {
+                selectedExercises.push(shuffledCompound[i]);
+            }
+            
+            // Fill remaining slots with isolation exercises
+            const remainingSlots = exerciseCount - selectedExercises.length;
+            const availableIsolation = isolationExercises.filter(ex => !selectedExercises.includes(ex));
+            const shuffledIsolation = availableIsolation.sort(() => Math.random() - 0.5);
+            
+            for (let i = 0; i < Math.min(remainingSlots, shuffledIsolation.length); i++) {
+                selectedExercises.push(shuffledIsolation[i]);
+            }
+            
+            // If still need more exercises, fill from any remaining available exercises
+            if (selectedExercises.length < exerciseCount) {
+                const remaining = availableExercises.filter(ex => !selectedExercises.includes(ex));
+                const shuffledRemaining = remaining.sort(() => Math.random() - 0.5);
+                
+                while (selectedExercises.length < exerciseCount && shuffledRemaining.length > 0) {
+                    selectedExercises.push(shuffledRemaining.pop());
+                }
             }
             
             console.log('Final selected exercises:', selectedExercises);
-
-            // Convert exercises to workout format
-            selectedExercises.forEach(exerciseName => {
-                const exercise = createExerciseFromName(exerciseName, preferences);
-                exercises.push(exercise);
+            
+            // Create workout structure
+            const exercises = selectedExercises.map((exerciseName, index) => {
+                return createIntelligentExercise(exerciseName, preferences, index, selectedExercises.length);
             });
-
+            
+            // Calculate workout details
             const calories = calculateCalories(preferences.type, preferences.duration, preferences.difficulty);
-            const muscleGroupName = preferences.muscleGroups && preferences.muscleGroups.length > 0 ? 
-                preferences.muscleGroups[0] : 'Full Body';
-
-            return {
+            const muscleGroupName = preferences.muscleGroups[0] || 'Full Body';
+            
+            const workout = {
                 id: Date.now(),
-                name: `AI ${muscleGroupName} ${preferences.type}`,
+                name: generateWorkoutName(preferences),
                 type: preferences.type,
                 duration: preferences.duration,
                 difficulty: preferences.difficulty,
@@ -3339,8 +4000,156 @@
                 exercises,
                 custom: true,
                 aiGenerated: true,
-                muscleGroups: preferences.muscleGroups || ['Full Body']
+                muscleGroups: preferences.muscleGroups
             };
+            
+            console.log('Generated workout:', workout);
+            return workout;
+        }
+
+        // Generate intelligent workout names
+        function generateWorkoutName(preferences) {
+            const typeAdjectives = {
+                'Strength Training': ['Power', 'Strong', 'Iron', 'Solid'],
+                'HIIT': ['Intense', 'Blazing', 'Explosive', 'Fire'],
+                'Cardio': ['Endurance', 'Cardio', 'Heart', 'Stamina'],
+                'Bodybuilding': ['Muscle', 'Hypertrophy', 'Mass', 'Pump'],
+                'CrossFit': ['WOD', 'Elite', 'Functional', 'Athletic'],
+                'Functional Training': ['Functional', 'Movement', 'Dynamic', 'Real'],
+                'Circuit Training': ['Circuit', 'Flow', 'Continuous', 'Chain']
+            };
+            
+            const muscleNames = {
+                'Full Body': 'Total Body',
+                'Upper Body': 'Upper',
+                'Lower Body': 'Lower',
+                'Push (Chest/Shoulders/Triceps)': 'Push',
+                'Pull (Back/Biceps)': 'Pull',
+                'Core/Abs': 'Core'
+            };
+            
+            const adjective = typeAdjectives[preferences.type]?.[Math.floor(Math.random() * typeAdjectives[preferences.type].length)] || 'AI';
+            const muscleGroup = muscleNames[preferences.muscleGroups[0]] || preferences.muscleGroups[0] || 'Total';
+            const equipment = preferences.equipment[0] === 'Bodyweight' ? 'Bodyweight' : preferences.equipment[0];
+            
+            return `${adjective} ${muscleGroup} ${equipment}`;
+        }
+
+        // Create intelligent exercise parameters
+        function createIntelligentExercise(exerciseName, preferences, exerciseIndex, totalExercises) {
+            const exercise = { name: exerciseName };
+            
+            // Get recommended weight
+            const recommendedWeight = getRecommendedWeight(exerciseName, null, preferences.type, preferences.difficulty);
+            if (recommendedWeight) {
+                exercise.weight = recommendedWeight;
+            }
+            
+            // Determine if this is a compound exercise
+            const isCompound = isCompoundExercise(exerciseName, preferences.equipment);
+            
+            // Exercise ordering: compound exercises get longer rest, come first
+            const restMultiplier = isCompound ? 1.2 : 0.8;
+            const isEarlyExercise = exerciseIndex < totalExercises * 0.3;
+            
+            switch (preferences.type) {
+                case 'HIIT':
+                case 'CrossFit':
+                    // High intensity with work/rest intervals
+                    const workTimes = preferences.difficulty === 'Beginner' ? [20, 30, 30] : 
+                                    preferences.difficulty === 'Advanced' ? [45, 60, 90] : [30, 45, 60];
+                    exercise.duration = workTimes[Math.floor(Math.random() * workTimes.length)];
+                    exercise.rest = Math.max(30, Math.floor(exercise.duration * 0.5 * restMultiplier));
+                    
+                    if (isCompound) {
+                        exercise.reps = preferences.difficulty === 'Beginner' ? '8-12' : 
+                                    preferences.difficulty === 'Advanced' ? '15-20' : '10-15';
+                    }
+                    break;
+                    
+                case 'Strength Training':
+                case 'Powerlifting':
+                    // Strength-focused with progressive sets/reps
+                    const strengthProgression = {
+                        'Beginner': { sets: [2, 3], reps: ['8-12', '6-10'], rest: [60, 90] },
+                        'Intermediate': { sets: [3, 4], reps: ['6-8', '5-6'], rest: [90, 120] },
+                        'Advanced': { sets: [4, 5], reps: ['3-5', '4-6'], rest: [120, 180] }
+                    };
+                    
+                    const prog = strengthProgression[preferences.difficulty];
+                    exercise.sets = isCompound ? Math.max(...prog.sets) : Math.min(...prog.sets);
+                    exercise.reps = isCompound ? prog.reps[1] : prog.reps[0];
+                    exercise.rest = Math.max(30, (isCompound ? Math.max(...prog.rest) : Math.min(...prog.rest)) * restMultiplier);
+                    break;
+                    
+                case 'Bodybuilding':
+                    // Volume-focused for hypertrophy
+                    exercise.sets = isCompound ? [3, 4][Math.floor(Math.random() * 2)] : [3, 4, 5][Math.floor(Math.random() * 3)];
+                    exercise.reps = preferences.difficulty === 'Beginner' ? '8-12' :
+                                preferences.difficulty === 'Advanced' ? '12-15' : '10-12';
+                    exercise.rest = Math.max(30, Math.floor((isCompound ? 90 : 60) * restMultiplier));
+                    break;
+                    
+                case 'Circuit Training':
+                    // Fast-paced with minimal rest
+                    exercise.duration = [30, 45][Math.floor(Math.random() * 2)];
+                    exercise.rest = Math.max(15, Math.floor(30 * restMultiplier));
+                    exercise.reps = '12-15';
+                    exercise.sets = 1; // Circuits typically single sets
+                    break;
+                    
+                case 'Functional Training':
+                    // Movement-based with moderate intensity
+                    exercise.sets = [2, 3][Math.floor(Math.random() * 2)];
+                    exercise.reps = preferences.difficulty === 'Beginner' ? '8-10' :
+                                preferences.difficulty === 'Advanced' ? '12-15' : '10-12';
+                    exercise.rest = Math.max(30, Math.floor((isCompound ? 90 : 60) * restMultiplier));
+                    break;
+                    
+                default:
+                    // Default parameters
+                    exercise.sets = 3;
+                    exercise.reps = '10-12';
+                    exercise.rest = Math.max(30, Math.floor(60 * restMultiplier));
+            }
+            
+            // Ensure minimum rest time of 30 seconds for safety
+            if (exercise.rest < 30) exercise.rest = 30;
+
+            // Cap maximum rest time to prevent extremely long workouts
+            if (exercise.rest > 300) exercise.rest = 300;
+            
+            // Add variety for final exercises (reduce intensity)
+            if (exerciseIndex >= totalExercises * 0.8) {
+                if (exercise.sets > 2) exercise.sets -= 1;
+                if (exercise.rest > 60) exercise.rest = Math.max(30, exercise.rest - 30);
+            }
+
+            return exercise;
+        }
+
+        // Helper function to determine if exercise is compound
+        function isCompoundExercise(exerciseName, equipment) {
+            const compoundKeywords = [
+                'deadlift', 'squat', 'press', 'row', 'pull-up', 'chin-up', 'thruster',
+                'clean', 'snatch', 'burpee', 'mountain climber', 'turkish get-up',
+                'swing', 'slam', 'complex', 'man maker'
+            ];
+            
+            const fullBodyExercises = [
+                'Burpees', 'Mountain Climbers', 'Thrusters', 'Turkish Get-ups',
+                'Man Makers', 'Clean and Press', 'Kettlebell Swings'
+            ];
+            
+            const name = exerciseName.toLowerCase();
+            
+            // Check if it's explicitly in full body category
+            if (fullBodyExercises.some(exercise => exercise.toLowerCase() === name)) {
+                return true;
+            }
+            
+            // Check compound keywords
+            return compoundKeywords.some(keyword => name.includes(keyword));
         }
         
         function createExerciseFromName(exerciseName, preferences) {
@@ -3815,48 +4624,44 @@
             newExercise.className = 'exercise-item';
             newExercise.draggable = true;
             newExercise.innerHTML = `
-                <div class="drag-handle" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); cursor: grab; color: rgba(255,255,255,0.4);"></div>
+                <div class="drag-handle"></div>
                 <div style="margin-left: 24px;">
                     <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
-                        <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;">
-                        <button type="button" onclick="this.parentElement.parentElement.parentElement.remove();" 
+                        <input type="text" placeholder="Exercise name" class="form-input" style="flex: 1;" maxlength="50">
+                        <button type="button" onclick="this.parentElement.parentElement.parentElement.remove(); setTimeout(() => setupDragAndDrop(document.getElementById('editExerciseList')), 50);" 
                                 class="btn btn-danger" style="width: auto; padding: 8px 12px;">
                             Remove
                         </button>
                     </div>
                     <div class="superset-partner" style="display: none; margin-bottom: 8px;">
-                        <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input">
+                        <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input" maxlength="50">
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto; gap: 4px;">
                         <div>
                             <div class="exercise-control-label">Duration(s)</div>
-                            <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" min="0" max="600">
                         </div>
                         <div>
                             <div class="exercise-control-label">Reps</div>
-                            <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
+                            <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" maxlength="10">
                         </div>
                         <div>
                             <div class="exercise-control-label">Sets</div>
-                            <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" min="1" max="10">
                         </div>
                         <div>
                             <div class="exercise-control-label">Rest(s)</div>
-                            <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
+                            <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" min="0" max="600">
                         </div>
                         <div>
                             <div class="exercise-control-label">Weight</div>
-                            <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;">
-                            <div>
-                                <div class="exercise-control-label">Weight</div>
-                                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                                <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1 0 65px;" value="${exercise.weight || ''}">
-                                <label style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: rgba(255,255,255,0.7); white-space: nowrap;">
-                                    <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)">
-                                     Superset
-                                 </label>
-                                </div>
-                             </div>                            
+                            <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;" maxlength="15">
+                        </div>
+                        <div style="display: flex; align-items: end; padding-bottom: 6px;">
+                            <label style="display: flex; align-items: center; gap: 2px; font-size: 10px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)" style="width: 12px; height: 12px; margin: 0;">
+                                SS
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -4259,7 +5064,20 @@
                     return;
                 }
 
-                const generatedWorkout = generateAIWorkout(preferences);
+                // Generate workout with comprehensive error handling
+                let generatedWorkout;
+                try {
+                    generatedWorkout = generateAIWorkout(preferences);
+                } catch (error) {
+                    console.error('AI Generation Error:', error);
+                    if (error.message.includes('Insufficient exercises')) {
+                        showNotification('Not enough exercises available for your selection. Try choosing more equipment or different muscle groups.', 'error');
+                    } else {
+                        showNotification('Failed to generate workout. Please try different settings.', 'error');
+                    }
+                    return;
+                }
+                
                 if (!generatedWorkout || !generatedWorkout.exercises || generatedWorkout.exercises.length === 0) {
                     showNotification('Failed to generate workout. Please try different settings.', 'error');
                     return;
@@ -4270,9 +5088,10 @@
                 closeModal('aiModal');
                 showHomeTab();
                 showNotification(`AI Workout "${generatedWorkout.name}" generated successfully!`);
+                
             } catch (error) {
-                console.error('AI Workout generation failed:', error);
-                showNotification('Failed to generate AI workout. Please try again.', 'error');
+                console.error('AI Workout handler failed:', error);
+                showNotification('An unexpected error occurred. Please try again.', 'error');
             }
         }
 
