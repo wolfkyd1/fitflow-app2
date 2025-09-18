@@ -3639,31 +3639,32 @@
                                         <div class="superset-partner" style="display: none; margin-bottom: 8px;">
                                             <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input">
                                         </div>
-                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto auto; gap: 8px;">
                                             <div>
                                                 <div class="exercise-control-label">Duration(s)</div>
-                                                <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
+                                                <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.duration || ''}" min="0" max="600">
                                             </div>
                                             <div>
                                                 <div class="exercise-control-label">Reps</div>
-                                                <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
+                                                <input type="text" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.reps || ''}" maxlength="10">
                                             </div>
                                             <div>
                                                 <div class="exercise-control-label">Sets</div>
-                                                <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;">
+                                                <input type="number" class="form-input" placeholder="#" style="padding: 6px; font-size: 14px;" value="${exercise.sets || ''}" min="1" max="10">
                                             </div>
                                             <div>
                                                 <div class="exercise-control-label">Rest(s)</div>
-                                                <input type="number" class="form-input" placeholder="sec(s)" style="padding: 6px; font-size: 14px;">
+                                                <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.rest || ''}" min="0" max="600">
                                             </div>
-                                            <div>
-                                            <div class="exercise-control-label">Weight</div>
-                                            <div style="display: flex; align-items: center; gap: 4px;">
-                                                <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1; min-width: 45px;">
-                                                <label style="display: flex; align-items: center; gap: 2px; font-size: 10px; color: rgba(255,255,255,0.7); white-space: nowrap;">
-                                                    <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)" style="width: 12px; height: 12px;">
-                                                    SS
-                                                </label>
+                                            <div style="grid-column: span 2;">
+                                                <div class="exercise-control-label">Weight</div>
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1;" value="${exercise.weight || ''}" maxlength="15">
+                                                    <label style="display: flex; align-items: center; gap: 3px; font-size: 10px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                                        <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)" style="width: 14px; height: 14px; margin: 0;" ${exercise.superset ? 'checked' : ''}>
+                                                        SS
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
