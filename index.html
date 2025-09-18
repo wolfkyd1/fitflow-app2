@@ -546,7 +546,7 @@
         /* Rest Screen Specific Styles */
         .rest-active {
             text-align: center;
-            padding: 20px;
+            padding: 8px; /* Reduced from 20px */
             background: #1a1a1a;
             position: fixed;
             top: 0;
@@ -948,9 +948,8 @@
             padding: clamp(16px, 4vw, 24px);
             margin: 20px 0;
             text-align: center;
-            /* Fixed height that scales with screen size */
             height: clamp(400px, 65vh, 550px);
-            width: calc(100% - 16px);
+            width: calc(100% - 16px); /* Now this will be much wider */
             max-width: none;
             margin-left: auto;
             margin-right: auto;
@@ -1875,9 +1874,9 @@
                 muscleGroups: ["Core/Abs"],
                 exercises: [
                     { name: "Plank", duration: 45, rest: 15, sets: 3 },
-                    { name: "Russian Twists", duration: 30, rest: 15, reps: "20 each", sets: 3 },
-                    { name: "Bicycle Crunches", duration: 30, rest: 15, reps: "15 each", sets: 3 },
-                    { name: "Dead Bug", duration: 45, rest: 15, reps: "10 each", sets: 2 }
+                    { name: "Russian Twists", duration: 30, rest: 15, reps: "20", sets: 3 },
+                    { name: "Bicycle Crunches", duration: 30, rest: 15, reps: "15", sets: 3 },
+                    { name: "Dead Bug", duration: 45, rest: 15, reps: "10", sets: 2 }
                 ]
             }
         ];
