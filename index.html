@@ -1428,109 +1428,227 @@
         // Exercise database
         const exerciseDatabase = {
             'Full Body': {
-                primary: ['Burpees', 'Thrusters', 'Man Makers', 'Turkish Get-ups'],
-                secondary: ['Mountain Climbers', 'Bear Crawls', 'Jumping Jacks', 'High Knees']
+                primary: ['Burpees', 'Thrusters', 'Man Makers', 'Turkish Get-ups', 'Kettlebell Swings', 'Clean and Press'],
+                secondary: ['Mountain Climbers', 'Bear Crawls', 'Jumping Jacks', 'High Knees', 'Battle Ropes', 'Jump Rope']
             },
             'Upper Body': {
-                primary: ['Pull-ups', 'Push-ups', 'Dips'],
-                secondary: ['Pike Push-ups', 'Handstand Push-ups', 'Tricep Dips']
+                primary: ['Pull-ups', 'Push-ups', 'Dips', 'Arnold Press', 'Incline Bench Press', 'Chin-ups'],
+                secondary: ['Pike Push-ups', 'Handstand Push-ups', 'Tricep Dips', 'Incline Push-ups', 'Cable Flyes']
             },
             'Lower Body': {
-                primary: ['Squats', 'Lunges', 'Single Leg Deadlifts'],
-                secondary: ['Jump Squats', 'Wall Sits', 'Calf Raises', 'Step-ups']
+                primary: ['Squats', 'Lunges', 'Single Leg Deadlifts', 'Step-ups', 'Front Squats', 'Sumo Deadlifts'],
+                secondary: ['Jump Squats', 'Wall Sits', 'Calf Raises', 'Glute Bridges', 'Side Lunges', 'Box Jumps']
             },
             'Push (Chest/Shoulders/Triceps)': {
-                primary: ['Dumbbell Bench Press', 'Push-ups', 'Overhead Press'],
-                secondary: ['Dips', 'Tricep Extensions', 'Lateral Raises', 'Front Raises']
+                primary: ['Dumbbell Bench Press', 'Push-ups', 'Overhead Press', 'Incline Press', 'Arnold Press'],
+                secondary: ['Dips', 'Tricep Extensions', 'Lateral Raises', 'Front Raises', 'Diamond Push-ups']
             },
             'Pull (Back/Biceps)': {
-                primary: ['Pull-ups', 'Bent-over Rows', 'Lat Pulldowns'],
-                secondary: ['Bicep Curls', 'Face Pulls', 'Reverse Flyes', 'Hammer Curls']
+                primary: ['Pull-ups', 'Bent-over Rows', 'Lat Pulldowns', 'Chin-ups', 'Seal Rows'],
+                secondary: ['Bicep Curls', 'Face Pulls', 'Reverse Flyes', 'Hammer Curls', 'Cable Curls']
             },
             'Legs': {
-                primary: ['Squats', 'Deadlifts', 'Lunges', 'Leg Press'],
-                secondary: ['Calf Raises', 'Leg Curls', 'Leg Extensions', 'Wall Sits']
+                primary: ['Squats', 'Deadlifts', 'Lunges', 'Leg Press', 'Bulgarian Split Squats', 'Hip Thrusts'],
+                secondary: ['Calf Raises', 'Leg Curls', 'Leg Extensions', 'Box Jumps', 'Wall Sits']
             },
             'Chest': {
-                primary: ['Bench Press', 'Dumbbell Bench Press', 'Push-ups'],
-                secondary: ['Chest Flyes', 'Incline Press', 'Decline Press', 'Chest Dips']
+                primary: ['Bench Press', 'Dumbbell Bench Press', 'Push-ups', 'Incline Press', 'Cable Press'],
+                secondary: ['Chest Flyes', 'Incline Press', 'Decline Press', 'Chest Dips', 'Machine Chest Press']
             },
             'Back': {
-                primary: ['Deadlifts', 'Pull-ups', 'Bent-over Rows'],
-                secondary: ['Lat Pulldowns', 'T-Bar Rows', 'Cable Rows', 'Face Pulls']
+                primary: ['Deadlifts', 'Pull-ups', 'Bent-over Rows', 'Rack Pulls'],
+                secondary: ['Lat Pulldowns', 'T-Bar Rows', 'Cable Rows', 'Face Pulls', 'Good Mornings']
             },
             'Shoulders': {
-                primary: ['Overhead Press', 'Arnold Press', 'Pike Push-ups'],
-                secondary: ['Lateral Raises', 'Front Raises', 'Rear Delt Flyes', 'Upright Rows']
+                primary: ['Overhead Press', 'Arnold Press', 'Pike Push-ups', 'Military Press'],
+                secondary: ['Lateral Raises', 'Front Raises', 'Rear Delt Flyes', 'Upright Rows', 'Shrugs']
             },
             'Arms': {
-                primary: ['Close-Grip Push-ups', 'Tricep Dips', 'Pull-ups'],
-                secondary: ['Bicep Curls', 'Tricep Extensions', 'Hammer Curls', 'Preacher Curls']
-            },
-            'Biceps': {
-                primary: ['Bicep Curls', 'Hammer Curls'],
-                secondary: ['Preacher Curls', 'Cable Curls', 'Concentration Curls']
-            },
-            'Triceps': {
-                primary: ['Close-Grip Push-ups', 'Tricep Dips'],
-                secondary: ['Tricep Extensions', 'Overhead Tricep Press', 'Diamond Push-ups']
+                primary: ['Close-Grip Push-ups', 'Tricep Dips', 'Pull-ups', 'Chin-ups'],
+                secondary: ['Bicep Curls', 'Tricep Extensions', 'Hammer Curls', 'Preacher Curls', 'Skull Crushers']
             },
             'Core/Abs': {
-                primary: ['Plank', 'Dead Bug', 'Russian Twists'],
-                secondary: ['Bicycle Crunches', 'Mountain Climbers', 'Leg Raises']
+                primary: ['Plank', 'Dead Bug', 'Russian Twists', 'Hanging Leg Raises', 'Ab Rollouts'],
+                secondary: ['Bicycle Crunches', 'Mountain Climbers', 'Sit-ups', 'Flutter Kicks', 'V-Ups']
             },
             'Glutes': {
-                primary: ['Hip Thrusts', 'Bulgarian Split Squats'],
-                secondary: ['Glute Bridges', 'Clamshells', 'Fire Hydrants']
+                primary: ['Hip Thrusts', 'Bulgarian Split Squats', 'Sumo Deadlifts'],
+                secondary: ['Glute Bridges', 'Clamshells', 'Fire Hydrants', 'Kickbacks', 'Step-ups']
             },
             'Quadriceps': {
-                primary: ['Squats', 'Lunges', 'Jump Squats'],
-                secondary: ['Leg Extensions', 'Wall Sits', 'Step-ups']
+                primary: ['Squats', 'Lunges', 'Jump Squats', 'Front Squats'],
+                secondary: ['Leg Extensions', 'Wall Sits', 'Step-ups', 'Bulgarian Split Squats']
             },
             'Hamstrings': {
-                primary: ['Romanian Deadlifts', 'Good Mornings'],
-                secondary: ['Leg Curls', 'Single Leg Deadlifts', 'Glute Ham Raises']
+                primary: ['Romanian Deadlifts', 'Good Mornings', 'Glute Ham Raises'],
+                secondary: ['Leg Curls', 'Single Leg Deadlifts', 'Kettlebell Swings', 'Nordic Curls']
             },
             'Calves': {
-                primary: ['Calf Raises', 'Jump Rope'],
-                secondary: ['Jumping Jacks', 'Box Jumps', 'Pogo Jumps']
+                primary: ['Calf Raises', 'Jump Rope', 'Seated Calf Raises'],
+                secondary: ['Jumping Jacks', 'Box Jumps', 'Pogo Jumps', 'Farmer Carries on Toes']
             },
             'Forearms': {
-                primary: ['Farmers Walks', 'Grip Squeezes'],
-                secondary: ['Wrist Curls', 'Reverse Wrist Curls', 'Plate Pinches']
+                primary: ['Farmers Walks', 'Grip Squeezes', 'Reverse Curls'],
+                secondary: ['Wrist Curls', 'Reverse Wrist Curls', 'Plate Pinches', 'Towel Pull-ups']
             },
             'Traps': {
-                primary: ['Shrugs', 'Upright Rows'],
-                secondary: ['Face Pulls', 'High Pulls', 'Barbell Shrugs']
+                primary: ['Shrugs', 'Upright Rows', 'Rack Pulls'],
+                secondary: ['Face Pulls', 'High Pulls', 'Barbell Shrugs', 'Dumbbell Shrugs']
             },
             'Lats': {
-                primary: ['Pull-ups', 'Lat Pulldowns'],
-                secondary: ['T-Bar Rows', 'Wide-Grip Rows', 'Straight Arm Pulldowns']
+                primary: ['Pull-ups', 'Lat Pulldowns', 'Straight Arm Pulldowns'],
+                secondary: ['T-Bar Rows', 'Wide-Grip Rows', 'Seal Rows', 'Inverted Rows']
+            },
+            'Cardio': {
+                primary: ['Running', 'Cycling', 'Rowing Machine', 'Elliptical'],
+                secondary: ['Burpees', 'Sprints', 'Jump Rope', 'Battle Ropes', 'Stair Climbing']
+            },
+            'Mobility/Stretching': {
+                primary: ['Cat-Cow Stretch', 'Childs Pose', 'Hip Flexor Stretch', 'Worlds Greatest Stretch'],
+                secondary: ['Hamstring Stretch', 'Quad Stretch', 'Shoulder Dislocates', 'Spinal Twists']
             }
         };
 
         // Exercise instructions
         const exerciseInstructions = {
-            'Push-ups': 'Start in plank position with hands shoulder-width apart. Lower your body until chest nearly touches the floor. Push back up to starting position. Keep core tight throughout.',
-            'Squats': 'Stand with feet shoulder-width apart. Lower your body by bending knees and pushing hips back. Keep chest up and knees behind toes. Drive through heels to return to standing.',
-            'Pull-ups': 'Hang from bar with overhand grip slightly wider than shoulders. Pull your body up until chin is over the bar. Lower back down with control. Keep core engaged.',
-            'Deadlifts': 'Stand with feet hip-width apart, barbell in front. Bend at hips and knees, grip bar. Lift by extending hips and knees simultaneously. Keep back straight throughout.',
-            'Plank': 'Start in push-up position on forearms. Keep body in straight line from head to heels. Hold position while breathing normally. Don\'t let hips sag.',
-            'Lunges': 'Step forward with one leg, lowering hips until both knees are bent at 90 degrees. Push back to starting position. Keep torso upright.',
-            'Burpees': 'Start standing, drop to push-up position, do a push-up, jump feet to hands, then jump up with arms overhead. Land softly and repeat.',
-            'Mountain Climbers': 'Start in plank position. Alternate bringing knees to chest in a running motion while keeping hips low and core tight.',
-            'Dumbbell Bench Press': 'Lie on bench with dumbbells at chest level. Press weights up until arms are extended. Lower with control. Keep feet flat on floor.',
-            'Bent-over Rows': 'Hinge at hips with slight knee bend. Pull weight to lower chest, squeezing shoulder blades together. Keep back straight.',
-            'Overhead Press': 'Stand with weights at shoulder height. Press overhead until arms are fully extended. Lower with control. Keep core engaged.',
-            'Bicep Curls': 'Stand with arms at sides holding weights. Curl weights toward shoulders, keeping elbows stationary. Lower with control.',
-            'Tricep Extensions': 'Hold weight overhead with both hands. Lower behind head by bending elbows. Extend back to start. Keep elbows pointing forward.',
-            'Russian Twists': 'Sit with knees bent, feet elevated. Lean back slightly and rotate torso side to side. Keep chest up and core engaged.',
-            'Jumping Jacks': 'Jump feet apart while raising arms overhead. Jump back to starting position. Land softly on balls of feet.',
-            'Wall Sits': 'Stand with back against wall. Slide down until thighs are parallel to floor. Hold position. Keep knees at 90 degrees.',
-            'Calf Raises': 'Stand on balls of feet. Rise up onto toes, then lower back down with control. Keep body straight throughout.',
-            'Hip Thrusts': 'Sit with upper back against bench, barbell on hips. Drive hips up, squeezing glutes at top. Lower with control.',
-            'Bulgarian Split Squats': 'Place rear foot on bench behind you. Lower into lunge position, then drive back up. Keep torso upright.',
-            'Default': 'Perform the exercise with proper form, focusing on controlled movements and full range of motion. Maintain proper breathing throughout.'
+            // Full Body
+            'Burpees': 'Start standing. Drop into push-up position, perform a push-up, jump feet forward, then explode upward with arms overhead.',
+            'Thrusters': 'Hold dumbbells at shoulders. Squat down, then drive up and press weights overhead in one motion.',
+            'Man Makers': 'With dumbbells, do a push-up, row each dumbbell, jump feet forward, then perform a clean and press.',
+            'Turkish Get-ups': 'Lie holding a kettlebell overhead. Slowly rise to standing while keeping kettlebell locked out overhead, then reverse.',
+            'Kettlebell Swings': 'Hold kettlebell with both hands. Hinge at hips, swing kettlebell to shoulder height using hip drive.',
+            'Clean and Press': 'From floor, pull bar/dumbbells to shoulders (clean), then press overhead. Lower under control.',
+            'Mountain Climbers': 'Start in plank. Quickly alternate driving knees toward chest like running in place.',
+            'Bear Crawls': 'Crawl on hands and feet with knees close to ground, moving opposite hand and foot forward together.',
+            'Jumping Jacks': 'Jump legs apart while raising arms overhead. Jump legs back together while lowering arms.',
+            'High Knees': 'Run in place, lifting knees to hip height quickly, pumping arms.',
+            'Battle Ropes': 'Hold rope ends. Alternate slamming or moving ropes in waves while keeping core braced.',
+            'Jump Rope': 'Swing rope overhead and jump lightly as it passes under feet. Maintain rhythm.',
+
+            // Upper Body
+            'Pull-ups': 'Hang from bar with overhand grip. Pull body up until chin clears bar, then lower slowly.',
+            'Push-ups': 'From plank, lower chest to floor keeping elbows tucked, then press back up.',
+            'Dips': 'Support body on bars. Bend elbows to lower torso, then push back to straight arms.',
+            'Arnold Press': 'Hold dumbbells at shoulders, palms in. Rotate palms out as you press overhead.',
+            'Incline Bench Press': 'On incline bench, press bar/dumbbells upward from chest, lower slowly.',
+            'Chin-ups': 'Hang from bar with underhand grip. Pull up until chin passes bar, then lower.',
+            'Pike Push-ups': 'From downward dog position, bend elbows to lower head toward floor, then press back up.',
+            'Handstand Push-ups': 'Against a wall, lower head to ground by bending elbows, then press back up.',
+            'Tricep Dips': 'On bench/chair, lower body by bending elbows, then press back up until arms straighten.',
+            'Incline Push-ups': 'Hands on elevated surface, perform push-up focusing on chest/shoulders.',
+            'Cable Flyes': 'From cable machine, bring arms together in hugging motion, then return slowly.',
+
+            // Lower Body
+            'Squats': 'Feet shoulder-width. Lower hips until thighs parallel, then drive back up.',
+            'Lunges': 'Step forward, lower both knees to 90°, push through front heel to return.',
+            'Single Leg Deadlifts': 'On one leg, hinge forward while holding weight, lower torso, then return upright.',
+            'Step-ups': 'Step onto bench with one leg, drive through heel to rise, then step back down.',
+            'Front Squats': 'Hold barbell across front shoulders. Squat down and return to standing.',
+            'Sumo Deadlifts': 'Wide stance. Grip bar between legs, extend hips/knees to stand tall.',
+            'Jump Squats': 'Perform squat, then explode upward into a jump, land softly and repeat.',
+            'Wall Sits': 'Sit against wall with thighs parallel to ground, hold position.',
+            'Calf Raises': 'Stand tall. Rise up on toes, squeeze calves, then lower slowly.',
+            'Glute Bridges': 'Lie on back, feet flat. Drive hips upward, squeeze glutes, lower back down.',
+            'Side Lunges': 'Step out to side, bend knee into lunge, keep other leg straight, then push back.',
+            'Box Jumps': 'Explosively jump onto a box/bench, land softly, step down.',
+
+            // Push
+            'Dumbbell Bench Press': 'Lie on bench, press dumbbells from chest upward, then lower slowly.',
+            'Overhead Press': 'Press bar/dumbbells from shoulders overhead until arms extend. Lower under control.',
+            'Incline Press': 'Press bar/dumbbells on incline bench, focusing on upper chest.',
+            'Tricep Extensions': 'Hold weight overhead, bend elbows to lower behind head, then extend arms.',
+            'Lateral Raises': 'With dumbbells, raise arms to sides until shoulder height, lower slowly.',
+            'Front Raises': 'With dumbbells, raise arms in front to shoulder height, then lower.',
+            'Diamond Push-ups': 'Do push-up with hands close under chest in diamond shape.',
+
+            // Pull
+            'Bent-over Rows': 'Hinge at hips, pull weights to chest, squeeze shoulder blades, then lower.',
+            'Lat Pulldowns': 'From machine, pull bar to chest, squeeze lats, then return slowly.',
+            'Seal Rows': 'Lie chest on bench, pull bar/dumbbells upward, then lower.',
+            'Face Pulls': 'From cable, pull rope toward face with elbows high, squeeze rear delts.',
+            'Reverse Flyes': 'With dumbbells, hinge forward, lift arms out to sides until shoulder height.',
+            'Hammer Curls': 'Curl dumbbells with palms facing each other, lower under control.',
+            'Cable Curls': 'From low pulley, curl bar/rope to shoulders, then lower.',
+
+            // Legs
+            'Deadlifts': 'Feet hip-width, grip bar. Extend hips and knees to lift bar, keep back straight.',
+            'Leg Press': 'Push platform upward with legs, do not lock knees, then return slowly.',
+            'Bulgarian Split Squats': 'Rear foot on bench. Lower into lunge, then push back up.',
+            'Hip Thrusts': 'Back on bench, drive hips upward with barbell across hips.',
+            'Leg Curls': 'From machine, curl legs toward glutes, then lower slowly.',
+            'Leg Extensions': 'From machine, extend legs until straight, then lower.',
+            
+            // Chest
+            'Bench Press': 'Lie on bench. Press bar upward from chest, then lower under control.',
+            'Cable Press': 'From cable machine, press arms forward like push-up motion.',
+            'Chest Flyes': 'With dumbbells, arms out wide then bring together over chest.',
+
+            // Back
+            'Rack Pulls': 'Partial deadlift from rack. Extend hips/knees to lockout, then return.',
+            'T-Bar Rows': 'From T-bar machine, pull handle to chest, squeeze back, then lower.',
+            'Cable Rows': 'From seated, pull handle to abdomen, squeeze, then extend arms.',
+            'Good Mornings': 'Bar on back, hinge forward at hips keeping back straight, return upright.',
+
+            // Shoulders
+            'Military Press': 'Strict overhead press, no leg drive. Lower under control.',
+            'Rear Delt Flyes': 'Hinge forward, lift dumbbells outward to target rear delts.',
+            'Upright Rows': 'Pull bar/dumbbells vertically to chest with elbows high.',
+            'Shrugs': 'Hold weights at sides, shrug shoulders up, squeeze, then lower.',
+
+            // Arms
+            'Close-Grip Push-ups': 'Push-ups with hands shoulder-width or closer, emphasize triceps.',
+            'Tricep Extensions': 'Extend arms downward from cable/overhead position.',
+            'Preacher Curls': 'Seated with arms braced, curl bar upward, then lower.',
+            'Skull Crushers': 'Lie on bench, bend elbows to lower bar to forehead, extend back up.',
+
+            // Core
+            'Dead Bug': 'Lie on back. Extend opposite arm/leg while keeping core braced, alternate sides.',
+            'Russian Twists': 'Sit leaning back, rotate torso side to side holding weight.',
+            'Hanging Leg Raises': 'From pull-up bar, raise legs straight up, then lower slowly.',
+            'Ab Rollouts': 'From knees with wheel, roll forward keeping core tight, then return.',
+            'Bicycle Crunches': 'Alternate elbow to opposite knee in pedaling motion.',
+            'Sit-ups': 'Curl torso up from floor until upright, lower back down.',
+            'Flutter Kicks': 'Lie on back, kick legs up and down alternately.',
+            'V-Ups': 'From lying flat, lift arms and legs to meet at center forming a V.',
+
+            // Glutes / Hamstrings
+            'Clamshells': 'Lie on side, knees bent. Lift top knee upward, keeping feet together.',
+            'Fire Hydrants': 'On all fours, lift one knee out to side, then lower.',
+            'Kickbacks': 'On all fours, extend one leg straight back and upward, then return.',
+            'Romanian Deadlifts': 'With bar, hinge at hips lowering to shins, then return upright.',
+            'Glute Ham Raises': 'From GHD machine, lower torso forward, then curl back up.',
+            'Nordic Curls': 'Partner/anchor feet, lower torso forward slowly, then pull back.',
+
+            // Calves / Forearms / Traps / Lats
+            'Seated Calf Raises': 'Sit with weight on knees, raise heels, then lower.',
+            'Pogo Jumps': 'Bounce repeatedly on toes with minimal knee bend.',
+            'Farmer Carries on Toes': 'Walk while holding weights, staying on tiptoes.',
+            'Farmers Walks': 'Hold heavy weights at sides, walk upright.',
+            'Grip Squeezes': 'Squeeze gripper/ball tightly, hold, then release.',
+            'Reverse Curls': 'Curl bar/dumbbells with palms facing down.',
+            'Wrist Curls': 'Rest forearms, curl wrists upward with dumbbells.',
+            'Reverse Wrist Curls': 'Same as wrist curls but with palms down.',
+            'Plate Pinches': 'Pinch two plates together and hold.',
+            'Towel Pull-ups': 'Do pull-ups gripping towels over bar.',
+            'High Pulls': 'Pull bar/dumbbells explosively to chest, elbows high.',
+
+            // Cardio
+            'Running': 'Maintain tall posture, midfoot strike, steady breathing.',
+            'Cycling': 'Pedal smoothly, maintain upright posture, engage core.',
+            'Rowing Machine': 'Push with legs, lean back, pull handle to chest, reverse motion.',
+            'Elliptical': 'Move feet in cycles while pumping arms, maintain rhythm.',
+            'Sprints': 'Run at full effort for short bursts, rest, repeat.',
+            'Stair Climbing': 'Climb stairs steadily or explosively, maintain balance.',
+
+            // Mobility
+            'Cat-Cow Stretch': 'On all fours, arch back up (cat), then drop belly and lift chest (cow).',
+            'Child’s Pose': 'Kneel, sit back on heels, stretch arms forward, relax chest down.',
+            'Hip Flexor Stretch': 'Kneel with one leg forward, push hips forward to stretch rear leg.',
+            'World’s Greatest Stretch': 'Lunge forward, place hands inside foot, rotate torso upward.',
+            'Hamstring Stretch': 'Sit or stand, reach toward toes while keeping back straight.',
+            'Quad Stretch': 'Stand, pull ankle to glutes to stretch thigh, hold balance.',
+            'Shoulder Dislocates': 'With stick/band, move arms overhead and behind, then forward.',
+            'Spinal Twists': 'Lie on back, drop knees to one side, rotate torso opposite.'
         };
 
         // Weight training phases
