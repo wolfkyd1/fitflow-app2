@@ -788,7 +788,7 @@
             border: none;
             padding: 12px 20px;
             border-radius: 20px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(55, 65, 81, 0.3);
@@ -932,88 +932,116 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-radius: 24px;
-            padding: 24px;
+            padding: clamp(16px, 4vw, 24px);
             margin: 20px 0;
             text-align: center;
-            min-height: 380px;
-            max-height: 50vh;
+            /* Fixed height that scales with screen size */
+            height: clamp(400px, 65vh, 550px);
+            width: calc(100% - 16px);
+            max-width: none;
+            margin-left: auto;
+            margin-right: auto;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             overflow: hidden;
             -webkit-overflow-scrolling: touch;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-        
-        /* CARD FIX: Responsive heights for different screen sizes */
-        @media (max-height: 700px) {
-            .rest-display {
-                min-height: 340px;
-                max-height: 55vh;
-                padding: 20px;
-            }
+
+        /* Background pattern */
+        .rest-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
-        
-        @media (max-height: 600px) {
-            .rest-display {
-                min-height: 300px;
-                max-height: 60vh;
-                padding: 16px;
-            }
+
+        .rest-display > * {
+            position: relative;
+            z-index: 1;
         }
-        
-        @media (min-height: 800px) {
-            .rest-display {
-                min-height: 420px;
-                max-height: 45vh;
-            }
-        }
-        
+
         .rest-display h3 {
             font-size: clamp(18px, 4vw, 24px);
-            margin-bottom: 12px;
+            margin-bottom: 0;
+            padding-top: clamp(8px, 2vh, 16px);
             font-weight: 700;
-            flex-shrink: 0;
+            opacity: 0.95;
+            /* Fixed space allocation */
+            height: clamp(40px, 8vh, 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
+
         .rest-timer {
-            font-size: clamp(48px, 12vw, 64px);
-            font-weight: 700;
-            margin: 16px 0;
+            font-size: clamp(48px, 12vw, 72px);
+            font-weight: 800;
             color: #ffffff;
-            flex-shrink: 0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.02em;
+            /* Fixed space allocation */
+            height: clamp(80px, 15vh, 120px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
         }
-        
+
         .next-exercise {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 16px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: clamp(12px, 3vw, 16px);
+            border-radius: 16px;
             backdrop-filter: blur(10px);
-            margin-top: 12px;
+            -webkit-backdrop-filter: blur(10px);
+            /* Fixed space allocation - takes remaining space */
             flex: 1;
-            min-height: 0;
+            min-height: clamp(80px, 12vh, 140px);
+            max-height: clamp(120px, 20vh, 180px);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            margin: clamp(8px, 2vh, 16px) 0;
         }
-        
+
+        /* Button container with fixed height */
+        .rest-buttons {
+            height: clamp(60px, 12vh, 80px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+            padding-bottom: clamp(8px, 2vh, 16px);
+        }
+
         .rest-skip-btn {
             background: linear-gradient(135deg, #ffffff, #f8fafc);
             color: #667eea;
             border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
+            padding: clamp(10px, 2vh, 14px) 24px;
+            border-radius: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: clamp(12px, 2.5vw, 14px);
             font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-            margin-top: 16px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
-            flex-shrink: 0;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
+
         .rest-skip-btn::before {
             content: '';
             position: absolute;
@@ -1021,17 +1049,43 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-            transition: left 0.6s;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.15), transparent);
+            transition: left 0.8s ease;
         }
-        
+
         .rest-skip-btn:hover::before {
             left: 100%;
         }
-        
+
         .rest-skip-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Responsive breakpoints for different screen sizes */
+        @media (max-height: 600px) {
+            .rest-display {
+                height: clamp(350px, 85vh, 450px);
+            }
+        }
+
+        @media (max-height: 500px) {
+            .rest-display {
+                height: clamp(300px, 90vh, 400px);
+            }
+        }
+
+        @media (min-height: 800px) {
+            .rest-display {
+                height: clamp(450px, 55vh, 600px);
+            }
+        }
+
+        @media (max-width: 375px) {
+            .rest-display {
+                width: calc(100% - 20px);
+                margin: 10px auto;
+            }
         }
         
         /* Form Styles */
@@ -1994,41 +2048,48 @@
                         
                         <div class="rest-display">
                             <h3>Rest Time</h3>
+                            
                             <div class="rest-timer">${formatTime(restTimer)}</div>
                             
                             ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
-                                <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
-                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">
+                                <div class="next-exercise">
+                                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; opacity: 0.9;">
                                         ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
                                     </div>
-                                    <div style="font-size: 14px; opacity: 0.9;">
+                                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
                                         ${exercise.name}
                                     </div>
                                 </div>
                             ` : !isRestingBetweenSets && nextExercise ? `
-                                <div style="background: rgba(255,255,255,0.2); padding: 16px; border-radius: 12px; backdrop-filter: blur(10px); margin-bottom: 16px;">
-                                    <div style="font-size: 16px; font-weight: bold;">
+                                <div class="next-exercise">
+                                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; opacity: 0.9;">
                                         Moving to next exercise
                                     </div>
+                                    <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Up Next:</div>
+                                    <div style="font-size: 18px; font-weight: 700; color: #ffffff;">
+                                        ${nextExercise.name}
+                                    </div>
                                 </div>
-                            ` : ''}
+                            ` : `
+                                <div class="next-exercise">
+                                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px; opacity: 0.9;">
+                                        Final Exercise Complete!
+                                    </div>
+                                    <div style="font-size: 16px; font-weight: 700; color: #ffffff;">
+                                        Workout finishing soon
+                                    </div>
+                                </div>
+                            `}
                             
-                            <div class="next-exercise">
-                                <div style="opacity: 0.9; margin-bottom: 8px; font-size: 14px;">Up Next:</div>
-                                <strong style="font-size: 20px;">
-                                    ${isRestingBetweenSets && actualSetsRemaining > 0 ?
-                                        `${exercise.name} - Set ${currentSet}` :
-                                        (nextExercise ? `${nextExercise.name}` : 'Workout Complete!')}
-                                </strong>
-                            </div>
-                            
-                            <div style="display: flex; gap: 12px; margin-top: 16px;">
-                                <button class="rest-skip-btn" onclick="skipRest()" style="flex: 1;">
-                                    Skip Rest
-                                </button>
-                                <button class="rest-skip-btn" onclick="addRestTime()" style="flex: 1; background: linear-gradient(135deg, #f59e0b, #d97706);">
-                                    +30s
-                                </button>
+                            <div class="rest-buttons">
+                                <div style="display: flex; gap: 12px;">
+                                    <button class="rest-skip-btn" onclick="skipRest()" style="flex: 1;">
+                                        Skip Rest
+                                    </button>
+                                    <button class="rest-skip-btn" onclick="addRestTime()" style="flex: 1; background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
+                                        +30s
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2124,16 +2185,16 @@
                                 ` : ''}
                             </div>
                             
-                            <div style="display: flex; gap: 16px; align-items: center; justify-content: center; margin-bottom: 20px;">
-                                <button class="btn-control" onclick="previousExercise()" ${currentExercise === 0 ? 'disabled style="opacity: 0.5;"' : ''}>
-                                    Previous
+                            <div style="display: flex; gap: 16px; align-items: center; justify-content: center; margin-bottom: 20px; width: 100%; padding: 0 20px; box-sizing: border-box;">
+                                <button class="btn-control" onclick="previousExercise()" ${currentExercise === 0 ? 'disabled style="opacity: 0.5; width: 70px;"' : 'style="width: 70px;"'}>
+                                    Prev
                                 </button>
                                 <button class="btn-play"
-                                        style="width: 70px; height: 70px; font-size: 30px; position: relative;"
+                                        style="width: 70px; height: 70px; font-size: 30px; position: relative; flex-shrink: 0;"
                                         onclick="toggleTimer()">
                                     ${isTimerRunning ? '||' : '▶'}
                                 </button>
-                                <button class="btn-control" onclick="nextExercise()" ${currentExercise >= currentWorkout.exercises.length - 1 ? 'disabled style="opacity: 0.5;"' : ''}>
+                                <button class="btn-control" onclick="nextExercise()" ${currentExercise >= currentWorkout.exercises.length - 1 ? 'disabled style="opacity: 0.5; width: 70px;"' : 'style="width: 70px;"'}>
                                     Next
                                 </button>
                             </div>
