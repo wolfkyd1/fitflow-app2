@@ -591,7 +591,7 @@
         .exercise-name-right {
             flex: 1;
             margin-left: 16px;
-            font-size: clamp(12px, 3.5vw, 24px); /* Reduced max from 28px */
+            font-size: clamp(14px, 4vw, 28px); /* Reduced max from 28px */
             font-weight: 700;
             color: #ffffff;
             text-align: right;
@@ -2280,9 +2280,14 @@
             const totalSets = exercise.sets || 1;
             const setsRemaining = totalSets - currentSet + 1;
 
+            // Determine current exercise info (main or superset partner)
+            const isSuperset = exercise.superset && exercise.superset.name;
+            const currentExerciseName = (isInSuperset && supersetPhase === 'partner') ? 
+                exercise.superset.name : exercise.name;
+            const currentInstruction = exerciseInstructions[currentExerciseName] || exerciseInstructions['Default'];
+
             // Auto-scale exercise name font size
-            const exerciseName = exercise.name;
-            let exerciseNameEl = `<div class="exercise-name-right" id="exerciseNameEl">${exerciseName}</div>`;
+            let exerciseNameEl = `<div class="exercise-name-right" id="exerciseNameEl">${currentExerciseName}</div>`;
 
             if (isResting) {
                 // Simple rest screen without gradient card
@@ -2295,60 +2300,60 @@
                 const nextExercise = currentWorkout.exercises[currentExercise + 1];
                 
                 restDiv.innerHTML = `
-                    <div style="text-align: center; color: white; padding: 20px;">
-                        <h1 style="font-size: clamp(24px, 6vw, 32px); margin-bottom: 20px;">${currentWorkout.name}</h1>
+                    <div style="padding: 80px 20px 20px; text-align: center; min-height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+                        <h1 style="font-size: clamp(24px, 6vw, 32px); margin-bottom: 20px; color: white;">${currentWorkout.name}</h1>
                         
                         <div style="margin-bottom: 30px;">
-                            <div style="background: rgba(255, 255, 255, 0.1); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 10px;">
-                                <div style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: ${progress}%; border-radius: 4px; transition: width 0.3s ease;"></div>
+                            <div class="progress-bar" style="margin-bottom: 10px;">
+                                <div class="progress-fill" style="width: ${progress}%;"></div>
                             </div>
                             <p style="color: rgba(255, 255, 255, 0.8); font-weight: 600; margin: 0;">
                                 Exercise ${currentExercise + (isRestingBetweenSets ? 1 : 2)} of ${currentWorkout.exercises.length}
                             </p>
                         </div>
                         
-                        <h2 style="font-size: clamp(20px, 5vw, 28px); margin-bottom: 10px;">Rest Time</h2>
-                        <div style="font-size: clamp(48px, 15vw, 72px); font-weight: 800; margin-bottom: 30px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);">
+                        <h2 style="font-size: clamp(20px, 5vw, 28px); margin-bottom: 10px; color: white;">Rest Time</h2>
+                        <div class="timer" style="font-size: clamp(48px, 15vw, 72px); font-weight: 800; margin: 20px 0; color: white;">
                             ${formatTime(restTimer)}
                         </div>
                         
                         ${isRestingBetweenSets && actualSetsRemaining > 0 ? `
-                            <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
-                                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                            <div style="background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); padding: 20px; border-radius: 16px; margin-bottom: 24px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: white;">
                                     ${actualSetsRemaining} set${actualSetsRemaining > 1 ? 's' : ''} remaining
                                 </div>
-                                <div style="font-size: 16px; opacity: 0.9;">
-                                    ${exercise.name}
+                                <div style="font-size: 16px; opacity: 0.9; color: rgba(255, 255, 255, 0.7);">
+                                    ${isSuperset ? `${exercise.name} + ${exercise.superset.name}` : exercise.name}
                                 </div>
                             </div>
                         ` : !isRestingBetweenSets && nextExercise ? `
-                            <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
-                                <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">
+                            <div style="background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); padding: 20px; border-radius: 16px; margin-bottom: 24px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: white;">
                                     Moving to next exercise
                                 </div>
-                                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px;">Up Next:</div>
-                                <div style="font-size: 18px; font-weight: 700;">
-                                    ${nextExercise.name}
+                                <div style="font-size: 14px; opacity: 0.8; margin-bottom: 8px; color: rgba(255, 255, 255, 0.7);">Up Next:</div>
+                                <div style="font-size: 18px; font-weight: 700; color: white;">
+                                    ${nextExercise.name}${nextExercise.superset ? ` + ${nextExercise.superset.name}` : ''}
                                 </div>
                             </div>
                         ` : `
-                            <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255, 255, 255, 0.2);">
-                                <div style="font-size: 18px; font-weight: bold;">
+                            <div style="background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%); padding: 20px; border-radius: 16px; margin-bottom: 24px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div style="font-size: 18px; font-weight: bold; color: white;">
                                     Workout Complete!
                                 </div>
                             </div>
                         `}
                         
-                        <div style="display: flex; gap: 12px; max-width: 300px; margin: 0 auto;">
-                            <button style="flex: 1; background: linear-gradient(135deg, #ffffff, #f8fafc); color: #667eea; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;" onclick="skipRest()">
+                        <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                            <button class="rest-skip-btn" onclick="skipRest()" style="flex: 1;">
                                 Skip Rest
                             </button>
-                            <button style="flex: 1; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; padding: 14px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;" onclick="addRestTime()">
+                            <button class="rest-skip-btn" onclick="addRestTime()" style="flex: 1; background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
                                 +30s
                             </button>
                         </div>
                         
-                        <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; margin-top: 20px;" onclick="confirmEndWorkout()">
+                        <button class="btn-end-workout" onclick="confirmEndWorkout()" style="width: auto; margin: 0 auto;">
                             End Workout
                         </button>
                     </div>
@@ -2371,8 +2376,6 @@
                     existingRest.remove();
                 }
                 
-                const instruction = exerciseInstructions[exercise.name] || exerciseInstructions['Default'];
-                
                 // Count detail cards and build HTML
                 let detailCardCount = 0;
                 let detailCardsHTML = '';
@@ -2391,7 +2394,7 @@
                     detailCardCount++;
                     detailCardsHTML += `
                         <div class="detail-card">
-                            <strong style="font-size: 24px; color: #ffffff;">${exercise.reps}</strong><br>
+                            <strong style="font-size: 24px; color: #ffffff;">${(isInSuperset && supersetPhase === 'partner') ? exercise.superset.reps : exercise.reps}</strong><br>
                             <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Reps</span>
                         </div>
                     `;
@@ -2417,11 +2420,12 @@
                     `;
                 }
 
-                if (exercise.weight) {
+                if (exercise.weight || (isSuperset && exercise.superset.weight)) {
                     detailCardCount++;
+                    const displayWeight = (isInSuperset && supersetPhase === 'partner') ? exercise.superset.weight : exercise.weight;
                     detailCardsHTML += `
                         <div class="detail-card">
-                            <strong style="font-size: 20px; color: #ffffff;">${exercise.weight}</strong><br>
+                            <strong style="font-size: 20px; color: #ffffff;">${displayWeight}</strong><br>
                             <span style="font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600;">Weight</span>
                         </div>
                     `;
@@ -2448,9 +2452,17 @@
                             
                             <div class="exercise-instructions">
                                 <h4>
-                                    <span style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">How to Perform</span>
+                                    <span style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                                        ${isSuperset ? `Superset ${supersetPhase === 'main' ? 'A' : 'B'}: ` : ''}How to Perform
+                                    </span>
                                 </h4>
-                                <p>${instruction}</p>
+                                <p>${currentInstruction}</p>
+                                ${isSuperset ? `
+                                    <div style="background: rgba(102, 126, 234, 0.1); padding: 12px; border-radius: 8px; margin-top: 12px; border-left: 4px solid #667eea;">
+                                        <strong>Superset:</strong> ${exercise.name} → ${exercise.superset.name}
+                                        <br><small>Complete both exercises back-to-back, then rest</small>
+                                    </div>
+                                ` : ''}
                             </div>
                             
                             ${totalSets > 1 ? `
@@ -2486,14 +2498,16 @@
                             </div>
                             
                             <button class="btn-complete-exercise" onclick="completeExercise()">
-                                Complete ${totalSets > 1 ? 'Set' : 'Exercise'}
+                                Complete ${isSuperset ? 
+                                    (supersetPhase === 'main' ? 'Exercise A' : 'Exercise B (Superset)') : 
+                                    (totalSets > 1 ? 'Set' : 'Exercise')}
                             </button>
                             
                             <div style="display: flex; gap: 12px; margin-top: 12px;">
                                 <button onclick="confirmEndWorkout()" class="btn-end-workout" style="flex: 1;">
                                     End Workout
                                 </button>
-                                <button onclick="showWorkoutSettings()" class="btn-control" style="flex: 0 0 auto; padding: 12px; font-size: 14px;">
+                                <button onclick="showWorkoutSettings()" class="btn-control" style="flex: 0 0 auto; padding: 12px;">
                                     ⚙️
                                 </button>
                             </div>
@@ -2823,7 +2837,68 @@
             }
             
             const totalSets = exercise.sets || 1;
+            const isSuperset = exercise.superset && exercise.superset.name;
             
+            // Handle superset logic
+            if (isSuperset && !isInSuperset) {
+                // Starting superset - move to partner exercise
+                isInSuperset = true;
+                supersetPhase = 'partner';
+                exerciseTimer = 0;
+                
+                // Short transition rest (10-15 seconds) between superset exercises
+                isResting = true;
+                restTimer = 15; // Short rest between superset exercises
+                isTimerRunning = false;
+                playDingSound();
+                
+                showWorkoutTab();
+                return;
+            }
+            
+            if (isInSuperset && supersetPhase === 'partner') {
+                // Completed superset partner - finish the superset
+                isInSuperset = false;
+                supersetPhase = 'main';
+                exerciseTimer = 0;
+                
+                // Check if we have more sets
+                if (currentSet < totalSets) {
+                    currentSet++;
+                    // Full rest after completing both superset exercises
+                    if (exercise.rest && exercise.rest > 0) {
+                        isResting = true;
+                        restTimer = exercise.rest;
+                        isTimerRunning = false;
+                        playDingSound();
+                    }
+                } else {
+                    // Move to next exercise
+                    if (currentExercise < currentWorkout.exercises.length - 1) {
+                        currentExercise++;
+                        currentSet = 1;
+                        exerciseTimer = 0;
+                        
+                        const nextExercise = currentWorkout.exercises[currentExercise];
+                        exerciseTimeLimit = nextExercise && nextExercise.duration ? nextExercise.duration : 0;
+                        
+                        if (exercise.rest && exercise.rest > 0) {
+                            isResting = true;
+                            restTimer = exercise.rest;
+                            isTimerRunning = false;
+                            playDingSound();
+                        }
+                    } else {
+                        completeWorkout();
+                        return;
+                    }
+                }
+                
+                showWorkoutTab();
+                return;
+            }
+            
+            // Regular exercise logic (non-superset)
             if (currentSet < totalSets) {
                 currentSet++;
                 exerciseTimer = 0;
@@ -2839,7 +2914,6 @@
                     currentSet = 1;
                     exerciseTimer = 0;
                     
-                    // Set new exercise time limit
                     const nextExercise = currentWorkout.exercises[currentExercise];
                     exerciseTimeLimit = nextExercise && nextExercise.duration ? nextExercise.duration : 0;
                     
@@ -3060,9 +3134,12 @@
             restTimer = 0;
             manualSkip = false;
             
+            // Reset superset state
+            isInSuperset = false;
+            supersetPhase = 'main';
+            
             releaseWakeLock();
             
-            // Show nav bar again
             document.querySelector('.nav').classList.remove('hidden');
             document.querySelector('.content').classList.remove('nav-hidden');
             
@@ -3111,29 +3188,69 @@
             
             let availableExercises = [];
             
+            console.log('Selected equipment:', preferences.equipment);
+            console.log('Selected muscle groups:', preferences.muscleGroups);
+            
+            // Map compound muscle groups to individual muscle groups
+            function expandMuscleGroups(muscleGroups) {
+                const expandedGroups = [];
+                muscleGroups.forEach(muscle => {
+                    switch(muscle) {
+                        case 'Push (Chest/Shoulders/Triceps)':
+                            expandedGroups.push('Chest', 'Shoulders', 'Arms', 'Triceps');
+                            break;
+                        case 'Pull (Back/Biceps)':
+                            expandedGroups.push('Back', 'Arms', 'Biceps');
+                            break;
+                        case 'Upper Body':
+                            expandedGroups.push('Upper Body', 'Chest', 'Back', 'Shoulders', 'Arms');
+                            break;
+                        case 'Lower Body':
+                            expandedGroups.push('Lower Body', 'Legs', 'Glutes');
+                            break;
+                        default:
+                            expandedGroups.push(muscle);
+                    }
+                });
+                return [...new Set(expandedGroups)]; // Remove duplicates
+            }
+            
             // Get exercises based on selected equipment
             if (preferences.equipment && preferences.equipment.length > 0) {
                 preferences.equipment.forEach(equipment => {
+                    console.log(`Processing equipment: ${equipment}`);
+                    
                     if (equipmentExerciseDatabase[equipment]) {
                         // Get exercises for selected muscle groups from this equipment
                         if (preferences.muscleGroups && preferences.muscleGroups.length > 0) {
-                            preferences.muscleGroups.forEach(muscle => {
+                            const expandedMuscleGroups = expandMuscleGroups(preferences.muscleGroups);
+                            console.log('Expanded muscle groups:', expandedMuscleGroups);
+                            
+                            expandedMuscleGroups.forEach(muscle => {
                                 if (equipmentExerciseDatabase[equipment][muscle]) {
+                                    console.log(`Found exercises for ${equipment} - ${muscle}:`, equipmentExerciseDatabase[equipment][muscle]);
                                     availableExercises = [...availableExercises, ...equipmentExerciseDatabase[equipment][muscle]];
+                                } else {
+                                    console.log(`No exercises found for ${equipment} - ${muscle}`);
                                 }
                             });
                         } else {
                             // If no muscle groups specified, get all exercises for this equipment
+                            console.log(`Getting all exercises for ${equipment}`);
                             Object.values(equipmentExerciseDatabase[equipment]).forEach(muscleExercises => {
                                 availableExercises = [...availableExercises, ...muscleExercises];
                             });
                         }
+                    } else {
+                        console.warn(`Equipment "${equipment}" not found in database`);
                     }
                 });
             } else {
+                console.log('No equipment selected, using bodyweight');
                 // Default to bodyweight if no equipment selected
                 if (preferences.muscleGroups && preferences.muscleGroups.length > 0) {
-                    preferences.muscleGroups.forEach(muscle => {
+                    const expandedMuscleGroups = expandMuscleGroups(preferences.muscleGroups);
+                    expandedMuscleGroups.forEach(muscle => {
                         if (equipmentExerciseDatabase['Bodyweight'][muscle]) {
                             availableExercises = [...availableExercises, ...equipmentExerciseDatabase['Bodyweight'][muscle]];
                         }
@@ -3145,21 +3262,61 @@
             
             // Remove duplicates
             availableExercises = [...new Set(availableExercises)];
+            console.log('Available exercises after deduplication:', availableExercises);
+            
+            // Only add bodyweight as fallback if we still don't have enough exercises
+            if (availableExercises.length < exerciseCount) {
+                console.log(`Only ${availableExercises.length} exercises found, need ${exerciseCount}. Adding bodyweight fallback.`);
+                const bodyweightExercises = Object.values(equipmentExerciseDatabase['Bodyweight']).flat();
+                availableExercises = [...new Set([...availableExercises, ...bodyweightExercises])];
+                console.log('Available exercises after bodyweight fallback:', availableExercises);
+            }
             
             // Ensure we have enough exercises
             if (availableExercises.length < exerciseCount) {
-                console.warn('Not enough exercises for selected equipment and muscle groups');
-                // Fall back to bodyweight exercises if needed
-                const bodyweightExercises = Object.values(equipmentExerciseDatabase['Bodyweight']).flat();
-                availableExercises = [...new Set([...availableExercises, ...bodyweightExercises])];
+                console.error('Still not enough exercises available');
+                showNotification('Not enough exercises available for selected criteria. Try selecting more equipment or muscle groups.', 'error');
+                return null;
             }
             
-            // Randomly select exercises
+            // Randomly select exercises, but try to distribute across equipment types
             const selectedExercises = [];
-            for (let i = 0; i < exerciseCount && availableExercises.length > 0; i++) {
-                const randomIndex = Math.floor(Math.random() * availableExercises.length);
-                selectedExercises.push(availableExercises.splice(randomIndex, 1)[0]);
+            const exercisePool = [...availableExercises];
+            
+            // Prioritize non-bodyweight exercises if multiple equipment types selected
+            if (preferences.equipment && preferences.equipment.length > 1) {
+                const nonBodyweightExercises = exercisePool.filter(ex => {
+                    // Check if exercise exists in non-bodyweight equipment
+                    return preferences.equipment.some(equipment => {
+                        if (equipment === 'Bodyweight') return false;
+                        return equipmentExerciseDatabase[equipment] && 
+                            Object.values(equipmentExerciseDatabase[equipment]).flat().includes(ex);
+                    });
+                });
+                
+                // Select most exercises from non-bodyweight equipment
+                const priorityCount = Math.min(Math.ceil(exerciseCount * 0.8), nonBodyweightExercises.length);
+                
+                for (let i = 0; i < priorityCount; i++) {
+                    if (nonBodyweightExercises.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * nonBodyweightExercises.length);
+                        const selectedExercise = nonBodyweightExercises.splice(randomIndex, 1)[0];
+                        selectedExercises.push(selectedExercise);
+                        
+                        // Remove from main pool
+                        const poolIndex = exercisePool.indexOf(selectedExercise);
+                        if (poolIndex > -1) exercisePool.splice(poolIndex, 1);
+                    }
+                }
             }
+            
+            // Fill remaining slots with any available exercises
+            while (selectedExercises.length < exerciseCount && exercisePool.length > 0) {
+                const randomIndex = Math.floor(Math.random() * exercisePool.length);
+                selectedExercises.push(exercisePool.splice(randomIndex, 1)[0]);
+            }
+            
+            console.log('Final selected exercises:', selectedExercises);
 
             // Convert exercises to workout format
             selectedExercises.forEach(exerciseName => {
@@ -3195,7 +3352,7 @@
                 case 'HIIT':
                 case 'Cardio':
                     exercise.duration = [30, 45, 60][Math.floor(Math.random() * 3)];
-                    exercise.rest = [15, 30][Math.floor(Math.random() * 2)];
+                    exercise.rest = Math.max(30, [15, 30][Math.floor(Math.random() * 2)]); // Minimum 30 seconds
                     break;
                 case 'Strength Training':
                 case 'Powerlifting':
@@ -3211,22 +3368,22 @@
                     const [sets, reps] = phaseData.sets_reps[setsRepsIndex];
                     exercise.sets = sets;
                     exercise.reps = reps.toString();
-                    exercise.rest = preferences.type === 'Powerlifting' ? 180 : 
-                                   preferences.type === 'Strength Training' ? 120 : 90;
+                    exercise.rest = Math.max(30, preferences.type === 'Powerlifting' ? 180 : 
+                                preferences.type === 'Strength Training' ? 120 : 90); // Minimum 30 seconds
                     
                     if (recommendedWeight) exercise.weight = recommendedWeight;
                     break;
                 case 'CrossFit':
                     exercise.duration = [45, 60][Math.floor(Math.random() * 2)];
-                    exercise.rest = [30, 45][Math.floor(Math.random() * 2)];
+                    exercise.rest = Math.max(30, [30, 45][Math.floor(Math.random() * 2)]); // Minimum 30 seconds
                     exercise.reps = preferences.difficulty === 'Beginner' ? '8-12' : 
-                                   preferences.difficulty === 'Advanced' ? '15-20' : '10-15';
+                                preferences.difficulty === 'Advanced' ? '15-20' : '10-15';
                     exercise.sets = 3;
                     if (recommendedWeight) exercise.weight = recommendedWeight;
                     break;
                 default:
                     exercise.duration = 45;
-                    exercise.rest = 30;
+                    exercise.rest = Math.max(30, 30); // Minimum 30 seconds
                     exercise.reps = '10-15';
                     exercise.sets = 2;
                     if (recommendedWeight) exercise.weight = recommendedWeight;
@@ -3589,10 +3746,10 @@
                                                     Remove
                                                 </button>
                                             </div>
-                                            <div class="superset-partner" style="display: none; margin-bottom: 8px;">
-                                                <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input" maxlength="50">
+                                            <div class="superset-partner" style="display: ${exercise.superset ? 'block' : 'none'}; margin-bottom: 8px;">
+                                                <input type="text" placeholder="Superset partner exercise" class="form-input superset-partner-input" maxlength="50" value="${exercise.superset ? exercise.superset.name : ''}">
                                             </div>
-                                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 4px;">
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto; gap: 4px;">
                                                 <div>
                                                     <div class="exercise-control-label">Duration(s)</div>
                                                     <input type="number" class="form-input" placeholder="sec" style="padding: 6px; font-size: 14px;" value="${exercise.duration || ''}" min="0" max="600">
@@ -3611,13 +3768,13 @@
                                                 </div>
                                                 <div>
                                                     <div class="exercise-control-label">Weight</div>
-                                                    <div style="display: flex; align-items: center; gap: 4px;">
-                                                        <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px; flex: 1; min-width: 45px;" value="${exercise.weight || ''}" maxlength="15">
-                                                        <label style="display: flex; align-items: center; gap: 2px; font-size: 10px; color: rgba(255,255,255,0.7); white-space: nowrap;">
-                                                            <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)" style="width: 12px; height: 12px;">
-                                                            SS
-                                                        </label>
-                                                    </div>
+                                                    <input type="text" class="form-input" placeholder="lbs" style="padding: 6px; font-size: 14px;" value="${exercise.weight || ''}" maxlength="15">
+                                                </div>
+                                                <div style="display: flex; align-items: end; padding-bottom: 6px;">
+                                                    <label style="display: flex; align-items: center; gap: 2px; font-size: 10px; color: rgba(255,255,255,0.7); white-space: nowrap;">
+                                                        <input type="checkbox" class="superset-checkbox" onchange="toggleSuperset(this)" style="width: 12px; height: 12px; margin: 0;" ${exercise.superset ? 'checked' : ''}>
+                                                        SS
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -3793,7 +3950,7 @@
                                     ${exercise.reps ? `<span style="background: rgba(34, 197, 94, 0.2); color: #22c55e; padding: 4px 8px; border-radius: 6px; font-size: 12px;">${exercise.reps} reps</span>` : ''}
                                     ${exercise.sets ? `<span style="background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 4px 8px; border-radius: 6px; font-size: 12px;">${exercise.sets} sets</span>` : ''}
                                     ${exercise.rest ? `<span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 4px 8px; border-radius: 6px; font-size: 12px;">${exercise.rest}s rest</span>` : ''}
-                                    ${exercise.weight ? `<span style="background: rgba(236, 72, 153, 0.2); color: #ec4899; padding: 4px 8px; border-radius: 6px; font-size: 12px;">${exercise.weight}</span>` : ''}
+                                    ${exercise.weight ? `<span style="background: rgba(236, 72, 153, 0.2); color: #ec4899; padding: 4px 8px; border-radius: 6px; font-size: 12px;">${exercise.weight} lbs</span>` : ''}
                                 </div>
                             </div>
                         `).join('')}
@@ -4118,6 +4275,9 @@
             }
         }
 
+        let isInSuperset = false;
+        let supersetPhase = 'main'; // 'main' or 'partner'   
+
         function handleCreateWorkout() {
             try {
                 const workoutName = document.getElementById('workout-name').value.trim();
@@ -4250,9 +4410,7 @@
                         if (!exercise.sets) exercise.sets = 1;
                         if (exercise.rest === undefined) exercise.rest = 30;
                         
-                        exercises.push(exercise);
-                        
-                        // Add superset partner if checked and has value
+                        // Handle superset as property of main exercise
                         if (supersetChecked && supersetPartner) {
                             if (supersetPartner.length > 50) {
                                 validationErrors.push(`Exercise ${index + 1}: Superset partner name too long`);
@@ -4264,17 +4422,14 @@
                                 return;
                             }
                             
-                            const supersetExercise = {
+                            exercise.superset = {
                                 name: supersetPartner,
                                 reps: exercise.reps,
-                                sets: exercise.sets,
-                                rest: Math.max(15, Math.floor(exercise.rest / 2)), // Minimum 15s rest
-                                superset: true
+                                weight: exercise.weight || ''
                             };
-                            if (exercise.weight) supersetExercise.weight = exercise.weight;
-                            exercises.push(supersetExercise);
-                            exerciseCount++;
                         }
+                        
+                        exercises.push(exercise);
                     }
                 });
                 
@@ -4290,7 +4445,7 @@
                 }
                 
                 if (exerciseCount > 15) {
-                    showNotification('Maximum 15 exercises allowed per workout (including supersets).', 'error');
+                    showNotification('Maximum 15 exercises allowed per workout.', 'error');
                     return;
                 }
                 
@@ -4309,10 +4464,10 @@
                     difficulty: workoutDifficulty,
                     duration: workoutDuration,
                     calories: calculateCalories(workoutType, workoutDuration, workoutDifficulty),
-                    equipment: ['Bodyweight'], // Default equipment
+                    equipment: ['Bodyweight'],
                     exercises: exercises,
                     custom: true,
-                    muscleGroups: ['Full Body'], // Default muscle group
+                    muscleGroups: ['Full Body'],
                     createdAt: new Date().toISOString()
                 };
                 
@@ -4336,7 +4491,7 @@
                 const workoutDuration = parseInt(document.getElementById('edit-workout-duration').value);
                 
                 if (!workoutName || !workoutDuration || workoutDuration < 1) {
-                    showNotification('Please enter a valid workout name and duration.');
+                    showNotification('Please enter a valid workout name and duration.', 'error');
                     return;
                 }
                 
@@ -4369,25 +4524,21 @@
                         if (!exercise.sets) exercise.sets = 1;
                         if (!exercise.rest) exercise.rest = 30;
                         
-                        exercises.push(exercise);
-                        
-                        // Add superset partner if checked and has value
+                        // Handle superset as property of main exercise
                         if (supersetChecked && supersetPartner) {
-                            const supersetExercise = {
+                            exercise.superset = {
                                 name: supersetPartner,
                                 reps: exercise.reps,
-                                sets: exercise.sets,
-                                rest: Math.floor(exercise.rest / 2), // Shorter rest for superset
-                                superset: true
+                                weight: exercise.weight || ''
                             };
-                            if (exercise.weight) supersetExercise.weight = exercise.weight;
-                            exercises.push(supersetExercise);
                         }
+                        
+                        exercises.push(exercise);
                     }
                 });
                 
                 if (!hasValidExercise) {
-                    showNotification('Please add at least one exercise with a name.');
+                    showNotification('Please add at least one exercise with a name.', 'error');
                     return;
                 }
                 
@@ -4411,7 +4562,7 @@
                 showNotification(`Workout "${workoutName}" updated successfully!`);
             } catch (error) {
                 console.error('Edit workout failed:', error);
-                showNotification('Failed to update workout. Please check your inputs and try again.');
+                showNotification('Failed to update workout. Please check your inputs and try again.', 'error');
             }
         }
 
